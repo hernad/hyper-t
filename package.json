@@ -2,5 +2,9 @@
   "name": "hyper-t",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/electron": "^1.6.10",
+    "@types/node": "^10.12.8"
+  }
 }
