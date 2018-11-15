@@ -3,7 +3,7 @@
   "name": "hyper-t",
   "description": "Opis aplikacija obavezno radi instalera.",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/main.js",
   "license": "MIT",
   "author": {
     "name": "Ernad Husremovic",
