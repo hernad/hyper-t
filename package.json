@@ -5,6 +5,13 @@
   "license": "MIT",
   "dependencies": {
     "@types/electron": "^1.6.10",
-    "@types/node": "^10.12.8"
+    "@types/node": "^10.12.8",
+    "electron": "^3.0.9"
+  },
+  "scripts": {
+    "prestart": "yarn build",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "node_modules/.bin/electron dist/main.js"
   }
 }
