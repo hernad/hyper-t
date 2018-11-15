@@ -5,9 +5,9 @@
 
 function fun1() {
     console.log("test")
-    document.write(" chrome :" + process.versions.chrome)
-    document.write(" electron :" + process.versions.electron)
-    document.write(" hot hot hot ....")
+    document.write("<p/>chrome: <b>" + process.versions.chrome + "</b>")
+    document.write(" electron: <b>" + process.versions.electron + "</b>")
+    document.write("<p/><i> hot hot hot .... </i>")
 }
 
 

@@ -5,8 +5,10 @@ let mainWindow: Electron.BrowserWindow;
 
 function createWindow() {
 
+  const iconPath = path.resolve(__dirname, '../resources/Icon.png')
 
   mainWindow = new BrowserWindow({
+    icon: iconPath,
     height: 600,
     width: 800,
     webPreferences: {
