@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		"module": "amd",
+		"moduleResolution": "node",
+		"noImplicitAny": false,
+		"target": "es6",
+		"experimentalDecorators": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"outDir": "../dist2",
+		"baseUrl": ".",
+		"allowJs": true,
+		"paths": {
+			"b/*": [
+               			"./b/*"
+			],
+			"base/*": [
+				"./base/*"
+            ],
+			"*": ["../node_modules/*"]		
+		},
+		"types": [
+		]
+	},
+	"include": [
+			"./typings",
+			"**/*"
+			  
+	]
+}

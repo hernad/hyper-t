@@ -1,0 +1,56 @@
+{
+
+	"compilerOptions": {
+		"module": "amd",
+		"moduleResolution": "node",
+		"noImplicitAny": false,
+		"target": "es5",
+		"experimentalDecorators": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"removeComments": false,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"outDir": "../dist",
+		"baseUrl": ".",
+		"allowJs": true,
+		"paths": {
+			"b/*": [
+               			"./b/*"
+			],
+			"base/*": [
+				"./base/*"
+			],
+			"platform/*": [
+                		"./platform/*"
+			],
+			"code/*": [
+                		"./code/*"
+			],
+			"workbench/*": [
+                		"./workbench/*"
+			],
+			"editor/*": [
+                		"./editor/*"
+			],
+			"*": ["../node_modules/*"]		
+		},
+		"types": [
+			"keytar",
+			"minimist",
+			"mocha",
+			"semver",
+			"sinon",
+			"winreg"
+		]
+	},
+	"include": [
+		   "./typings",
+		   "**/*"	  
+	],
+	"exclude": [
+		    "./typings/require-monaco.d.ts"
+	]
+}

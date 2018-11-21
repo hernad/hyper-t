@@ -1,0 +1,89 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+declare namespace monaco {
+
+	export type Thenable<T> = PromiseLike<T>;
+
+	export interface IDisposable {
+		dispose(): void;
+	}
+
+	export interface IEvent<T> {
+		(listener: (e: T) => any, thisArg?: any): IDisposable;
+	}
+
+	/**
+	 * A helper that allows to emit and listen to typed events
+	 */
+	export class Emitter<T> {
+		constructor();
+		readonly event: Event<T>;
+		fire(event?: T): void;
+		dispose(): void;
+	}
+
+#include(platform/markers/common/markers): MarkerTag, MarkerSeverity
+#include(base/common/winjs.base.d.ts): Promise
+#include(base/common/cancellation): CancellationTokenSource, CancellationToken
+#include(base/common/uri): URI, UriComponents
+#include(base/common/keyCodes): KeyCode
+#include(editor/common/standalone/standaloneBase): KeyMod
+#include(base/common/htmlContent): IMarkdownString
+#include(base/browser/keyboardEvent): IKeyboardEvent
+#include(base/browser/mouseEvent): IMouseEvent
+#include(editor/common/editorCommon): IScrollEvent
+#include(editor/common/core/position): IPosition, Position
+#include(editor/common/core/range): IRange, Range
+#include(editor/common/core/selection): ISelection, Selection, SelectionDirection
+#include(editor/common/core/token): Token
+}
+
+declare namespace monaco.editor {
+
+#includeAll(editor/standalone/browser/standaloneEditor;modes.=>languages.;editorCommon.=>):
+#include(editor/standalone/common/standaloneThemeService): BuiltinTheme, IStandaloneThemeData, IColors
+#include(editor/common/modes/supports/tokenization): ITokenThemeRule
+#include(editor/common/services/webWorker): MonacoWebWorker, IWebWorkerOptions
+#include(editor/standalone/browser/standaloneCodeEditor): IActionDescriptor, IEditorConstructionOptions, IDiffEditorConstructionOptions, IStandaloneCodeEditor, IStandaloneDiffEditor
+export interface ICommandHandler {
+	(...args: any[]): void;
+}
+#include(platform/contextkey/common/contextkey): IContextKey
+#include(editor/standalone/browser/standaloneServices): IEditorOverrideServices
+#include(platform/markers/common/markers): IMarker, IMarkerData, IRelatedInformation
+#include(editor/standalone/browser/colorizer): IColorizerOptions, IColorizerElementOptions
+#include(base/common/scrollable): ScrollbarVisibility
+#include(platform/theme/common/themeService): ThemeColor
+#includeAll(editor/common/model;LanguageIdentifier=>languages.LanguageIdentifier): IScrollEvent
+#includeAll(editor/common/editorCommon;editorOptions.=>): IScrollEvent
+#includeAll(editor/common/model/textModelEvents):
+#includeAll(editor/common/controller/cursorEvents):
+#includeAll(editor/common/config/editorOptions):
+#includeAll(editor/browser/editorBrowser;editorCommon.=>;editorOptions.=>):
+#include(editor/common/config/fontInfo): FontInfo, BareFontInfo
+
+//compatibility:
+export type IReadOnlyModel = ITextModel;
+export type IModel = ITextModel;
+}
+
+declare namespace monaco.languages {
+
+#includeAll(editor/standalone/browser/standaloneLanguages;modes.=>;editorCommon.=>editor.;model.=>editor.;IMarkerData=>editor.IMarkerData):
+#includeAll(editor/common/modes/languageConfiguration):
+#includeAll(editor/common/modes;editorCommon.IRange=>IRange;editorCommon.IPosition=>IPosition;editorCommon.=>editor.;IMarkerData=>editor.IMarkerData;model.=>editor.):
+#include(editor/common/services/modeService): ILanguageExtensionPoint
+#includeAll(editor/standalone/common/monarch/monarchTypes):
+
+}
+
+declare namespace monaco.worker {
+
+#includeAll(editor/common/services/editorSimpleWorker;):
+
+}
+
+//dtsv=2

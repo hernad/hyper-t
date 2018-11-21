@@ -1,0 +1,24 @@
+{
+	"nameShort": "Hyper - OSS",
+	"nameLong": "Hyper - OSS",
+	"applicationName": "hyper-oss",
+	"dataFolderName": ".vshyper-oss",
+	"win32MutexName": "vshypeross",
+	"licenseName": "MIT",
+	"licenseUrl": "https://github.com/Microsoft/vshyper/blob/master/LICENSE.txt",
+	"win32DirName": "Microsoft Hyper OSS",
+	"win32NameVersion": "Microsoft Hyper OSS",
+	"win32RegValueName": "HyperOSS",
+	"win32AppId": "{{E34003BB-9E10-4501-8C11-BE3FAA83F23F}",
+	"win32x64AppId": "{{D77B7E06-80BA-4137-BCF4-654B95CCEBC5}",
+	"win32UserAppId": "{{C6065F05-9603-4FC4-8101-B9781A25D88E}",
+	"win32x64UserAppId": "{{C6065F05-9603-4FC4-8101-B9781A25D88E}",
+	"win32AppUserModelId": "Microsoft.HyperOSS",
+	"win32ShellNameShort": "C&ode - OSS",
+	"darwinBundleIdentifier": "com.visualstudio.hyper.oss",
+	"reportIssueUrl": "https://github.com/Microsoft/vshyper/issues/new",
+	"urlProtocol": "hyper-oss",
+	"extensionAllowedProposedApi": [
+		"ms-vshyper.references-view"
+	]
+}

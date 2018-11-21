@@ -1,0 +1,43 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noImplicitAny": false,
+		"target": "es5",
+		"experimentalDecorators": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"baseUrl": ".",
+		"paths": {
+			"b/*": [
+               			"./b/*"
+			],
+			"base/*": [
+				"./base/*"
+			],
+			"platform/*": [
+                		"./platform/*"
+			],
+			"code/*": [
+                		"./code/*"
+			],
+			"workbench/*": [
+                		"./workbench/*"
+			],
+			"editor/*": [
+                		"./editor/*"
+			],
+			"*": ["../node_modules/*"]		
+		},
+		"types": [
+			"keytar",
+			"minimist",
+			"mocha",
+			"semver",
+			"sinon",
+			"winreg"
+		]
+	}
+}
