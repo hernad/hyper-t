@@ -1,7 +1,8 @@
 {
-	"nameShort": "Hyper - OSS",
-	"nameLong": "Hyper - OSS",
-	"applicationName": "hyper-t",
+	"nameShort": "hyper-t",
+	"nameLong": "Hyper-t",
+	"applicationName": "hypert",
+    "twitterUrl": "https://twitter.com/hernad",
 	"dataFolderName": ".hyper-t",
 	"win32MutexName": "hypert",
 	"licenseName": "MIT",

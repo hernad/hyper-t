@@ -1,7 +1,7 @@
 {
   "name": "hyper-t",
-  "description": "Opis aplikacija obavezno radi instalera.",
-  "version": "1.0.0",
+  "description": "sramno podjonjen vscode",
+  "version": "1.1.0",
   "main": "dist/main.js",
   "license": "MIT",
   "author": {

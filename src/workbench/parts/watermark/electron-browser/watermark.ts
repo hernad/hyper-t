@@ -36,20 +36,20 @@ interface WatermarkEntry {
 }
 
 const showCommands: WatermarkEntry = {
-	text: nls.localize('watermark.showCommands', "Show All Commands"),
+	text: nls.localize('watermark.showCommands', "Prikaz svih komandi"),
 	ids: [ShowAllCommandsAction.ID]
 };
 const quickOpen: WatermarkEntry = {
-	text: nls.localize('watermark.quickOpen', "Go to File"),
+	text: nls.localize('watermark.quickOpen', "Idi na fajl"),
 	ids: [QUICKOPEN_ACTION_ID]
 };
 const openFileNonMacOnly: WatermarkEntry = {
-	text: nls.localize('watermark.openFile', "Open File"),
+	text: nls.localize('watermark.openFile', "Otvori fajl"),
 	ids: [OpenFileAction.ID],
 	mac: false
 };
 const openFolderNonMacOnly: WatermarkEntry = {
-	text: nls.localize('watermark.openFolder', "Open Folder"),
+	text: nls.localize('watermark.openFolder', "Otvori direktorij"),
 	ids: [OpenFolderAction.ID],
 	mac: false
 };
@@ -59,7 +59,7 @@ const openFileOrFolderMacOnly: WatermarkEntry = {
 	mac: true
 };
 const openRecent: WatermarkEntry = {
-	text: nls.localize('watermark.openRecent', "Open Recent"),
+	text: nls.localize('watermark.openRecent', "Otvori posljednje"),
 	ids: [OpenRecentAction.ID]
 };
 const newUntitledFile: WatermarkEntry = {
