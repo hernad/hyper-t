@@ -1,0 +1,17 @@
+{
+	"name": "theme-kimbie-dark",
+	"displayName": "%displayName%",
+	"description": "%description%",
+	"version": "1.0.0",
+	"publisher": "hernad",
+	"engines": { "hypert": "*" },
+	"contributes": {
+		"themes": [
+			{
+				"label": "Kimbie Dark",
+				"uiTheme": "vs-dark",
+				"path": "./themes/kimbie-dark-color-theme.json"
+			}
+		]
+	}
+}
