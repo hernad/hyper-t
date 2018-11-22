@@ -12,15 +12,15 @@ import { IConfigurationRegistry, Extensions as ConfigurationExtensions, Configur
 import { IWorkbenchActionRegistry, Extensions } from 'workbench/common/actions';
 import { KeyMod, KeyChord, KeyCode } from 'base/common/keyCodes';
 import { isWindows, isLinux, isMacintosh } from 'base/common/platform';
-import { KeybindingsReferenceAction, OpenDocumentationUrlAction, OpenIntroductoryVideosUrlAction, OpenTipsAndTricksUrlAction, OpenIssueReporterAction, ReportPerformanceIssueUsingReporterAction, ZoomResetAction, ZoomOutAction, ZoomInAction, ToggleFullScreenAction, ToggleMenuBarAction, CloseWorkspaceAction, CloseCurrentWindowAction, SwitchWindow, NewWindowAction, NavigateUpAction, NavigateDownAction, NavigateLeftAction, NavigateRightAction, IncreaseViewSizeAction, DecreaseViewSizeAction, ToggleSharedProcessAction, QuickSwitchWindow, QuickOpenRecentAction, inRecentFilesPickerContextKey, ShowAboutDialogAction, InspectContextKeysAction, OpenProcessExplorer, OpenTwitterUrlAction, OpenRequestFeatureUrlAction, /*OpenPrivacyStatementUrlAction,  out-privacy-statement */ OpenLicenseUrlAction, OpenRecentAction } from 'workbench/electron-browser/actions';
+import { KeybindingsReferenceAction, OpenDocumentationUrlAction, OpenIntroductoryVideosUrlAction, OpenTipsAndTricksUrlAction, OpenIssueReporterAction, ReportPerformanceIssueUsingReporterAction, ZoomResetAction, ZoomOutAction, ZoomInAction, ToggleFullScreenAction, ToggleMenuBarAction, CloseWorkspaceAction, CloseCurrentWindowAction, SwitchWindow, NewWindowAction, NavigateUpAction, NavigateDownAction, NavigateLeftAction, NavigateRightAction, IncreaseViewSizeAction, DecreaseViewSizeAction, ToggleSharedProcessAction, QuickSwitchWindow, QuickOpenRecentAction, inRecentFilesPickerContextKey, ShowAboutDialogAction, InspectContextKeysAction, OpenProcessExplorer, OpenTwitterUrlAction, OpenRequestFeatureUrlAction, /*OpenPrivacyStatementUrlAction,  out-privacy-statement */ /* OpenLicenseUrlAction,*/ OpenRecentAction  } from 'workbench/electron-browser/actions';
 import { registerCommands, QUIT_ID } from 'workbench/electron-browser/commands';
-import { AddRootFolderAction, GlobalRemoveRootFolderAction, OpenWorkspaceAction, SaveWorkspaceAsAction, OpenWorkspaceConfigFileAction, DuplicateWorkspaceInNewWindowAction, OpenFileFolderAction, OpenFileAction, OpenFolderAction } from 'workbench/browser/actions/workspaceActions';
+import { AddRootFolderAction, GlobalRemoveRootFolderAction, OpenWorkspaceAction, /* SaveWorkspaceAsAction, OpenWorkspaceConfigFileAction, DuplicateWorkspaceInNewWindowAction, */ OpenFileFolderAction, OpenFileAction, OpenFolderAction } from 'workbench/browser/actions/workspaceActions';
 import { ContextKeyExpr, RawContextKey } from 'platform/contextkey/common/contextkey';
 import { inQuickOpenContext, getQuickNavigateHandler } from 'workbench/browser/parts/quickopen/quickopen';
 import { KeybindingsRegistry, KeybindingWeight } from 'platform/keybinding/common/keybindingsRegistry';
-import { CommandsRegistry } from 'platform/commands/common/commands';
-import { IInstantiationService } from 'platform/instantiation/common/instantiation';
-import { ADD_ROOT_FOLDER_COMMAND_ID } from 'workbench/browser/actions/workspaceCommands';
+// import { CommandsRegistry } from 'platform/commands/common/commands';
+// import { IInstantiationService } from 'platform/instantiation/common/instantiation';
+// import { ADD_ROOT_FOLDER_COMMAND_ID } from 'workbench/browser/actions/workspaceCommands';
 import { IsMacContext } from 'platform/workbench/common/contextkeys';
 
 // Contribute Commands
@@ -68,7 +68,7 @@ if (OpenTipsAndTricksUrlAction.AVAILABLE) {
 
 workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(OpenTwitterUrlAction, OpenTwitterUrlAction.ID, OpenTwitterUrlAction.LABEL), 'Help: Join Us on Twitter', helpCategory);
 workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(OpenRequestFeatureUrlAction, OpenRequestFeatureUrlAction.ID, OpenRequestFeatureUrlAction.LABEL), 'Help: Search Feature Requests', helpCategory);
-workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(OpenLicenseUrlAction, OpenLicenseUrlAction.ID, OpenLicenseUrlAction.LABEL), 'Help: View License', helpCategory);
+// workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(OpenLicenseUrlAction, OpenLicenseUrlAction.ID, OpenLicenseUrlAction.LABEL), 'Help: View License', helpCategory);
 // workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(OpenPrivacyStatementUrlAction, OpenPrivacyStatementUrlAction.ID, OpenPrivacyStatementUrlAction.LABEL), 'Help: Privacy Statement', helpCategory);
 workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(ShowAboutDialogAction, ShowAboutDialogAction.ID, ShowAboutDialogAction.LABEL), 'Help: About', helpCategory);
 
@@ -108,12 +108,14 @@ const workspacesCategory = nls.localize('workspaces', "Workspaces");
 workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(AddRootFolderAction, AddRootFolderAction.ID, AddRootFolderAction.LABEL), 'Workspaces: Add Folder to Workspace...', workspacesCategory);
 workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(GlobalRemoveRootFolderAction, GlobalRemoveRootFolderAction.ID, GlobalRemoveRootFolderAction.LABEL), 'Workspaces: Remove Folder from Workspace...', workspacesCategory);
 workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(OpenWorkspaceAction, OpenWorkspaceAction.ID, OpenWorkspaceAction.LABEL), 'Workspaces: Open Workspace...', workspacesCategory);
-workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(SaveWorkspaceAsAction, SaveWorkspaceAsAction.ID, SaveWorkspaceAsAction.LABEL), 'Workspaces: Save Workspace As...', workspacesCategory);
-workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(DuplicateWorkspaceInNewWindowAction, DuplicateWorkspaceInNewWindowAction.ID, DuplicateWorkspaceInNewWindowAction.LABEL), 'Workspaces: Duplicate Workspace in New Window', workspacesCategory);
+// workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(SaveWorkspaceAsAction, SaveWorkspaceAsAction.ID, SaveWorkspaceAsAction.LABEL), 'Workspaces: Save Workspace As...', workspacesCategory);
+// workbenchActionsRegistry.registerWorkbenchAction(new SyncActionDescriptor(DuplicateWorkspaceInNewWindowAction, DuplicateWorkspaceInNewWindowAction.ID, DuplicateWorkspaceInNewWindowAction.LABEL), 'Workspaces: Duplicate Workspace in New Window', workspacesCategory);
 
-CommandsRegistry.registerCommand(OpenWorkspaceConfigFileAction.ID, serviceAccessor => {
-	serviceAccessor.get(IInstantiationService).createInstance(OpenWorkspaceConfigFileAction, OpenWorkspaceConfigFileAction.ID, OpenWorkspaceConfigFileAction.LABEL).run();
-});
+// CommandsRegistry.registerCommand(OpenWorkspaceConfigFileAction.ID, serviceAccessor => {
+//	serviceAccessor.get(IInstantiationService).createInstance(OpenWorkspaceConfigFileAction, OpenWorkspaceConfigFileAction.ID, OpenWorkspaceConfigFileAction.LABEL).run();
+// });
+
+/*
 MenuRegistry.appendMenuItem(MenuId.CommandPalette, {
 	command: {
 		id: OpenWorkspaceConfigFileAction.ID,
@@ -121,6 +123,7 @@ MenuRegistry.appendMenuItem(MenuId.CommandPalette, {
 	},
 	when: new RawContextKey<string>('workbenchState', '').isEqualTo('workspace')
 });
+*/
 
 // Developer related actions
 const developerCategory = nls.localize('developer', "Developer");
@@ -218,6 +221,8 @@ MenuRegistry.appendMenuItem(MenuId.MenubarRecentMenu, {
 	order: 1
 });
 
+/* out-meni-opcije
+
 MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	group: '3_workspace',
 	command: {
@@ -235,6 +240,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	},
 	order: 2
 });
+*/
 
 MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	title: nls.localize({ key: 'miPreferences', comment: ['&& denotes a mnemonic'] }, "&&Preferences"),
@@ -359,6 +365,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	order: 4
 });
 
+/* hernad out-meni-opcije
 // Reference
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	group: '2_reference',
@@ -368,6 +375,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	},
 	order: 1
 });
+
 
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	group: '2_reference',
@@ -386,6 +394,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	},
 	order: 3
 });
+*/
 
 // Feedback
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
@@ -397,6 +406,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	order: 1
 });
 
+/*
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	group: '3_feedback',
 	command: {
@@ -405,6 +415,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	},
 	order: 2
 });
+
 
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	group: '3_feedback',
@@ -424,6 +435,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	},
 	order: 1
 });
+*/
 
 /* out-privacy-statement
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {

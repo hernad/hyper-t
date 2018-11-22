@@ -78,9 +78,9 @@ const typesDts = [
 ];
 function compileTask(src, out, build) {
     return function () {
-        console.log('hernad-3');
+        console.log('hernad-compile-4');
         const compile = createCompile(src, build, true);
-        const srcPipe = es.merge(gulp.src(`${src}/**/*.@(html|png|css|svg|scss|less|eot|woff|ttf)`, { base: `${src}` }), gulp.src(typesDts));
+        const srcPipe = es.merge(gulp.src(`${src}/**/*.@(html|png|css|svg|scss|less|eot|woff|ttf|md)`, { base: `${src}` }), gulp.src(typesDts));
         let generator = new MonacoGenerator(false);
         if (src === 'src') {
             generator.execute();

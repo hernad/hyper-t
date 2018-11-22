@@ -93,7 +93,7 @@ export function compileTask(src: string, out: string, build: boolean): () => Nod
 		const compile = createCompile(src, build, true);
 
 		const srcPipe = es.merge(
-			gulp.src( `${src}/**/*.@(html|png|css|svg)`, { base: `${src}` }),
+			gulp.src( `${src}/**/*.@(html|png|css|svg|scss|less|eot|woff|ttf|md)`, { base: `${src}` }),
 			gulp.src(typesDts),
 		);
 
