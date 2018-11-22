@@ -87,7 +87,7 @@ namespace snippetExt {
 	}
 
 	export const snippetsContribution: IJSONSchema = {
-		description: localize('vscode.extension.contributes.snippets', 'Contributes snippets.'),
+		description: localize('hypert.extension.contributes.snippets', 'Contributes snippets.'),
 		type: 'array',
 		defaultSnippets: [{ body: [{ language: '', path: '' }] }],
 		items: {
@@ -95,11 +95,11 @@ namespace snippetExt {
 			defaultSnippets: [{ body: { language: '${1:id}', path: './snippets/${2:id}.json.' } }],
 			properties: {
 				language: {
-					description: localize('vscode.extension.contributes.snippets-language', 'Language identifier for which this snippet is contributed to.'),
+					description: localize('hypert.extension.contributes.snippets-language', 'Language identifier for which this snippet is contributed to.'),
 					type: 'string'
 				},
 				path: {
-					description: localize('vscode.extension.contributes.snippets-path', 'Path of the snippets file. The path is relative to the extension folder and typically starts with \'./snippets/\'.'),
+					description: localize('hypert.extension.contributes.snippets-path', 'Path of the snippets file. The path is relative to the extension folder and typically starts with \'./snippets/\'.'),
 					type: 'string'
 				}
 			}
@@ -253,7 +253,7 @@ class SnippetsService implements ISnippetsService {
 
 	private _initWorkspaceFolderSnippets(workspace: IWorkspace, bucket: IDisposable[]): Thenable<any> {
 		let promises = workspace.folders.map(folder => {
-			const snippetFolder = folder.toResource('.vscode');
+			const snippetFolder = folder.toResource('.hypert');
 			return this._fileService.existsFile(snippetFolder).then(value => {
 				if (value) {
 					this._initFolderSnippets(SnippetSource.Workspace, snippetFolder, bucket);

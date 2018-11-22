@@ -441,7 +441,7 @@ export class ModelServiceImpl extends Disposable implements IModelService {
 		// clean up markers for internal, transient models
 		if (model.uri.scheme === network.Schemas.inMemory
 			|| model.uri.scheme === network.Schemas.internal
-			|| model.uri.scheme === network.Schemas.vscode) {
+			|| model.uri.scheme === network.Schemas.hypert) {
 			if (this._markerService) {
 				this._markerService.read({ resource: model.uri }).map(marker => marker.owner).forEach(owner => this._markerService.remove(owner, [model.uri]));
 			}

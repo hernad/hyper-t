@@ -5,7 +5,7 @@
 
 import { URI, UriComponents } from 'base/common/uri';
 import { MainContext, IMainContext, ExtHostFileSystemShape, MainThreadFileSystemShape, IFileChangeDto } from './extHost.protocol';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import * as files from 'platform/files/common/files';
 import { IDisposable, toDisposable, dispose } from 'base/common/lifecycle';
 import { FileChangeType, DocumentLink } from 'workbench/api/node/extHostTypes';
@@ -80,10 +80,10 @@ class FsLinkProvider {
 		}
 	}
 
-	provideDocumentLinks(document: vscode.TextDocument): vscode.ProviderResult<vscode.DocumentLink[]> {
+	provideDocumentLinks(document: hypert.TextDocument): hypert.ProviderResult<hypert.DocumentLink[]> {
 		this._initStateMachine();
 
-		const result: vscode.DocumentLink[] = [];
+		const result: hypert.DocumentLink[] = [];
 		const links = LinkComputer.computeLinks({
 			getLineContent(lineNumber: number): string {
 				return document.lineAt(lineNumber - 1).text;
@@ -109,7 +109,7 @@ export class ExtHostFileSystem implements ExtHostFileSystemShape {
 
 	private readonly _proxy: MainThreadFileSystemShape;
 	private readonly _linkProvider = new FsLinkProvider();
-	private readonly _fsProvider = new Map<number, vscode.FileSystemProvider>();
+	private readonly _fsProvider = new Map<number, hypert.FileSystemProvider>();
 	private readonly _usedSchemes = new Set<string>();
 	private readonly _watches = new Map<number, IDisposable>();
 
@@ -120,7 +120,7 @@ export class ExtHostFileSystem implements ExtHostFileSystemShape {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadFileSystem);
 		this._usedSchemes.add(Schemas.file);
 		this._usedSchemes.add(Schemas.untitled);
-		this._usedSchemes.add(Schemas.vscode);
+		this._usedSchemes.add(Schemas.hypert);
 		this._usedSchemes.add(Schemas.inMemory);
 		this._usedSchemes.add(Schemas.internal);
 		this._usedSchemes.add(Schemas.http);
@@ -139,7 +139,7 @@ export class ExtHostFileSystem implements ExtHostFileSystemShape {
 		}
 	}
 
-	registerFileSystemProvider(scheme: string, provider: vscode.FileSystemProvider, options: { isCaseSensitive?: boolean, isReadonly?: boolean } = {}) {
+	registerFileSystemProvider(scheme: string, provider: hypert.FileSystemProvider, options: { isCaseSensitive?: boolean, isReadonly?: boolean } = {}) {
 
 		if (this._usedSchemes.has(scheme)) {
 			throw new Error(`a provider for the scheme '${scheme}' is already registered`);
@@ -209,7 +209,7 @@ export class ExtHostFileSystem implements ExtHostFileSystemShape {
 		this._proxy.$setUriFormatter(scheme, formatter);
 	}
 
-	private static _asIStat(stat: vscode.FileStat): files.IStat {
+	private static _asIStat(stat: hypert.FileStat): files.IStat {
 		const { type, ctime, mtime, size } = stat;
 		return { type, ctime, mtime, size };
 	}

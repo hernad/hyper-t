@@ -447,7 +447,7 @@ export class TextAreaHandler extends ViewPart {
 	public prepareRender(ctx: RenderingContext): void {
 		if (this._accessibilitySupport === platform.AccessibilitySupport.Enabled) {
 			// Do not move the textarea with the cursor, as this generates accessibility events that might confuse screen readers
-			// See https://github.com/Microsoft/vscode/issues/26730
+			// See https://github.com/hernad/hyper-t/issues/26730
 			this._primaryCursorVisibleRange = null;
 		} else {
 			const primaryCursorPosition = new Position(this._selections[0].positionLineNumber, this._selections[0].positionColumn);

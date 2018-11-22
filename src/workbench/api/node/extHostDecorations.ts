@@ -3,14 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { URI } from 'base/common/uri';
 import { MainContext, IMainContext, ExtHostDecorationsShape, MainThreadDecorationsShape, DecorationData, DecorationRequest, DecorationReply } from 'workbench/api/node/extHost.protocol';
 import { Disposable } from 'workbench/api/node/extHostTypes';
 import { CancellationToken } from 'base/common/cancellation';
 
 interface ProviderData {
-	provider: vscode.DecorationProvider;
+	provider: hypert.DecorationProvider;
 	extensionId: string;
 }
 
@@ -25,7 +25,7 @@ export class ExtHostDecorations implements ExtHostDecorationsShape {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadDecorations);
 	}
 
-	registerDecorationProvider(provider: vscode.DecorationProvider, extensionId: string): vscode.Disposable {
+	registerDecorationProvider(provider: hypert.DecorationProvider, extensionId: string): hypert.Disposable {
 		const handle = ExtHostDecorations._handlePool++;
 		this._provider.set(handle, { provider, extensionId });
 		this._proxy.$registerDecorationProvider(handle, extensionId);

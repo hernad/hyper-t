@@ -7,7 +7,7 @@ import * as crypto from 'crypto';
 
 import { URI } from 'base/common/uri';
 import { illegalArgument } from 'base/common/errors';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { isMarkdownString } from 'base/common/htmlContent';
 import { IRelativePattern } from 'base/common/glob';
 import { relative } from 'path';
@@ -219,7 +219,7 @@ export class Position {
 
 export class Range {
 
-	static isRange(thing: any): thing is vscode.Range {
+	static isRange(thing: any): thing is hypert.Range {
 		if (thing instanceof Range) {
 			return true;
 		}
@@ -524,19 +524,19 @@ export interface IFileTextEdit {
 	edit: TextEdit;
 }
 
-export class WorkspaceEdit implements vscode.WorkspaceEdit {
+export class WorkspaceEdit implements hypert.WorkspaceEdit {
 
 	private _edits = new Array<IFileOperation | IFileTextEdit>();
 
-	renameFile(from: vscode.Uri, to: vscode.Uri, options?: { overwrite?: boolean, ignoreIfExists?: boolean }): void {
+	renameFile(from: hypert.Uri, to: hypert.Uri, options?: { overwrite?: boolean, ignoreIfExists?: boolean }): void {
 		this._edits.push({ _type: 1, from, to, options });
 	}
 
-	createFile(uri: vscode.Uri, options?: { overwrite?: boolean, ignoreIfExists?: boolean }): void {
+	createFile(uri: hypert.Uri, options?: { overwrite?: boolean, ignoreIfExists?: boolean }): void {
 		this._edits.push({ _type: 1, from: undefined, to: uri, options });
 	}
 
-	deleteFile(uri: vscode.Uri, options?: { recursive?: boolean, ignoreIfNotExists?: boolean }): void {
+	deleteFile(uri: hypert.Uri, options?: { recursive?: boolean, ignoreIfNotExists?: boolean }): void {
 		this._edits.push({ _type: 1, from: uri, to: undefined, options });
 	}
 
@@ -837,18 +837,18 @@ export class Diagnostic {
 
 export class Hover {
 
-	public contents: vscode.MarkdownString[] | vscode.MarkedString[];
+	public contents: hypert.MarkdownString[] | hypert.MarkedString[];
 	public range: Range | undefined;
 
 	constructor(
-		contents: vscode.MarkdownString | vscode.MarkedString | vscode.MarkdownString[] | vscode.MarkedString[],
+		contents: hypert.MarkdownString | hypert.MarkedString | hypert.MarkdownString[] | hypert.MarkedString[],
 		range?: Range
 	) {
 		if (!contents) {
 			throw new Error('Illegal argument, contents must be defined');
 		}
 		if (Array.isArray(contents)) {
-			this.contents = <vscode.MarkdownString[] | vscode.MarkedString[]>contents;
+			this.contents = <hypert.MarkdownString[] | hypert.MarkedString[]>contents;
 		} else if (isMarkdownString(contents)) {
 			this.contents = [contents];
 		} else {
@@ -996,7 +996,7 @@ export enum CodeActionTrigger {
 export class CodeAction {
 	title: string;
 
-	command?: vscode.Command;
+	command?: hypert.Command;
 
 	edit?: WorkspaceEdit;
 
@@ -1041,9 +1041,9 @@ export class CodeLens {
 
 	range: Range;
 
-	command: vscode.Command | undefined;
+	command: hypert.Command | undefined;
 
-	constructor(range: Range, command?: vscode.Command) {
+	constructor(range: Range, command?: hypert.Command) {
 		this.range = range;
 		this.command = command;
 	}
@@ -1167,7 +1167,7 @@ export enum CompletionItemInsertTextRule {
 	KeepWhitespace = 0b1
 }
 
-export class CompletionItem implements vscode.CompletionItem {
+export class CompletionItem implements hypert.CompletionItem {
 
 	label: string;
 	kind: CompletionItemKind | undefined;
@@ -1182,7 +1182,7 @@ export class CompletionItem implements vscode.CompletionItem {
 	commitCharacters: string[];
 	textEdit: TextEdit;
 	additionalTextEdits: TextEdit[];
-	command: vscode.Command;
+	command: hypert.Command;
 
 	constructor(label: string, kind?: CompletionItemKind) {
 		this.label = label;
@@ -1208,9 +1208,9 @@ export class CompletionList {
 
 	isIncomplete?: boolean;
 
-	items: vscode.CompletionItem[];
+	items: hypert.CompletionItem[];
 
-	constructor(items: vscode.CompletionItem[] = [], isIncomplete: boolean = false) {
+	constructor(items: hypert.CompletionItem[] = [], isIncomplete: boolean = false) {
 		this.items = items;
 		this.isIncomplete = isIncomplete;
 	}
@@ -1385,7 +1385,7 @@ export enum TaskPanelKind {
 	New = 3
 }
 
-export class TaskGroup implements vscode.TaskGroup {
+export class TaskGroup implements hypert.TaskGroup {
 
 	private _id: string;
 
@@ -1427,15 +1427,15 @@ export class TaskGroup implements vscode.TaskGroup {
 	}
 }
 
-export class ProcessExecution implements vscode.ProcessExecution {
+export class ProcessExecution implements hypert.ProcessExecution {
 
 	private _process: string;
 	private _args: string[];
-	private _options: vscode.ProcessExecutionOptions;
+	private _options: hypert.ProcessExecutionOptions;
 
-	constructor(process: string, options?: vscode.ProcessExecutionOptions);
-	constructor(process: string, args: string[], options?: vscode.ProcessExecutionOptions);
-	constructor(process: string, varg1?: string[] | vscode.ProcessExecutionOptions, varg2?: vscode.ProcessExecutionOptions) {
+	constructor(process: string, options?: hypert.ProcessExecutionOptions);
+	constructor(process: string, args: string[], options?: hypert.ProcessExecutionOptions);
+	constructor(process: string, varg1?: string[] | hypert.ProcessExecutionOptions, varg2?: hypert.ProcessExecutionOptions) {
 		if (typeof process !== 'string') {
 			throw illegalArgument('process');
 		}
@@ -1476,11 +1476,11 @@ export class ProcessExecution implements vscode.ProcessExecution {
 		this._args = value;
 	}
 
-	get options(): vscode.ProcessExecutionOptions {
+	get options(): hypert.ProcessExecutionOptions {
 		return this._options;
 	}
 
-	set options(value: vscode.ProcessExecutionOptions) {
+	set options(value: hypert.ProcessExecutionOptions) {
 		this._options = value;
 	}
 
@@ -1499,16 +1499,16 @@ export class ProcessExecution implements vscode.ProcessExecution {
 	}
 }
 
-export class ShellExecution implements vscode.ShellExecution {
+export class ShellExecution implements hypert.ShellExecution {
 
 	private _commandLine: string;
-	private _command: string | vscode.ShellQuotedString;
-	private _args: (string | vscode.ShellQuotedString)[];
-	private _options: vscode.ShellExecutionOptions;
+	private _command: string | hypert.ShellQuotedString;
+	private _args: (string | hypert.ShellQuotedString)[];
+	private _options: hypert.ShellExecutionOptions;
 
-	constructor(commandLine: string, options?: vscode.ShellExecutionOptions);
-	constructor(command: string | vscode.ShellQuotedString, args: (string | vscode.ShellQuotedString)[], options?: vscode.ShellExecutionOptions);
-	constructor(arg0: string | vscode.ShellQuotedString, arg1?: vscode.ShellExecutionOptions | (string | vscode.ShellQuotedString)[], arg2?: vscode.ShellExecutionOptions) {
+	constructor(commandLine: string, options?: hypert.ShellExecutionOptions);
+	constructor(command: string | hypert.ShellQuotedString, args: (string | hypert.ShellQuotedString)[], options?: hypert.ShellExecutionOptions);
+	constructor(arg0: string | hypert.ShellQuotedString, arg1?: hypert.ShellExecutionOptions | (string | hypert.ShellQuotedString)[], arg2?: hypert.ShellExecutionOptions) {
 		if (Array.isArray(arg1)) {
 			if (!arg0) {
 				throw illegalArgument('command can\'t be undefined or null');
@@ -1517,7 +1517,7 @@ export class ShellExecution implements vscode.ShellExecution {
 				throw illegalArgument('command');
 			}
 			this._command = arg0;
-			this._args = arg1 as (string | vscode.ShellQuotedString)[];
+			this._args = arg1 as (string | hypert.ShellQuotedString)[];
 			this._options = arg2;
 		} else {
 			if (typeof arg0 !== 'string') {
@@ -1539,30 +1539,30 @@ export class ShellExecution implements vscode.ShellExecution {
 		this._commandLine = value;
 	}
 
-	get command(): string | vscode.ShellQuotedString {
+	get command(): string | hypert.ShellQuotedString {
 		return this._command;
 	}
 
-	set command(value: string | vscode.ShellQuotedString) {
+	set command(value: string | hypert.ShellQuotedString) {
 		if (typeof value !== 'string' && typeof value.value !== 'string') {
 			throw illegalArgument('command');
 		}
 		this._command = value;
 	}
 
-	get args(): (string | vscode.ShellQuotedString)[] {
+	get args(): (string | hypert.ShellQuotedString)[] {
 		return this._args;
 	}
 
-	set args(value: (string | vscode.ShellQuotedString)[]) {
+	set args(value: (string | hypert.ShellQuotedString)[]) {
 		this._args = value || [];
 	}
 
-	get options(): vscode.ShellExecutionOptions {
+	get options(): hypert.ShellExecutionOptions {
 		return this._options;
 	}
 
-	set options(value: vscode.ShellExecutionOptions) {
+	set options(value: hypert.ShellExecutionOptions) {
 		this._options = value;
 	}
 
@@ -1595,12 +1595,12 @@ export enum TaskScope {
 	Workspace = 2
 }
 
-export class Task implements vscode.Task {
+export class Task implements hypert.Task {
 
 	private __id: string;
 
-	private _definition: vscode.TaskDefinition;
-	private _scope: vscode.TaskScope.Global | vscode.TaskScope.Workspace | vscode.WorkspaceFolder;
+	private _definition: hypert.TaskDefinition;
+	private _scope: hypert.TaskScope.Global | hypert.TaskScope.Workspace | hypert.WorkspaceFolder;
 	private _name: string;
 	private _execution: ProcessExecution | ShellExecution;
 	private _problemMatchers: string[];
@@ -1608,11 +1608,11 @@ export class Task implements vscode.Task {
 	private _isBackground: boolean;
 	private _source: string;
 	private _group: TaskGroup;
-	private _presentationOptions: vscode.TaskPresentationOptions;
+	private _presentationOptions: hypert.TaskPresentationOptions;
 
-	constructor(definition: vscode.TaskDefinition, name: string, source: string, execution?: ProcessExecution | ShellExecution, problemMatchers?: string | string[]);
-	constructor(definition: vscode.TaskDefinition, scope: vscode.TaskScope.Global | vscode.TaskScope.Workspace | vscode.WorkspaceFolder, name: string, source: string, execution?: ProcessExecution | ShellExecution, problemMatchers?: string | string[]);
-	constructor(definition: vscode.TaskDefinition, arg2: string | (vscode.TaskScope.Global | vscode.TaskScope.Workspace) | vscode.WorkspaceFolder, arg3: any, arg4?: any, arg5?: any, arg6?: any) {
+	constructor(definition: hypert.TaskDefinition, name: string, source: string, execution?: ProcessExecution | ShellExecution, problemMatchers?: string | string[]);
+	constructor(definition: hypert.TaskDefinition, scope: hypert.TaskScope.Global | hypert.TaskScope.Workspace | hypert.WorkspaceFolder, name: string, source: string, execution?: ProcessExecution | ShellExecution, problemMatchers?: string | string[]);
+	constructor(definition: hypert.TaskDefinition, arg2: string | (hypert.TaskScope.Global | hypert.TaskScope.Workspace) | hypert.WorkspaceFolder, arg3: any, arg4?: any, arg5?: any, arg6?: any) {
 		this.definition = definition;
 		let problemMatchers: string | string[];
 		if (typeof arg2 === 'string') {
@@ -1674,11 +1674,11 @@ export class Task implements vscode.Task {
 		}
 	}
 
-	get definition(): vscode.TaskDefinition {
+	get definition(): hypert.TaskDefinition {
 		return this._definition;
 	}
 
-	set definition(value: vscode.TaskDefinition) {
+	set definition(value: hypert.TaskDefinition) {
 		if (value === void 0 || value === null) {
 			throw illegalArgument('Kind can\'t be undefined or null');
 		}
@@ -1686,11 +1686,11 @@ export class Task implements vscode.Task {
 		this._definition = value;
 	}
 
-	get scope(): vscode.TaskScope.Global | vscode.TaskScope.Workspace | vscode.WorkspaceFolder {
+	get scope(): hypert.TaskScope.Global | hypert.TaskScope.Workspace | hypert.WorkspaceFolder {
 		return this._scope;
 	}
 
-	set target(value: vscode.TaskScope.Global | vscode.TaskScope.Workspace | vscode.WorkspaceFolder) {
+	set target(value: hypert.TaskScope.Global | hypert.TaskScope.Workspace | hypert.WorkspaceFolder) {
 		this.clear();
 		this._scope = value;
 	}
@@ -1775,11 +1775,11 @@ export class Task implements vscode.Task {
 		this._group = value;
 	}
 
-	get presentationOptions(): vscode.TaskPresentationOptions {
+	get presentationOptions(): hypert.TaskPresentationOptions {
 		return this._presentationOptions;
 	}
 
-	set presentationOptions(value: vscode.TaskPresentationOptions) {
+	set presentationOptions(value: hypert.TaskPresentationOptions) {
 		if (value === null) {
 			value = undefined;
 		}
@@ -1797,16 +1797,16 @@ export enum ProgressLocation {
 
 export class TreeItem {
 
-	label?: string | vscode.TreeItemLabel;
+	label?: string | hypert.TreeItemLabel;
 	resourceUri?: URI;
 	iconPath?: string | URI | { light: string | URI; dark: string | URI };
-	command?: vscode.Command;
+	command?: hypert.Command;
 	contextValue?: string;
 	tooltip?: string;
 
-	constructor(label: string | vscode.TreeItemLabel, collapsibleState?: vscode.TreeItemCollapsibleState)
-	constructor(resourceUri: URI, collapsibleState?: vscode.TreeItemCollapsibleState)
-	constructor(arg1: string | vscode.TreeItemLabel | URI, public collapsibleState: vscode.TreeItemCollapsibleState = TreeItemCollapsibleState.None) {
+	constructor(label: string | hypert.TreeItemLabel, collapsibleState?: hypert.TreeItemCollapsibleState)
+	constructor(resourceUri: URI, collapsibleState?: hypert.TreeItemCollapsibleState)
+	constructor(arg1: string | hypert.TreeItemLabel | URI, public collapsibleState: hypert.TreeItemCollapsibleState = TreeItemCollapsibleState.None) {
 		if (arg1 instanceof URI) {
 			this.resourceUri = arg1;
 		} else {
@@ -1855,7 +1855,7 @@ export class RelativePattern implements IRelativePattern {
 
 	pattern: string;
 
-	constructor(base: vscode.WorkspaceFolder | string, pattern: string) {
+	constructor(base: hypert.WorkspaceFolder | string, pattern: string) {
 		if (typeof base !== 'string') {
 			if (!base || !URI.isUri(base.uri)) {
 				throw illegalArgument('base');
@@ -1935,7 +1935,7 @@ export class FunctionBreakpoint extends Breakpoint {
 	}
 }
 
-export class DebugAdapterExecutable implements vscode.DebugAdapterExecutable {
+export class DebugAdapterExecutable implements hypert.DebugAdapterExecutable {
 	readonly command: string;
 	readonly args: string[];
 	readonly env?: { [key: string]: string };
@@ -1949,7 +1949,7 @@ export class DebugAdapterExecutable implements vscode.DebugAdapterExecutable {
 	}
 }
 
-export class DebugAdapterServer implements vscode.DebugAdapterServer {
+export class DebugAdapterServer implements hypert.DebugAdapterServer {
 	readonly port: number;
 	readonly host: string;
 
@@ -1959,7 +1959,7 @@ export class DebugAdapterServer implements vscode.DebugAdapterServer {
 	}
 }
 
-export class DebugAdapterImplementation implements vscode.DebugAdapterImplementation {
+export class DebugAdapterImplementation implements hypert.DebugAdapterImplementation {
 	readonly implementation: any;
 
 	constructor(transport: any) {
@@ -2064,7 +2064,7 @@ export enum CommentThreadCollapsibleState {
 
 export class QuickInputButtons {
 
-	static readonly Back: vscode.QuickInputButton = { iconPath: 'back.svg' };
+	static readonly Back: hypert.QuickInputButton = { iconPath: 'back.svg' };
 
 	private constructor() { }
 }

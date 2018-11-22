@@ -186,7 +186,7 @@ export function tokenColorsSchema(description: string): IJSONSchema {
 	};
 }
 
-export const schemaId = 'vscode://schemas/color-theme';
+export const schemaId = 'hypert://schemas/color-theme';
 const schema: IJSONSchema = {
 	type: 'object',
 	allowComments: true,

@@ -6,21 +6,21 @@
 import { CancellationTokenSource } from 'base/common/cancellation';
 import { OutputChannel } from 'workbench/services/search/node/ripgrepSearchUtils';
 import { RipgrepTextSearchEngine } from 'workbench/services/search/node/ripgrepTextSearchEngine';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
-export class RipgrepSearchProvider implements vscode.TextSearchProvider {
-	private inProgress: Set<vscode.CancellationTokenSource> = new Set();
+export class RipgrepSearchProvider implements hypert.TextSearchProvider {
+	private inProgress: Set<hypert.CancellationTokenSource> = new Set();
 
 	constructor(private outputChannel: OutputChannel) {
 		process.once('exit', () => this.dispose());
 	}
 
-	provideTextSearchResults(query: vscode.TextSearchQuery, options: vscode.TextSearchOptions, progress: vscode.Progress<vscode.TextSearchResult>, token: vscode.CancellationToken): Promise<vscode.TextSearchComplete> {
+	provideTextSearchResults(query: hypert.TextSearchQuery, options: hypert.TextSearchOptions, progress: hypert.Progress<hypert.TextSearchResult>, token: hypert.CancellationToken): Promise<hypert.TextSearchComplete> {
 		const engine = new RipgrepTextSearchEngine(this.outputChannel);
 		return this.withToken(token, token => engine.provideTextSearchResults(query, options, progress, token));
 	}
 
-	private async withToken<T>(token: vscode.CancellationToken, fn: (token: vscode.CancellationToken) => Thenable<T>): Promise<T> {
+	private async withToken<T>(token: hypert.CancellationToken, fn: (token: hypert.CancellationToken) => Thenable<T>): Promise<T> {
 		const merged = mergedTokenSource(token);
 		this.inProgress.add(merged);
 		const result = await fn(merged.token);
@@ -34,7 +34,7 @@ export class RipgrepSearchProvider implements vscode.TextSearchProvider {
 	}
 }
 
-function mergedTokenSource(token: vscode.CancellationToken): vscode.CancellationTokenSource {
+function mergedTokenSource(token: hypert.CancellationToken): hypert.CancellationTokenSource {
 	const tokenSource = new CancellationTokenSource();
 	token.onCancellationRequested(() => tokenSource.cancel());
 

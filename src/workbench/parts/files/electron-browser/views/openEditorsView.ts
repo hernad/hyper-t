@@ -373,9 +373,9 @@ export class OpenEditorsView extends ViewletPanel {
 			*/
 			this.telemetryService.publicLog('workbenchActionExecuted', { id: 'workbench.files.openFile', from: 'openEditors' });
 
-			const preserveActivateGroup = options.sideBySide && options.preserveFocus; // needed for https://github.com/Microsoft/vscode/issues/42399
+			const preserveActivateGroup = options.sideBySide && options.preserveFocus; // needed for https://github.com/hernad/hyper-t/issues/42399
 			if (!preserveActivateGroup) {
-				this.editorGroupService.activateGroup(element.groupId); // needed for https://github.com/Microsoft/vscode/issues/6672
+				this.editorGroupService.activateGroup(element.groupId); // needed for https://github.com/hernad/hyper-t/issues/6672
 			}
 			this.editorService.openEditor(element.editor, options, options.sideBySide ? SIDE_GROUP : ACTIVE_GROUP).then(editor => {
 				if (!preserveActivateGroup) {
@@ -517,7 +517,7 @@ class OpenEditorsDelegate implements IListVirtualDelegate<OpenEditor | IEditorGr
 
 /**
  * Check if the item being dragged is one of the supported types that can be dropped on an
- * open editor or editor group. Fixes https://github.com/Microsoft/vscode/issues/52344.
+ * open editor or editor group. Fixes https://github.com/hernad/hyper-t/issues/52344.
  * @param e
  * @returns true if dropping is supported.
  */

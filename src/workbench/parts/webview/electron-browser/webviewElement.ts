@@ -279,7 +279,7 @@ export class WebviewElement extends Disposable {
 
 	private onDidBlockSvg() {
 		this.sendMessage({
-			name: 'vscode-did-block-svg'
+			name: 'hypert-did-block-svg'
 		});
 	}
 
@@ -289,7 +289,7 @@ export class WebviewElement extends Disposable {
 		const exportedColors = colorRegistry.getColorRegistry().getColors().reduce((colors, entry) => {
 			const color = theme.getColor(entry.id);
 			if (color) {
-				colors['vscode-' + entry.id.replace('.', '-')] = color.toString();
+				colors['hypert-' + entry.id.replace('.', '-')] = color.toString();
 			}
 			return colors;
 		}, {});
@@ -306,9 +306,9 @@ export class WebviewElement extends Disposable {
 			'link-active-color': theme.getColor(colorRegistry.textLinkActiveForeground).toString(),
 
 			// Offical API
-			'vscode-editor-font-family': fontFamily,
-			'vscode-editor-font-weight': fontWeight,
-			'vscode-editor-font-size': fontSize,
+			'hypert-editor-font-family': fontFamily,
+			'hypert-editor-font-weight': fontWeight,
+			'hypert-editor-font-size': fontSize,
 			...exportedColors
 		};
 
@@ -440,9 +440,9 @@ export class WebviewElement extends Disposable {
 
 
 enum ApiThemeClassName {
-	light = 'vscode-light',
-	dark = 'vscode-dark',
-	highContrast = 'vscode-high-contrast'
+	light = 'hypert-light',
+	dark = 'hypert-dark',
+	highContrast = 'hypert-high-contrast'
 }
 
 namespace ApiThemeClassName {

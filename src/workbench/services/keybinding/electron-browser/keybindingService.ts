@@ -203,34 +203,34 @@ let keybindingType: IJSONSchema = {
 	default: { command: '', key: '' },
 	properties: {
 		command: {
-			description: nls.localize('vscode.extension.contributes.keybindings.command', 'Identifier of the command to run when keybinding is triggered.'),
+			description: nls.localize('hypert.extension.contributes.keybindings.command', 'Identifier of the command to run when keybinding is triggered.'),
 			type: 'string'
 		},
 		key: {
-			description: nls.localize('vscode.extension.contributes.keybindings.key', 'Key or key sequence (separate keys with plus-sign and sequences with space, e.g Ctrl+O and Ctrl+L L for a chord).'),
+			description: nls.localize('hypert.extension.contributes.keybindings.key', 'Key or key sequence (separate keys with plus-sign and sequences with space, e.g Ctrl+O and Ctrl+L L for a chord).'),
 			type: 'string'
 		},
 		mac: {
-			description: nls.localize('vscode.extension.contributes.keybindings.mac', 'Mac specific key or key sequence.'),
+			description: nls.localize('hypert.extension.contributes.keybindings.mac', 'Mac specific key or key sequence.'),
 			type: 'string'
 		},
 		linux: {
-			description: nls.localize('vscode.extension.contributes.keybindings.linux', 'Linux specific key or key sequence.'),
+			description: nls.localize('hypert.extension.contributes.keybindings.linux', 'Linux specific key or key sequence.'),
 			type: 'string'
 		},
 		win: {
-			description: nls.localize('vscode.extension.contributes.keybindings.win', 'Windows specific key or key sequence.'),
+			description: nls.localize('hypert.extension.contributes.keybindings.win', 'Windows specific key or key sequence.'),
 			type: 'string'
 		},
 		when: {
-			description: nls.localize('vscode.extension.contributes.keybindings.when', 'Condition when the key is active.'),
+			description: nls.localize('hypert.extension.contributes.keybindings.when', 'Condition when the key is active.'),
 			type: 'string'
 		}
 	}
 };
 
 let keybindingsExtPoint = ExtensionsRegistry.registerExtensionPoint<ContributedKeyBinding | ContributedKeyBinding[]>('keybindings', [], {
-	description: nls.localize('vscode.extension.contributes.keybindings', "Contributes keybindings."),
+	description: nls.localize('hypert.extension.contributes.keybindings', "Contributes keybindings."),
 	oneOf: [
 		keybindingType,
 		{
@@ -563,7 +563,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 	}
 }
 
-let schemaId = 'vscode://schemas/keybindings';
+let schemaId = 'hypert://schemas/keybindings';
 let schema: IJSONSchema = {
 	'id': schemaId,
 	'type': 'array',

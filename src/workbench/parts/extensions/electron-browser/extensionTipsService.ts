@@ -334,7 +334,7 @@ export class ExtensionTipsService extends Disposable implements IExtensionTipsSe
 	 * @param workspaceFolder
 	 */
 	private resolveWorkspaceFolderExtensionConfig(workspaceFolder: IWorkspaceFolder): Promise<IExtensionsConfigContent | null> {
-		const extensionsJsonUri = workspaceFolder.toResource(paths.join('.vscode', 'extensions.json'));
+		const extensionsJsonUri = workspaceFolder.toResource(paths.join('.hypert', 'extensions.json'));
 
 		return Promise.resolve(this.fileService.resolveFile(extensionsJsonUri)
 			.then(() => this.fileService.resolveContent(extensionsJsonUri))
@@ -647,8 +647,8 @@ export class ExtensionTipsService extends Disposable implements IExtensionTipsSe
 				hasSuggestion = true;
 
 				let message = localize('reallyRecommended2', "The '{0}' extension is recommended for this file type.", name);
-				// Temporary fix for the only extension pack we recommend. See https://github.com/Microsoft/vscode/issues/35364
-				if (id === 'vscjava.vscode-java-pack') {
+				// Temporary fix for the only extension pack we recommend. See https://github.com/hernad/hyper-t/issues/35364
+				if (id === 'vscjava.hypert-java-pack') {
 					message = localize('reallyRecommendedExtensionPack', "The '{0}' extension pack is recommended for this file type.", name);
 				}
 

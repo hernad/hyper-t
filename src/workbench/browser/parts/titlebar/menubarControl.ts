@@ -1030,7 +1030,7 @@ export class MenubarControl extends Disposable {
 				}
 			});
 
-			menuToPopulate.items.push({ id: 'vscode.menubar.separator' });
+			menuToPopulate.items.push({ id: 'hypert.menubar.separator' });
 		}
 
 		if (menuToPopulate.items.length > 0) {

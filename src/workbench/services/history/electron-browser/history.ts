@@ -159,7 +159,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 
 		// if the service is created late enough that an editor is already opened
 		// make sure to trigger the onActiveEditorChanged() to track the editor
-		// properly (fixes https://github.com/Microsoft/vscode/issues/59908)
+		// properly (fixes https://github.com/hernad/hyper-t/issues/59908)
 		if (editorService.activeControl) {
 			this.onActiveEditorChanged();
 		}
@@ -719,7 +719,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 			}
 
 			if (this.partService.isCreated() && !this.fileService.canHandleResource(inputResource)) {
-				return false; // make sure to only check this when workbench has started (for https://github.com/Microsoft/vscode/issues/48275)
+				return false; // make sure to only check this when workbench has started (for https://github.com/hernad/hyper-t/issues/48275)
 			}
 
 			return inputResource.toString() === resource.toString();
@@ -791,7 +791,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 			} catch (error) {
 				onUnexpectedError(error);
 
-				return void 0; // https://github.com/Microsoft/vscode/issues/60960
+				return void 0; // https://github.com/hernad/hyper-t/issues/60960
 			}
 		}).filter(input => !!input);
 	}

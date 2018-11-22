@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as chokidar from 'vscode-chokidar';
+import * as chokidar from 'hypert-chokidar';
 import * as fs from 'fs';
 
 import * as gracefulFs from 'graceful-fs';
@@ -114,7 +114,7 @@ export class ChokidarWatcherService implements IWatcherService {
 			followSymlinks: true, // this is the default of chokidar and supports file events through symlinks
 			interval: pollingInterval, // while not used in normal cases, if any error causes chokidar to fallback to polling, increase its intervals
 			binaryInterval: pollingInterval,
-			disableGlobbing: true // fix https://github.com/Microsoft/vscode/issues/4586
+			disableGlobbing: true // fix https://github.com/hernad/hyper-t/issues/4586
 		};
 
 		// if there's only one request, use the built-in ignore-filterering
@@ -255,7 +255,7 @@ export class ChokidarWatcherService implements IWatcherService {
 				// the watcher consumes so many file descriptors that
 				// we are running into a limit. We only want to warn
 				// once in this case to avoid log spam.
-				// See https://github.com/Microsoft/vscode/issues/7950
+				// See https://github.com/hernad/hyper-t/issues/7950
 				if ((<any>error).code === 'ENOSPC') {
 					if (!this.enospcErrorLogged) {
 						this.enospcErrorLogged = true;

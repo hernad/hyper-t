@@ -13,7 +13,7 @@ import { ExtHostCommands } from 'workbench/api/node/extHostCommands';
 import { MainContext, MainThreadSCMShape, SCMRawResource, SCMRawResourceSplice, SCMRawResourceSplices, IMainContext, ExtHostSCMShape } from './extHost.protocol';
 import { sortedDiff } from 'base/common/arrays';
 import { comparePaths } from 'base/common/comparers';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { ISplice } from 'base/common/sequence';
 import { ILogService } from 'platform/log/common/log';
 import { CancellationToken } from 'base/common/cancellation';
@@ -22,7 +22,7 @@ type ProviderHandle = number;
 type GroupHandle = number;
 type ResourceStateHandle = number;
 
-function getIconPath(decorations: vscode.SourceControlResourceThemableDecorations) {
+function getIconPath(decorations: hypert.SourceControlResourceThemableDecorations) {
 	if (!decorations) {
 		return undefined;
 	} else if (typeof decorations.iconPath === 'string') {
@@ -33,7 +33,7 @@ function getIconPath(decorations: vscode.SourceControlResourceThemableDecoration
 	return undefined;
 }
 
-function compareResourceThemableDecorations(a: vscode.SourceControlResourceThemableDecorations, b: vscode.SourceControlResourceThemableDecorations): number {
+function compareResourceThemableDecorations(a: hypert.SourceControlResourceThemableDecorations, b: hypert.SourceControlResourceThemableDecorations): number {
 	if (!a.iconPath && !b.iconPath) {
 		return 0;
 	} else if (!a.iconPath) {
@@ -47,7 +47,7 @@ function compareResourceThemableDecorations(a: vscode.SourceControlResourceThema
 	return comparePaths(aPath, bPath);
 }
 
-function compareResourceStatesDecorations(a: vscode.SourceControlResourceDecorations, b: vscode.SourceControlResourceDecorations): number {
+function compareResourceStatesDecorations(a: hypert.SourceControlResourceDecorations, b: hypert.SourceControlResourceDecorations): number {
 	let result = 0;
 
 	if (a.strikeThrough !== b.strikeThrough) {
@@ -91,7 +91,7 @@ function compareResourceStatesDecorations(a: vscode.SourceControlResourceDecorat
 	return result;
 }
 
-function compareResourceStates(a: vscode.SourceControlResourceState, b: vscode.SourceControlResourceState): number {
+function compareResourceStates(a: hypert.SourceControlResourceState, b: hypert.SourceControlResourceState): number {
 	let result = comparePaths(a.resourceUri.fsPath, b.resourceUri.fsPath, true);
 
 	if (result !== 0) {
@@ -119,14 +119,14 @@ function compareArgs(a: any[], b: any[]): boolean {
 	return true;
 }
 
-function commandEquals(a: vscode.Command, b: vscode.Command): boolean {
+function commandEquals(a: hypert.Command, b: hypert.Command): boolean {
 	return a.command === b.command
 		&& a.title === b.title
 		&& a.tooltip === b.tooltip
 		&& (a.arguments && b.arguments ? compareArgs(a.arguments, b.arguments) : a.arguments === b.arguments);
 }
 
-function commandListEquals(a: vscode.Command[], b: vscode.Command[]): boolean {
+function commandListEquals(a: hypert.Command[], b: hypert.Command[]): boolean {
 	if (a.length !== b.length) {
 		return false;
 	}
@@ -141,10 +141,10 @@ function commandListEquals(a: vscode.Command[], b: vscode.Command[]): boolean {
 }
 
 export interface IValidateInput {
-	(value: string, cursorPosition: number): vscode.ProviderResult<vscode.SourceControlInputBoxValidation | undefined | null>;
+	(value: string, cursorPosition: number): hypert.ProviderResult<hypert.SourceControlInputBoxValidation | undefined | null>;
 }
 
-export class ExtHostSCMInputBox implements vscode.SourceControlInputBox {
+export class ExtHostSCMInputBox implements hypert.SourceControlInputBox {
 
 	private _value: string = '';
 
@@ -224,14 +224,14 @@ export class ExtHostSCMInputBox implements vscode.SourceControlInputBox {
 	}
 }
 
-class ExtHostSourceControlResourceGroup implements vscode.SourceControlResourceGroup {
+class ExtHostSourceControlResourceGroup implements hypert.SourceControlResourceGroup {
 
 	private static _handlePool: number = 0;
 	private _resourceHandlePool: number = 0;
-	private _resourceStates: vscode.SourceControlResourceState[] = [];
+	private _resourceStates: hypert.SourceControlResourceState[] = [];
 
-	private _resourceStatesMap: Map<ResourceStateHandle, vscode.SourceControlResourceState> = new Map<ResourceStateHandle, vscode.SourceControlResourceState>();
-	private _resourceStatesCommandsMap: Map<ResourceStateHandle, vscode.Command> = new Map<ResourceStateHandle, vscode.Command>();
+	private _resourceStatesMap: Map<ResourceStateHandle, hypert.SourceControlResourceState> = new Map<ResourceStateHandle, hypert.SourceControlResourceState>();
+	private _resourceStatesCommandsMap: Map<ResourceStateHandle, hypert.Command> = new Map<ResourceStateHandle, hypert.Command>();
 
 	private _onDidUpdateResourceStates = new Emitter<void>();
 	readonly onDidUpdateResourceStates = this._onDidUpdateResourceStates.event;
@@ -239,7 +239,7 @@ class ExtHostSourceControlResourceGroup implements vscode.SourceControlResourceG
 	readonly onDidDispose = this._onDidDispose.event;
 
 	private _handlesSnapshot: number[] = [];
-	private _resourceSnapshot: vscode.SourceControlResourceState[] = [];
+	private _resourceSnapshot: hypert.SourceControlResourceState[] = [];
 
 	get id(): string { return this._id; }
 
@@ -256,8 +256,8 @@ class ExtHostSourceControlResourceGroup implements vscode.SourceControlResourceG
 		this._proxy.$updateGroup(this._sourceControlHandle, this.handle, { hideWhenEmpty });
 	}
 
-	get resourceStates(): vscode.SourceControlResourceState[] { return [...this._resourceStates]; }
-	set resourceStates(resources: vscode.SourceControlResourceState[]) {
+	get resourceStates(): hypert.SourceControlResourceState[] { return [...this._resourceStates]; }
+	set resourceStates(resources: hypert.SourceControlResourceState[]) {
 		this._resourceStates = [...resources];
 		this._onDidUpdateResourceStates.fire();
 	}
@@ -275,7 +275,7 @@ class ExtHostSourceControlResourceGroup implements vscode.SourceControlResourceG
 		this._proxy.$registerGroup(_sourceControlHandle, this.handle, _id, _label);
 	}
 
-	getResourceState(handle: number): vscode.SourceControlResourceState | undefined {
+	getResourceState(handle: number): hypert.SourceControlResourceState | undefined {
 		return this._resourceStatesMap.get(handle);
 	}
 
@@ -358,7 +358,7 @@ class ExtHostSourceControlResourceGroup implements vscode.SourceControlResourceG
 	}
 }
 
-class ExtHostSourceControl implements vscode.SourceControl {
+class ExtHostSourceControl implements hypert.SourceControl {
 
 	private static _handlePool: number = 0;
 	private _groups: Map<GroupHandle, ExtHostSourceControlResourceGroup> = new Map<GroupHandle, ExtHostSourceControlResourceGroup>();
@@ -371,7 +371,7 @@ class ExtHostSourceControl implements vscode.SourceControl {
 		return this._label;
 	}
 
-	get rootUri(): vscode.Uri | undefined {
+	get rootUri(): hypert.Uri | undefined {
 		return this._rootUri;
 	}
 
@@ -393,13 +393,13 @@ class ExtHostSourceControl implements vscode.SourceControl {
 		this._proxy.$updateSourceControl(this.handle, { count });
 	}
 
-	private _quickDiffProvider: vscode.QuickDiffProvider | undefined = undefined;
+	private _quickDiffProvider: hypert.QuickDiffProvider | undefined = undefined;
 
-	get quickDiffProvider(): vscode.QuickDiffProvider | undefined {
+	get quickDiffProvider(): hypert.QuickDiffProvider | undefined {
 		return this._quickDiffProvider;
 	}
 
-	set quickDiffProvider(quickDiffProvider: vscode.QuickDiffProvider | undefined) {
+	set quickDiffProvider(quickDiffProvider: hypert.QuickDiffProvider | undefined) {
 		this._quickDiffProvider = quickDiffProvider;
 		this._proxy.$updateSourceControl(this.handle, { hasQuickDiffProvider: !!quickDiffProvider });
 	}
@@ -415,26 +415,26 @@ class ExtHostSourceControl implements vscode.SourceControl {
 		this._proxy.$updateSourceControl(this.handle, { commitTemplate });
 	}
 
-	private _acceptInputCommand: vscode.Command | undefined = undefined;
+	private _acceptInputCommand: hypert.Command | undefined = undefined;
 
-	get acceptInputCommand(): vscode.Command | undefined {
+	get acceptInputCommand(): hypert.Command | undefined {
 		return this._acceptInputCommand;
 	}
 
-	set acceptInputCommand(acceptInputCommand: vscode.Command | undefined) {
+	set acceptInputCommand(acceptInputCommand: hypert.Command | undefined) {
 		this._acceptInputCommand = acceptInputCommand;
 
 		const internal = this._commands.converter.toInternal(acceptInputCommand);
 		this._proxy.$updateSourceControl(this.handle, { acceptInputCommand: internal });
 	}
 
-	private _statusBarCommands: vscode.Command[] | undefined = undefined;
+	private _statusBarCommands: hypert.Command[] | undefined = undefined;
 
-	get statusBarCommands(): vscode.Command[] | undefined {
+	get statusBarCommands(): hypert.Command[] | undefined {
 		return this._statusBarCommands;
 	}
 
-	set statusBarCommands(statusBarCommands: vscode.Command[] | undefined) {
+	set statusBarCommands(statusBarCommands: hypert.Command[] | undefined) {
 		if (this._statusBarCommands && statusBarCommands && commandListEquals(this._statusBarCommands, statusBarCommands)) {
 			return;
 		}
@@ -462,7 +462,7 @@ class ExtHostSourceControl implements vscode.SourceControl {
 		private _commands: ExtHostCommands,
 		private _id: string,
 		private _label: string,
-		private _rootUri?: vscode.Uri
+		private _rootUri?: hypert.Uri
 	) {
 		this._inputBox = new ExtHostSCMInputBox(_extension, this._proxy, this.handle);
 		this._proxy.$registerSourceControl(this.handle, _id, _label, _rootUri);
@@ -532,8 +532,8 @@ export class ExtHostSCM implements ExtHostSCMShape {
 	private _sourceControls: Map<ProviderHandle, ExtHostSourceControl> = new Map<ProviderHandle, ExtHostSourceControl>();
 	private _sourceControlsByExtension: Map<string, ExtHostSourceControl[]> = new Map<string, ExtHostSourceControl[]>();
 
-	private _onDidChangeActiveProvider = new Emitter<vscode.SourceControl>();
-	get onDidChangeActiveProvider(): Event<vscode.SourceControl> { return this._onDidChangeActiveProvider.event; }
+	private _onDidChangeActiveProvider = new Emitter<hypert.SourceControl>();
+	get onDidChangeActiveProvider(): Event<hypert.SourceControl> { return this._onDidChangeActiveProvider.event; }
 
 	private _selectedSourceControlHandles = new Set<number>();
 
@@ -583,7 +583,7 @@ export class ExtHostSCM implements ExtHostSCMShape {
 		});
 	}
 
-	createSourceControl(extension: IExtensionDescription, id: string, label: string, rootUri: vscode.Uri | undefined): vscode.SourceControl {
+	createSourceControl(extension: IExtensionDescription, id: string, label: string, rootUri: hypert.Uri | undefined): hypert.SourceControl {
 		this.logService.trace('ExtHostSCM#createSourceControl', extension.id, id, label, rootUri);
 
 		const handle = ExtHostSCM._handlePool++;

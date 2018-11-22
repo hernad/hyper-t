@@ -14,7 +14,7 @@ export namespace Schemas {
 	/**
 	 * A schema that is used for setting files
 	 */
-	export const vscode: string = 'vscode';
+	export const hypert: string = 'hypert';
 
 	/**
 	 * A schema that is used for internal private files

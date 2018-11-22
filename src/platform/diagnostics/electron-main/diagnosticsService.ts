@@ -30,7 +30,7 @@ export interface IDiagnosticsService {
 }
 
 export interface VersionInfo {
-	vscodeVersion: string;
+	hypertVersion: string;
 	os: string;
 }
 

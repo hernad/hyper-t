@@ -140,7 +140,7 @@ function applyStyles(styles: ProcessExplorerStyles): void {
 function applyZoom(zoomLevel: number): void {
 	webFrame.setZoomLevel(zoomLevel);
 	browser.setZoomFactor(webFrame.getZoomFactor());
-	// See https://github.com/Microsoft/vscode/issues/26151
+	// See https://github.com/hernad/hyper-t/issues/26151
 	// Cannot be trusted because the webFrame might take some time
 	// until it really applies the new zoom level
 	browser.setZoomLevel(webFrame.getZoomLevel(), /*isTrusted*/false);
@@ -210,7 +210,7 @@ export function startup(data: ProcessExplorerData): void {
 	applyZoom(data.zoomLevel);
 
 	// Map window process pids to titles, annotate process names with this when rendering to distinguish between them
-	ipcRenderer.on('vscode:windowsInfoResponse', (event, windows) => {
+	ipcRenderer.on('hypert:windowsInfoResponse', (event, windows) => {
 		mapPidToWindowTitle = new Map<number, string>();
 		windows.forEach(window => mapPidToWindowTitle.set(window.pid, window.title));
 	});

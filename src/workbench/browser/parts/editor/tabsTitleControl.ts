@@ -171,7 +171,7 @@ export class TabsTitleControl extends TitleControl {
 			}
 		}));
 
-		// Prevent auto-scrolling (https://github.com/Microsoft/vscode/issues/16690)
+		// Prevent auto-scrolling (https://github.com/hernad/hyper-t/issues/16690)
 		this._register(addDisposableListener(this.tabsContainer, EventType.MOUSE_DOWN, (e: MouseEvent) => {
 			if (e.button === 1) {
 				e.preventDefault();
@@ -188,7 +188,7 @@ export class TabsTitleControl extends TitleControl {
 
 				// Return if the target is not on the tabs container
 				if (e.target !== this.tabsContainer) {
-					this.updateDropFeedback(this.tabsContainer, false); // fixes https://github.com/Microsoft/vscode/issues/52093
+					this.updateDropFeedback(this.tabsContainer, false); // fixes https://github.com/hernad/hyper-t/issues/52093
 					return;
 				}
 
@@ -404,7 +404,7 @@ export class TabsTitleControl extends TitleControl {
 		const tabContainer = document.createElement('div');
 		tabContainer.draggable = true;
 		tabContainer.tabIndex = 0;
-		tabContainer.setAttribute('role', 'presentation'); // cannot use role "tab" here due to https://github.com/Microsoft/vscode/issues/8659
+		tabContainer.setAttribute('role', 'presentation'); // cannot use role "tab" here due to https://github.com/hernad/hyper-t/issues/8659
 		addClass(tabContainer, 'tab');
 
 		// Gesture Support
@@ -451,7 +451,7 @@ export class TabsTitleControl extends TitleControl {
 
 			if (e instanceof MouseEvent && e.button !== 0) {
 				if (e.button === 1) {
-					e.preventDefault(); // required to prevent auto-scrolling (https://github.com/Microsoft/vscode/issues/16690)
+					e.preventDefault(); // required to prevent auto-scrolling (https://github.com/hernad/hyper-t/issues/16690)
 				}
 
 				return void 0; // only for left mouse click
@@ -489,7 +489,7 @@ export class TabsTitleControl extends TitleControl {
 			tab.blur();
 
 			if (e.button === 1 /* Middle Button*/ && !this.originatesFromTabActionBar(e)) {
-				e.stopPropagation(); // for https://github.com/Microsoft/vscode/issues/56715
+				e.stopPropagation(); // for https://github.com/hernad/hyper-t/issues/56715
 
 				this.blockRevealActiveTabOnce();
 				this.closeOneEditorAction.run({ groupId: this.group.id, editorIndex: index });
@@ -563,7 +563,7 @@ export class TabsTitleControl extends TitleControl {
 			EventHelper.stop(e, true);
 
 			this.onContextMenu(this.group.getEditor(index), e, tab);
-		}, true /* use capture to fix https://github.com/Microsoft/vscode/issues/19145 */));
+		}, true /* use capture to fix https://github.com/hernad/hyper-t/issues/19145 */));
 
 		// Drag support
 		disposables.push(addDisposableListener(tab, EventType.DRAG_START, (e: DragEvent) => {
@@ -578,7 +578,7 @@ export class TabsTitleControl extends TitleControl {
 				this.instantiationService.invokeFunction(fillResourceDataTransfers, [resource], e);
 			}
 
-			// Fixes https://github.com/Microsoft/vscode/issues/18733
+			// Fixes https://github.com/hernad/hyper-t/issues/18733
 			addClass(tab, 'dragged');
 			scheduleAtNextAnimationFrame(() => removeClass(tab, 'dragged'));
 		}));
@@ -655,7 +655,7 @@ export class TabsTitleControl extends TitleControl {
 		}
 
 		if (e.dataTransfer.types.length > 0) {
-			return true; // optimistically allow external data (// see https://github.com/Microsoft/vscode/issues/25789)
+			return true; // optimistically allow external data (// see https://github.com/hernad/hyper-t/issues/25789)
 		}
 
 		return false;

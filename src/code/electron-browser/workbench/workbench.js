@@ -130,13 +130,13 @@ function getLazyEnv() {
 			console.warn('renderer did not receive lazyEnv in time');
 		}, 10000);
 
-		ipc.once('vscode:acceptShellEnv', function (event, shellEnv) {
+		ipc.once('hypert:acceptShellEnv', function (event, shellEnv) {
 			clearTimeout(handle);
 			bootstrapWindow.assign(process.env, shellEnv);
 			// @ts-ignore
 			resolve(process.env);
 		});
 
-		ipc.send('vscode:fetchShellEnv');
+		ipc.send('hypert:fetchShellEnv');
 	});
 }

@@ -79,7 +79,7 @@ export class OpenerService implements IOpenerService {
 				return Promise.resolve(undefined);
 
 			} else if (resource.scheme === Schemas.file) {
-				resource = resources.normalizePath(resource); // workaround for non-normalized paths (https://github.com/Microsoft/vscode/issues/12954)
+				resource = resources.normalizePath(resource); // workaround for non-normalized paths (https://github.com/hernad/hyper-t/issues/12954)
 			}
 			promise = this._editorService.openCodeEditor({ resource, options: { selection, } }, this._editorService.getFocusedCodeEditor(), options && options.openToSide);
 		}

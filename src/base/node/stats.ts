@@ -28,7 +28,7 @@ function asSortedItems(map: Map<string, number>): WorkspaceStatItem[] {
 export function collectLaunchConfigs(folder: string): Promise<WorkspaceStatItem[]> {
 	let launchConfigs = new Map<string, number>();
 
-	let launchConfig = join(folder, '.vscode', 'launch.json');
+	let launchConfig = join(folder, '.hypert', 'launch.json');
 	return new Promise((resolve, reject) => {
 		exists(launchConfig, (doesExist) => {
 			if (doesExist) {

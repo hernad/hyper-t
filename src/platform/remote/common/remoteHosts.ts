@@ -5,7 +5,7 @@
 
 import { URI } from 'base/common/uri';
 
-export const REMOTE_HOST_SCHEME = 'vscode-remote';
+export const REMOTE_HOST_SCHEME = 'hypert-remote';
 
 export function getRemoteAuthority(uri: URI) {
 	return uri.scheme === REMOTE_HOST_SCHEME ? uri.authority : void 0;

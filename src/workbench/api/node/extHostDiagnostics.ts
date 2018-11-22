@@ -6,7 +6,7 @@
 import { localize } from 'base/nls';
 import { IMarkerData, MarkerSeverity } from 'platform/markers/common/markers';
 import { URI } from 'base/common/uri';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { MainContext, MainThreadDiagnosticsShape, ExtHostDiagnosticsShape, IMainContext } from './extHost.protocol';
 import { DiagnosticSeverity, Diagnostic } from './extHostTypes';
 import * as converter from './extHostTypeConverters';
@@ -14,18 +14,18 @@ import { mergeSort, equals } from 'base/common/arrays';
 import { Event, Emitter, debounceEvent, mapEvent } from 'base/common/event';
 import { keys } from 'base/common/map';
 
-export class DiagnosticCollection implements vscode.DiagnosticCollection {
+export class DiagnosticCollection implements hypert.DiagnosticCollection {
 
 	private readonly _name: string;
 	private readonly _owner: string;
 	private readonly _maxDiagnosticsPerFile: number;
-	private readonly _onDidChangeDiagnostics: Emitter<(vscode.Uri | string)[]>;
+	private readonly _onDidChangeDiagnostics: Emitter<(hypert.Uri | string)[]>;
 	private readonly _proxy: MainThreadDiagnosticsShape;
 
 	private _isDisposed = false;
-	private _data = new Map<string, vscode.Diagnostic[]>();
+	private _data = new Map<string, hypert.Diagnostic[]>();
 
-	constructor(name: string, owner: string, maxDiagnosticsPerFile: number, proxy: MainThreadDiagnosticsShape, onDidChangeDiagnostics: Emitter<(vscode.Uri | string)[]>) {
+	constructor(name: string, owner: string, maxDiagnosticsPerFile: number, proxy: MainThreadDiagnosticsShape, onDidChangeDiagnostics: Emitter<(hypert.Uri | string)[]>) {
 		this._name = name;
 		this._owner = owner;
 		this._maxDiagnosticsPerFile = maxDiagnosticsPerFile;
@@ -47,9 +47,9 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		return this._name;
 	}
 
-	set(uri: vscode.Uri, diagnostics: vscode.Diagnostic[]): void;
-	set(entries: [vscode.Uri, vscode.Diagnostic[]][]): void;
-	set(first: vscode.Uri | [vscode.Uri, vscode.Diagnostic[]][], diagnostics?: vscode.Diagnostic[]) {
+	set(uri: hypert.Uri, diagnostics: hypert.Diagnostic[]): void;
+	set(entries: [hypert.Uri, hypert.Diagnostic[]][]): void;
+	set(first: hypert.Uri | [hypert.Uri, hypert.Diagnostic[]][], diagnostics?: hypert.Diagnostic[]) {
 
 		if (!first) {
 			// this set-call is a clear-call
@@ -60,7 +60,7 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		// the actual implementation for #set
 
 		this._checkDisposed();
-		let toSync: vscode.Uri[];
+		let toSync: hypert.Uri[];
 		let hasChanged = true;
 
 		if (first instanceof URI) {
@@ -81,7 +81,7 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		} else if (Array.isArray(first)) {
 			// update many rows
 			toSync = [];
-			let lastUri: vscode.Uri;
+			let lastUri: hypert.Uri;
 
 			// ensure stable-sort
 			mergeSort(first, DiagnosticCollection._compareIndexedTuplesByUri);
@@ -159,7 +159,7 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		this._proxy.$changeMany(this._owner, entries);
 	}
 
-	delete(uri: vscode.Uri): void {
+	delete(uri: hypert.Uri): void {
 		this._checkDisposed();
 		this._onDidChangeDiagnostics.fire([uri]);
 		this._data.delete(uri.toString());
@@ -173,7 +173,7 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		this._proxy.$clear(this._owner);
 	}
 
-	forEach(callback: (uri: URI, diagnostics: vscode.Diagnostic[], collection: DiagnosticCollection) => any, thisArg?: any): void {
+	forEach(callback: (uri: URI, diagnostics: hypert.Diagnostic[], collection: DiagnosticCollection) => any, thisArg?: any): void {
 		this._checkDisposed();
 		this._data.forEach((value, key) => {
 			let uri = URI.parse(key);
@@ -181,11 +181,11 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		});
 	}
 
-	get(uri: URI): vscode.Diagnostic[] {
+	get(uri: URI): hypert.Diagnostic[] {
 		this._checkDisposed();
 		let result = this._data.get(uri.toString());
 		if (Array.isArray(result)) {
-			return <vscode.Diagnostic[]>Object.freeze(result.slice(0));
+			return <hypert.Diagnostic[]>Object.freeze(result.slice(0));
 		}
 		return undefined;
 	}
@@ -201,7 +201,7 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		}
 	}
 
-	private static _compareIndexedTuplesByUri(a: [vscode.Uri, vscode.Diagnostic[]], b: [vscode.Uri, vscode.Diagnostic[]]): number {
+	private static _compareIndexedTuplesByUri(a: [hypert.Uri, hypert.Diagnostic[]], b: [hypert.Uri, hypert.Diagnostic[]]): number {
 		if (a[0].toString() < b[0].toString()) {
 			return -1;
 		} else if (a[0].toString() > b[0].toString()) {
@@ -219,9 +219,9 @@ export class ExtHostDiagnostics implements ExtHostDiagnosticsShape {
 
 	private readonly _proxy: MainThreadDiagnosticsShape;
 	private readonly _collections = new Map<string, DiagnosticCollection>();
-	private readonly _onDidChangeDiagnostics = new Emitter<(vscode.Uri | string)[]>();
+	private readonly _onDidChangeDiagnostics = new Emitter<(hypert.Uri | string)[]>();
 
-	static _debouncer(last: (vscode.Uri | string)[], current: (vscode.Uri | string)[]): (vscode.Uri | string)[] {
+	static _debouncer(last: (hypert.Uri | string)[], current: (hypert.Uri | string)[]): (hypert.Uri | string)[] {
 		if (!last) {
 			return current;
 		} else {
@@ -229,8 +229,8 @@ export class ExtHostDiagnostics implements ExtHostDiagnosticsShape {
 		}
 	}
 
-	static _mapper(last: (vscode.Uri | string)[]): { uris: vscode.Uri[] } {
-		let uris: vscode.Uri[] = [];
+	static _mapper(last: (hypert.Uri | string)[]): { uris: hypert.Uri[] } {
+		let uris: hypert.Uri[] = [];
 		let map = new Set<string>();
 		for (const uri of last) {
 			if (typeof uri === 'string') {
@@ -249,13 +249,13 @@ export class ExtHostDiagnostics implements ExtHostDiagnosticsShape {
 		return { uris };
 	}
 
-	readonly onDidChangeDiagnostics: Event<vscode.DiagnosticChangeEvent> = mapEvent(debounceEvent(this._onDidChangeDiagnostics.event, ExtHostDiagnostics._debouncer, 50), ExtHostDiagnostics._mapper);
+	readonly onDidChangeDiagnostics: Event<hypert.DiagnosticChangeEvent> = mapEvent(debounceEvent(this._onDidChangeDiagnostics.event, ExtHostDiagnostics._debouncer, 50), ExtHostDiagnostics._mapper);
 
 	constructor(mainContext: IMainContext) {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadDiagnostics);
 	}
 
-	createDiagnosticCollection(name: string): vscode.DiagnosticCollection {
+	createDiagnosticCollection(name: string): hypert.DiagnosticCollection {
 		let { _collections, _proxy, _onDidChangeDiagnostics } = this;
 		let owner: string;
 		if (!name) {
@@ -284,14 +284,14 @@ export class ExtHostDiagnostics implements ExtHostDiagnosticsShape {
 		return result;
 	}
 
-	getDiagnostics(resource: vscode.Uri): vscode.Diagnostic[];
-	getDiagnostics(): [vscode.Uri, vscode.Diagnostic[]][];
-	getDiagnostics(resource?: vscode.Uri): vscode.Diagnostic[] | [vscode.Uri, vscode.Diagnostic[]][] {
+	getDiagnostics(resource: hypert.Uri): hypert.Diagnostic[];
+	getDiagnostics(): [hypert.Uri, hypert.Diagnostic[]][];
+	getDiagnostics(resource?: hypert.Uri): hypert.Diagnostic[] | [hypert.Uri, hypert.Diagnostic[]][] {
 		if (resource) {
 			return this._getDiagnostics(resource);
 		} else {
 			let index = new Map<string, number>();
-			let res: [vscode.Uri, vscode.Diagnostic[]][] = [];
+			let res: [hypert.Uri, hypert.Diagnostic[]][] = [];
 			this._collections.forEach(collection => {
 				collection.forEach((uri, diagnostics) => {
 					let idx = index.get(uri.toString());
@@ -307,8 +307,8 @@ export class ExtHostDiagnostics implements ExtHostDiagnosticsShape {
 		}
 	}
 
-	private _getDiagnostics(resource: vscode.Uri): vscode.Diagnostic[] {
-		let res: vscode.Diagnostic[] = [];
+	private _getDiagnostics(resource: hypert.Uri): hypert.Diagnostic[] {
+		let res: hypert.Diagnostic[] = [];
 		this._collections.forEach(collection => {
 			if (collection.has(resource)) {
 				res = res.concat(collection.get(resource));

@@ -75,7 +75,7 @@ export interface IUntitledEditorService {
 	 * if the provided resource exists already as untitled input.
 	 *
 	 * It is valid to pass in a file resource. In that case the path will be used as identifier.
-	 * The use case is to be able to create a new file with a specific path with VSCode.
+	 * The use case is to be able to create a new file with a specific path with hypert.
 	 */
 	createOrGet(resource?: URI, modeId?: string, initialValue?: string, encoding?: string): UntitledEditorInput;
 
@@ -84,7 +84,7 @@ export interface IUntitledEditorService {
 	 * if the provided resource exists already as untitled model.
 	 *
 	 * It is valid to pass in a file resource. In that case the path will be used as identifier.
-	 * The use case is to be able to create a new file with a specific path with VSCode.
+	 * The use case is to be able to create a new file with a specific path with hypert.
 	 */
 	loadOrCreate(options: IModelLoadOrCreateOptions): TPromise<UntitledEditorModel>;
 

@@ -34,7 +34,7 @@ import { RequestService } from 'platform/request/electron-main/requestService';
 import { IURLService } from 'platform/url/common/url';
 import { URLService } from 'platform/url/common/urlService';
 import * as fs from 'fs';
-import { CodeApplication } from 'code/electron-main/app';
+import { HypertApplication } from 'code/electron-main/app';
 import { HistoryMainService } from 'platform/history/electron-main/historyMainService';
 import { IHistoryMainService } from 'platform/history/common/history';
 import { WorkspacesMainService } from 'platform/workspaces/electron-main/workspacesMainService';
@@ -155,9 +155,9 @@ function setupIPC(accessor: ServicesAccessor): Thenable<Server> {
 				app.dock.show();
 			}
 
-			// Set the VSCODE_PID variable here when we are sure we are the first
+			// Set the HYPERT_PID variable here when we are sure we are the first
 			// instance to startup. Otherwise we would wrongly overwrite the PID
-			process.env['VSCODE_PID'] = String(process.pid);
+			process.env['HYPERT_PID'] = String(process.pid);
 
 			return server;
 		}, err => {
@@ -298,7 +298,7 @@ function startup(args: ParsedArgs): void {
 	// We need to buffer the spdlog logs until we are sure
 	// we are the only instance running, otherwise we'll have concurrent
 	// log file access on Windows
-	// https://github.com/Microsoft/vscode/issues/41218
+	// https://github.com/hernad/hyper-t/issues/41218
 	const bufferLogService = new BufferLogService();
 	const instantiationService = createServices(args, bufferLogService);
 
@@ -307,13 +307,13 @@ function startup(args: ParsedArgs): void {
 		// Patch `process.env` with the instance's environment
 		const environmentService = accessor.get(IEnvironmentService);
 		const instanceEnv: typeof process.env = {
-			VSCODE_IPC_HOOK: environmentService.mainIPCHandle,
-			VSCODE_NLS_CONFIG: process.env['VSCODE_NLS_CONFIG'],
-			VSCODE_LOGS: process.env['VSCODE_LOGS']
+			HYPERT_IPC_HOOK: environmentService.mainIPCHandle,
+			HYPERT_NLS_CONFIG: process.env['HYPERT_NLS_CONFIG'],
+			HYPERT_LOGS: process.env['HYPERT_LOGS']
 		};
 
-		if (process.env['VSCODE_PORTABLE']) {
-			instanceEnv['VSCODE_PORTABLE'] = process.env['VSCODE_PORTABLE'];
+		if (process.env['HYPERT_PORTABLE']) {
+			instanceEnv['HYPERT_PORTABLE'] = process.env['HYPERT_PORTABLE'];
 		}
 
 		assign(process.env, instanceEnv);
@@ -323,7 +323,7 @@ function startup(args: ParsedArgs): void {
 			.then(() => instantiationService.invokeFunction(setupIPC))
 			.then(mainIpcServer => {
 				bufferLogService.logger = createSpdLogService('main', bufferLogService.getLevel(), environmentService.logsPath);
-				return instantiationService.createInstance(CodeApplication, mainIpcServer, instanceEnv).startup();
+				return instantiationService.createInstance(HypertApplication, mainIpcServer, instanceEnv).startup();
 			});
 	}).then(null, err => instantiationService.invokeFunction(quit, err));
 }

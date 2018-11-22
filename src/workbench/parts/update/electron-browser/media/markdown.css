@@ -101,38 +101,38 @@ code > div {
 
 
 
-.vscode-light code > div {
+.hypert-light code > div {
 	background-color: rgba(220, 220, 220, 0.4);
 }
 
-.vscode-dark code > div {
+.hypert-dark code > div {
 	background-color: rgba(10, 10, 10, 0.4);
 }
 
-.vscode-high-contrast code > div {
+.hypert-high-contrast code > div {
 	background-color: rgb(0, 0, 0);
 }
 
-.vscode-high-contrast h1 {
+.hypert-high-contrast h1 {
 	border-color: rgb(0, 0, 0);
 }
 
-.vscode-light table > thead > tr > th {
+.hypert-light table > thead > tr > th {
 	border-color: rgba(0, 0, 0, 0.69);
 }
 
-.vscode-dark table > thead > tr > th {
+.hypert-dark table > thead > tr > th {
 	border-color: rgba(255, 255, 255, 0.69);
 }
 
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
+.hypert-light h1,
+.hypert-light hr,
+.hypert-light table > tbody > tr + tr > td {
 	border-color: rgba(0, 0, 0, 0.18);
 }
 
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
+.hypert-dark h1,
+.hypert-dark hr,
+.hypert-dark table > tbody > tr + tr > td {
 	border-color: rgba(255, 255, 255, 0.18);
 }

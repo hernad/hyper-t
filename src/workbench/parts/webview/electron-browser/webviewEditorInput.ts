@@ -10,7 +10,7 @@ import { TPromise } from 'base/common/winjs.base';
 import { IEditorModel } from 'platform/editor/common/editor';
 import { EditorInput, EditorModel, GroupIdentifier, IEditorInput } from 'workbench/common/editor';
 import { IPartService, Parts } from 'workbench/services/part/common/partService';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { WebviewEvents, WebviewInputOptions, WebviewReviver } from './webviewEditorService';
 import { WebviewElement } from './webviewElement';
 
@@ -200,7 +200,7 @@ export class WebviewEditorInput extends EditorInput {
 		return this._options;
 	}
 
-	public setOptions(value: vscode.WebviewOptions) {
+	public setOptions(value: hypert.WebviewOptions) {
 		this._options = {
 			...this._options,
 			...value

@@ -1144,7 +1144,7 @@ export function computeScreenAwareSize(cssPx: number): number {
  */
 export function windowOpenNoOpener(url: string): void {
 	if (platform.isNative || browser.isEdgeWebView) {
-		// In VSCode, window.open() always returns null...
+		// In hypert, window.open() always returns null...
 		// The same is true for a WebView (see https://github.com/Microsoft/monaco-editor/issues/628)
 		window.open(url);
 	} else {

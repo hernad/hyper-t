@@ -6,7 +6,7 @@
 import { mixin, deepClone } from 'base/common/objects';
 import { URI } from 'base/common/uri';
 import { Event, Emitter } from 'base/common/event';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { ExtHostWorkspace } from 'workbench/api/node/extHostWorkspace';
 import { ExtHostConfigurationShape, MainThreadConfigurationShape, IWorkspaceConfigurationChangeEventData, IConfigurationInitData } from './extHost.protocol';
 import { ConfigurationTarget as ExtHostConfigurationTarget } from './extHostTypes';
@@ -38,7 +38,7 @@ type ConfigurationInspect<T> = {
 
 export class ExtHostConfiguration implements ExtHostConfigurationShape {
 
-	private readonly _onDidChangeConfiguration = new Emitter<vscode.ConfigurationChangeEvent>();
+	private readonly _onDidChangeConfiguration = new Emitter<hypert.ConfigurationChangeEvent>();
 	private readonly _proxy: MainThreadConfigurationShape;
 	private readonly _extHostWorkspace: ExtHostWorkspace;
 	private _configurationScopes: { [key: string]: ConfigurationScope };
@@ -51,7 +51,7 @@ export class ExtHostConfiguration implements ExtHostConfigurationShape {
 		this._configurationScopes = data.configurationScopes;
 	}
 
-	get onDidChangeConfiguration(): Event<vscode.ConfigurationChangeEvent> {
+	get onDidChangeConfiguration(): Event<hypert.ConfigurationChangeEvent> {
 		return this._onDidChangeConfiguration && this._onDidChangeConfiguration.event;
 	}
 
@@ -60,7 +60,7 @@ export class ExtHostConfiguration implements ExtHostConfigurationShape {
 		this._onDidChangeConfiguration.fire(this._toConfigurationChangeEvent(eventData));
 	}
 
-	getConfiguration(section?: string, resource?: URI, extensionId?: string): vscode.WorkspaceConfiguration {
+	getConfiguration(section?: string, resource?: URI, extensionId?: string): hypert.WorkspaceConfiguration {
 		const config = this._toReadonlyValue(section
 			? lookUp(this._configuration.getValue(null, { resource }, this._extHostWorkspace.workspace), section)
 			: this._configuration.getValue(null, { resource }, this._extHostWorkspace.workspace));
@@ -84,7 +84,7 @@ export class ExtHostConfiguration implements ExtHostConfigurationShape {
 			}
 		}
 
-		const result: vscode.WorkspaceConfiguration = {
+		const result: hypert.WorkspaceConfiguration = {
 			has(key: string): boolean {
 				return typeof lookUp(config, key) !== 'undefined';
 			},
@@ -168,7 +168,7 @@ export class ExtHostConfiguration implements ExtHostConfigurationShape {
 			mixin(result, config, false);
 		}
 
-		return <vscode.WorkspaceConfiguration>Object.freeze(result);
+		return <hypert.WorkspaceConfiguration>Object.freeze(result);
 	}
 
 	private _toReadonlyValue(result: any): any {
@@ -204,7 +204,7 @@ export class ExtHostConfiguration implements ExtHostConfigurationShape {
 		}
 	}
 
-	private _toConfigurationChangeEvent(data: IWorkspaceConfigurationChangeEventData): vscode.ConfigurationChangeEvent {
+	private _toConfigurationChangeEvent(data: IWorkspaceConfigurationChangeEventData): hypert.ConfigurationChangeEvent {
 		const changedConfiguration = new ConfigurationModel(data.changedConfiguration.contents, data.changedConfiguration.keys, data.changedConfiguration.overrides);
 		const changedConfigurationByResource: ResourceMap<ConfigurationModel> = new ResourceMap<ConfigurationModel>();
 		for (const key of Object.keys(data.changedConfigurationByResource)) {

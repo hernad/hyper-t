@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ProgressOptions } from 'vscode';
+import { ProgressOptions } from 'hypert';
 import { MainThreadProgressShape, ExtHostProgressShape } from './extHost.protocol';
 import { ProgressLocation } from './extHostTypeConverters';
 import { IExtensionDescription } from 'workbench/services/extensions/common/extensions';

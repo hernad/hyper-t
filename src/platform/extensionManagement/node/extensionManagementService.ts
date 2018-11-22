@@ -207,7 +207,7 @@ export class ExtensionManagementService extends Disposable implements IExtension
 					return validateLocalExtension(zipPath)
 						.then(manifest => {
 							const identifier = { id: getLocalExtensionIdFromManifest(manifest) };
-							if (manifest.engines && manifest.engines.vscode && !isEngineValid(manifest.engines.vscode)) {
+							if (manifest.engines && manifest.engines.hypert && !isEngineValid(manifest.engines.hypert)) {
 								return Promise.reject(new Error(nls.localize('incompatible', "Unable to install extension '{0}' as it is not compatible with VS Code '{1}'.", identifier.id, pkg.version)));
 							}
 							return this.removeIfExists(identifier.id)

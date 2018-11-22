@@ -17,7 +17,7 @@ import { compareItemsByScore, IItemAccessor, prepareQuery, ScorerCache } from 'b
 import { ICachedSearchStats, IFileIndexProviderStats, IFileMatch, IFileQuery, IFileSearchStats, IFolderQuery, ISearchCompleteStats } from 'platform/search/common/search';
 import { IDirectoryEntry, IDirectoryTree, IInternalFileMatch } from 'workbench/services/search/node/fileSearchManager';
 import { QueryGlobTester, resolvePatternsForProvider } from 'workbench/services/search/node/search';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
 interface IInternalSearchComplete<T = IFileSearchStats> {
 	limitHit: boolean;
@@ -42,7 +42,7 @@ export class FileIndexSearchEngine {
 
 	private globalExcludePattern: glob.ParsedExpression;
 
-	constructor(private config: IFileQuery, private provider: vscode.FileIndexProvider) {
+	constructor(private config: IFileQuery, private provider: hypert.FileIndexProvider) {
 		this.filePattern = config.filePattern;
 		this.includePattern = config.includePattern && glob.parse(config.includePattern);
 		this.maxResults = config.maxResults || null;
@@ -181,7 +181,7 @@ export class FileIndexSearchEngine {
 		});
 	}
 
-	private getSearchOptionsForFolder(fq: IFolderQuery<URI>): vscode.FileIndexOptions {
+	private getSearchOptionsForFolder(fq: IFolderQuery<URI>): hypert.FileIndexOptions {
 		const includes = resolvePatternsForProvider(this.config.includePattern, fq.includePattern);
 		const excludes = resolvePatternsForProvider(this.config.excludePattern, fq.excludePattern);
 
@@ -303,7 +303,7 @@ export class FileIndexSearchManager {
 
 	private readonly folderCacheKeys = new Map<string, Set<string>>();
 
-	public fileSearch(config: IFileQuery, provider: vscode.FileIndexProvider, onBatch: (matches: IFileMatch[]) => void, token: CancellationToken): Promise<ISearchCompleteStats> {
+	public fileSearch(config: IFileQuery, provider: hypert.FileIndexProvider, onBatch: (matches: IFileMatch[]) => void, token: CancellationToken): Promise<ISearchCompleteStats> {
 		if (config.sortByScore) {
 			let sortedSearch = this.trySortedSearchFromCache(config, token);
 			if (!sortedSearch) {

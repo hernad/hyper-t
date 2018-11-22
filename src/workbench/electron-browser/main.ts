@@ -67,7 +67,7 @@ export function startup(configuration: IWindowConfiguration): Promise<void> {
 
 	// Browser config
 	browser.setZoomFactor(webFrame.getZoomFactor()); // Ensure others can listen to zoom level changes
-	browser.setZoomLevel(webFrame.getZoomLevel(), true /* isTrusted */); // Can be trusted because we are not setting it ourselves (https://github.com/Microsoft/vscode/issues/26151)
+	browser.setZoomLevel(webFrame.getZoomLevel(), true /* isTrusted */); // Can be trusted because we are not setting it ourselves (https://github.com/hernad/hyper-t/issues/26151)
 	browser.setFullscreen(!!configuration.fullscreen);
 	browser.setAccessibilitySupport(configuration.accessibilitySupport ? platform.AccessibilitySupport.Enabled : platform.AccessibilitySupport.Disabled);
 
@@ -225,7 +225,7 @@ function resolveSingleFolderWorkspaceInitializationPayload(folderUri: ISingleFol
 	}
 
 	// For local: ensure path is absolute and exists
-	const sanitizedFolderPath = sanitizeFilePath(folderUri.fsPath, process.env['VSCODE_CWD'] || process.cwd());
+	const sanitizedFolderPath = sanitizeFilePath(folderUri.fsPath, process.env['HYPERT_CWD'] || process.cwd());
 	return stat(sanitizedFolderPath).then(stat => {
 		const sanitizedFolderUri = uri.file(sanitizedFolderPath);
 		return {

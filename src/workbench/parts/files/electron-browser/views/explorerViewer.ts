@@ -307,7 +307,7 @@ export class FileRenderer implements IRenderer {
 			}
 
 			setTimeout(() => {
-				if (!blur) { // https://github.com/Microsoft/vscode/issues/20269
+				if (!blur) { // https://github.com/hernad/hyper-t/issues/20269
 					tree.domFocus();
 				}
 				dispose(toDispose);

@@ -9,16 +9,16 @@ import { IRelativePattern, parse } from 'base/common/glob';
 import { URI, UriComponents } from 'base/common/uri';
 import { ExtHostDocumentsAndEditors } from 'workbench/api/node/extHostDocumentsAndEditors';
 import { IExtensionDescription } from 'workbench/services/extensions/common/extensions';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { ExtHostFileSystemEventServiceShape, FileSystemEvents, IMainContext, MainContext, ResourceFileEditDto, ResourceTextEditDto, MainThreadTextEditorsShape } from './extHost.protocol';
 import * as typeConverter from './extHostTypeConverters';
 import { Disposable, WorkspaceEdit } from './extHostTypes';
 
-class FileSystemWatcher implements vscode.FileSystemWatcher {
+class FileSystemWatcher implements hypert.FileSystemWatcher {
 
-	private _onDidCreate = new Emitter<vscode.Uri>();
-	private _onDidChange = new Emitter<vscode.Uri>();
-	private _onDidDelete = new Emitter<vscode.Uri>();
+	private _onDidCreate = new Emitter<hypert.Uri>();
+	private _onDidChange = new Emitter<hypert.Uri>();
+	private _onDidDelete = new Emitter<hypert.Uri>();
 	private _disposable: Disposable;
 	private _config: number;
 
@@ -83,31 +83,31 @@ class FileSystemWatcher implements vscode.FileSystemWatcher {
 		this._disposable.dispose();
 	}
 
-	get onDidCreate(): Event<vscode.Uri> {
+	get onDidCreate(): Event<hypert.Uri> {
 		return this._onDidCreate.event;
 	}
 
-	get onDidChange(): Event<vscode.Uri> {
+	get onDidChange(): Event<hypert.Uri> {
 		return this._onDidChange.event;
 	}
 
-	get onDidDelete(): Event<vscode.Uri> {
+	get onDidDelete(): Event<hypert.Uri> {
 		return this._onDidDelete.event;
 	}
 }
 
 interface WillRenameListener {
 	extension: IExtensionDescription;
-	(e: vscode.FileWillRenameEvent): any;
+	(e: hypert.FileWillRenameEvent): any;
 }
 
 export class ExtHostFileSystemEventService implements ExtHostFileSystemEventServiceShape {
 
 	private readonly _onFileEvent = new Emitter<FileSystemEvents>();
-	private readonly _onDidRenameFile = new Emitter<vscode.FileRenameEvent>();
-	private readonly _onWillRenameFile = new AsyncEmitter<vscode.FileWillRenameEvent>();
+	private readonly _onDidRenameFile = new Emitter<hypert.FileRenameEvent>();
+	private readonly _onWillRenameFile = new AsyncEmitter<hypert.FileWillRenameEvent>();
 
-	readonly onDidRenameFile: Event<vscode.FileRenameEvent> = this._onDidRenameFile.event;
+	readonly onDidRenameFile: Event<hypert.FileRenameEvent> = this._onDidRenameFile.event;
 
 	constructor(
 		mainContext: IMainContext,
@@ -117,7 +117,7 @@ export class ExtHostFileSystemEventService implements ExtHostFileSystemEventServ
 		//
 	}
 
-	public createFileSystemWatcher(globPattern: string | IRelativePattern, ignoreCreateEvents?: boolean, ignoreChangeEvents?: boolean, ignoreDeleteEvents?: boolean): vscode.FileSystemWatcher {
+	public createFileSystemWatcher(globPattern: string | IRelativePattern, ignoreCreateEvents?: boolean, ignoreChangeEvents?: boolean, ignoreDeleteEvents?: boolean): hypert.FileSystemWatcher {
 		return new FileSystemWatcher(this._onFileEvent.event, globPattern, ignoreCreateEvents, ignoreChangeEvents, ignoreDeleteEvents);
 	}
 
@@ -129,7 +129,7 @@ export class ExtHostFileSystemEventService implements ExtHostFileSystemEventServ
 		this._onDidRenameFile.fire(Object.freeze({ oldUri: URI.revive(oldUri), newUri: URI.revive(newUri) }));
 	}
 
-	getOnWillRenameFileEvent(extension: IExtensionDescription): Event<vscode.FileWillRenameEvent> {
+	getOnWillRenameFileEvent(extension: IExtensionDescription): Event<hypert.FileWillRenameEvent> {
 		return (listener, thisArg, disposables) => {
 			let wrappedListener = <WillRenameListener><any>function () {
 				listener.apply(thisArg, arguments);
@@ -148,7 +148,7 @@ export class ExtHostFileSystemEventService implements ExtHostFileSystemEventServ
 			return {
 				oldUri,
 				newUri,
-				waitUntil: (thenable: Thenable<vscode.WorkspaceEdit>): void => {
+				waitUntil: (thenable: Thenable<hypert.WorkspaceEdit>): void => {
 					if (Object.isFrozen(bucket)) {
 						throw new TypeError('waitUntil cannot be called async');
 					}

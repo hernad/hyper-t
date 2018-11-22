@@ -143,19 +143,19 @@ interface ExtensionSuggestion {
 }
 
 const extensionPacks: ExtensionSuggestion[] = [
-	{ name: localize('welcomePage.javaScript', "JavaScript"), id: 'dbaeumer.vscode-eslint' },
+	{ name: localize('welcomePage.javaScript', "JavaScript"), id: 'dbaeumer.hypert-eslint' },
 	{ name: localize('welcomePage.typeScript', "TypeScript"), id: 'eg2.tslint' },
 	{ name: localize('welcomePage.python', "Python"), id: 'ms-python.python' },
 	// { name: localize('welcomePage.go', "Go"), id: 'lukehoban.go' },
 	{ name: localize('welcomePage.php', "PHP"), id: 'felixfbecker.php-pack' },
 	{ name: localize('welcomePage.azure', "Azure"), title: localize('welcomePage.showAzureExtensions', "Show Azure extensions"), id: 'workbench.extensions.action.showAzureExtensions', isCommand: true },
-	{ name: localize('welcomePage.docker', "Docker"), id: 'peterjausovec.vscode-docker' },
+	{ name: localize('welcomePage.docker', "Docker"), id: 'peterjausovec.hypert-docker' },
 ];
 
 const keymapExtensions: ExtensionSuggestion[] = [
 	{ name: localize('welcomePage.vim', "Vim"), id: 'vscodevim.vim', isKeymap: true },
-	{ name: localize('welcomePage.sublime', "Sublime"), id: 'ms-vscode.sublime-keybindings', isKeymap: true },
-	{ name: localize('welcomePage.atom', "Atom"), id: 'ms-vscode.atom-keybindings', isKeymap: true },
+	{ name: localize('welcomePage.sublime', "Sublime"), id: 'ms-hypert.sublime-keybindings', isKeymap: true },
+	{ name: localize('welcomePage.atom', "Atom"), id: 'ms-hypert.atom-keybindings', isKeymap: true },
 ];
 
 interface Strings {

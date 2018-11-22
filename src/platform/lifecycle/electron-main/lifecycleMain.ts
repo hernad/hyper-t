@@ -285,8 +285,8 @@ export class LifecycleService extends Disposable implements ILifecycleService {
 	private onBeforeUnloadWindowInRenderer(window: ICodeWindow, reason: UnloadReason): TPromise<boolean /* veto */> {
 		return new TPromise<boolean>(c => {
 			const oneTimeEventToken = this.oneTimeListenerTokenGenerator++;
-			const okChannel = `vscode:ok${oneTimeEventToken}`;
-			const cancelChannel = `vscode:cancel${oneTimeEventToken}`;
+			const okChannel = `hypert:ok${oneTimeEventToken}`;
+			const cancelChannel = `hypert:cancel${oneTimeEventToken}`;
 
 			ipc.once(okChannel, () => {
 				c(false); // no veto
@@ -296,7 +296,7 @@ export class LifecycleService extends Disposable implements ILifecycleService {
 				c(true); // veto
 			});
 
-			window.send('vscode:onBeforeUnload', { okChannel, cancelChannel, reason });
+			window.send('hypert:onBeforeUnload', { okChannel, cancelChannel, reason });
 		});
 	}
 
@@ -317,11 +317,11 @@ export class LifecycleService extends Disposable implements ILifecycleService {
 	private onWillUnloadWindowInRenderer(window: ICodeWindow, reason: UnloadReason): TPromise<void> {
 		return new TPromise<void>(c => {
 			const oneTimeEventToken = this.oneTimeListenerTokenGenerator++;
-			const replyChannel = `vscode:reply${oneTimeEventToken}`;
+			const replyChannel = `hypert:reply${oneTimeEventToken}`;
 
 			ipc.once(replyChannel, () => c(void 0));
 
-			window.send('vscode:onWillUnload', { replyChannel, reason });
+			window.send('hypert:onWillUnload', { replyChannel, reason });
 		});
 	}
 
@@ -395,11 +395,11 @@ export class LifecycleService extends Disposable implements ILifecycleService {
 
 				// Windows: we are about to restart and as such we need to restore the original
 				// current working directory we had on startup to get the exact same startup
-				// behaviour. As such, we briefly change back to the VSCODE_CWD and then when
+				// behaviour. As such, we briefly change back to the HYPERT_CWD and then when
 				// Code starts it will set it back to the installation directory again.
 				try {
 					if (isWindows) {
-						const vscodeCwd = process.env['VSCODE_CWD'];
+						const vscodeCwd = process.env['HYPERT_CWD'];
 						if (vscodeCwd) {
 							process.chdir(vscodeCwd);
 						}

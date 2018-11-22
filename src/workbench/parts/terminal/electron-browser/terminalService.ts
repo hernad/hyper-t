@@ -54,11 +54,11 @@ export class TerminalService extends AbstractTerminalService implements ITermina
 
 		this._terminalTabs = [];
 		this._configHelper = this._instantiationService.createInstance(TerminalConfigHelper);
-		ipc.on('vscode:openFiles', (_event: any, request: IOpenFileRequest) => {
+		ipc.on('hypert:openFiles', (_event: any, request: IOpenFileRequest) => {
 			// if the request to open files is coming in from the integrated terminal (identified though
 			// the termProgram variable) and we are instructed to wait for editors close, wait for the
 			// marker file to get deleted and then focus back to the integrated terminal.
-			if (request.termProgram === 'vscode' && request.filesToWait) {
+			if (request.termProgram === 'hypert' && request.filesToWait) {
 				pfs.whenDeleted(request.filesToWait.waitMarkerFilePath).then(() => {
 					if (this.terminalInstances.length > 0) {
 						this.getActiveInstance().focus();

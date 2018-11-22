@@ -461,7 +461,7 @@ export class ResourceMap<T> {
 	}
 }
 
-// We should fold BoundedMap and LinkedMap. See https://github.com/Microsoft/vscode/issues/28496
+// We should fold BoundedMap and LinkedMap. See https://github.com/hernad/hyper-t/issues/28496
 
 interface Item<K, V> {
 	previous: Item<K, V> | undefined;

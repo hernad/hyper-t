@@ -410,7 +410,7 @@ function splitGlobPattern(pattern: string): string[] {
 }
 
 /**
- * Note - we used {} here previously but ripgrep can't handle nested {} patterns. See https://github.com/Microsoft/vscode/issues/32761
+ * Note - we used {} here previously but ripgrep can't handle nested {} patterns. See https://github.com/hernad/hyper-t/issues/32761
  */
 function expandGlobalGlob(pattern: string): string[] {
 	const patterns = [

@@ -5,7 +5,7 @@
 
 import { StatusbarAlignment as MainThreadStatusBarAlignment } from 'platform/statusbar/common/statusbar';
 import { StatusBarAlignment as ExtHostStatusBarAlignment, Disposable, ThemeColor } from './extHostTypes';
-import { StatusBarItem, StatusBarAlignment } from 'vscode';
+import { StatusBarItem, StatusBarAlignment } from 'hypert';
 import { MainContext, MainThreadStatusBarShape, IMainContext } from './extHost.protocol';
 
 export class ExtHostStatusBarEntry implements StatusBarItem {

@@ -37,29 +37,29 @@ export class IssueService implements IIssueService {
 	}
 
 	private registerListeners(): void {
-		ipcMain.on('vscode:issueSystemInfoRequest', (event: Event) => {
+		ipcMain.on('hypert:issueSystemInfoRequest', (event: Event) => {
 			this.getSystemInformation().then(msg => {
-				event.sender.send('vscode:issueSystemInfoResponse', msg);
+				event.sender.send('hypert:issueSystemInfoResponse', msg);
 			});
 		});
 
-		ipcMain.on('vscode:issuePerformanceInfoRequest', (event: Event) => {
+		ipcMain.on('hypert:issuePerformanceInfoRequest', (event: Event) => {
 			this.getPerformanceInfo().then(msg => {
-				event.sender.send('vscode:issuePerformanceInfoResponse', msg);
+				event.sender.send('hypert:issuePerformanceInfoResponse', msg);
 			});
 		});
 
-		ipcMain.on('vscode:workbenchCommand', (event, arg) => {
+		ipcMain.on('hypert:workbenchCommand', (event, arg) => {
 			if (this._issueParentWindow) {
-				this._issueParentWindow.webContents.send('vscode:runAction', { id: arg, from: 'issueReporter' });
+				this._issueParentWindow.webContents.send('hypert:runAction', { id: arg, from: 'issueReporter' });
 			}
 		});
 
-		ipcMain.on('vscode:openExternal', (_, arg) => {
+		ipcMain.on('hypert:openExternal', (_, arg) => {
 			this.windowsService.openExternal(arg);
 		});
 
-		ipcMain.on('vscode:closeIssueReporter', (event: Event) => {
+		ipcMain.on('hypert:closeIssueReporter', (event: Event) => {
 			if (this._issueWindow) {
 				this._issueWindow.close();
 			}
@@ -67,7 +67,7 @@ export class IssueService implements IIssueService {
 
 		ipcMain.on('windowsInfoRequest', (event: Event) => {
 			this.launchService.getMainProcessInfo().then(info => {
-				event.sender.send('vscode:windowsInfoResponse', info.windows);
+				event.sender.send('hypert:windowsInfoResponse', info.windows);
 			});
 		});
 

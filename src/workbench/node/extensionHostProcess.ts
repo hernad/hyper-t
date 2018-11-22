@@ -45,7 +45,7 @@ let onTerminate = function () {
 
 function createExtHostProtocol(): Promise<IMessagePassingProtocol> {
 
-	const pipeName = process.env.VSCODE_IPC_HOOK_EXTHOST;
+	const pipeName = process.env.HYPERT_IPC_HOOK_EXTHOST;
 
 	return new Promise<IMessagePassingProtocol>((resolve, reject) => {
 
@@ -173,7 +173,7 @@ createExtHostProtocol().then(protocol => {
 function patchExecArgv() {
 	// when encountering the prevent-inspect flag we delete this
 	// and the prior flag
-	if (process.env.VSCODE_PREVENT_FOREIGN_INSPECT) {
+	if (process.env.HYPERT_PREVENT_FOREIGN_INSPECT) {
 		for (let i = 0; i < process.execArgv.length; i++) {
 			if (process.execArgv[i].match(/--inspect-brk=\d+|--inspect=\d+/)) {
 				process.execArgv.splice(i, 1);

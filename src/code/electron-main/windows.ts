@@ -217,8 +217,8 @@ export class WindowsManager implements IWindowsMainService {
 		});
 
 		// React to workbench loaded events from windows
-		ipc.on('vscode:workbenchLoaded', (event: any, windowId: number) => {
-			this.logService.trace('IPC#vscode-workbenchLoaded');
+		ipc.on('hypert:workbenchLoaded', (event: any, windowId: number) => {
+			this.logService.trace('IPC#hypert-workbenchLoaded');
 
 			const win = this.getWindowById(windowId);
 			if (win) {
@@ -233,9 +233,9 @@ export class WindowsManager implements IWindowsMainService {
 		if (isWindows) {
 			systemPreferences.on('inverted-color-scheme-changed', () => {
 				if (systemPreferences.isInvertedColorScheme()) {
-					this.sendToAll('vscode:enterHighContrast');
+					this.sendToAll('hypert:enterHighContrast');
 				} else {
-					this.sendToAll('vscode:leaveHighContrast');
+					this.sendToAll('hypert:leaveHighContrast');
 				}
 			});
 		}
@@ -767,7 +767,7 @@ export class WindowsManager implements IWindowsMainService {
 			if (configuration.userEnv) {
 				params.termProgram = configuration.userEnv['TERM_PROGRAM'];
 			}
-			readyWindow.send('vscode:openFiles', params);
+			readyWindow.send('hypert:openFiles', params);
 		});
 
 		return window;
@@ -777,7 +777,7 @@ export class WindowsManager implements IWindowsMainService {
 		window.focus(); // make sure window has focus
 
 		window.ready().then(readyWindow => {
-			readyWindow.send('vscode:addFolders', { foldersToAdd });
+			readyWindow.send('hypert:addFolders', { foldersToAdd });
 		});
 
 		return window;
@@ -785,7 +785,7 @@ export class WindowsManager implements IWindowsMainService {
 
 	private doOpenFolderOrWorkspace(openConfig: IOpenConfiguration, folderOrWorkspace: IPathToOpen, forceNewWindow: boolean, fileInputs: IFileInputs, windowToUse?: ICodeWindow): ICodeWindow {
 		if (!forceNewWindow && !windowToUse && typeof openConfig.contextWindowId === 'number') {
-			windowToUse = this.getWindowById(openConfig.contextWindowId); // fix for https://github.com/Microsoft/vscode/issues/49587
+			windowToUse = this.getWindowById(openConfig.contextWindowId); // fix for https://github.com/hernad/hyper-t/issues/49587
 		}
 
 		const browserWindow = this.openInBrowserWindow({
@@ -1428,7 +1428,7 @@ export class WindowsManager implements IWindowsMainService {
 			} else if (windowConfig.newWindowDimensions === 'inherit' && lastActive) {
 				const lastActiveState = lastActive.serializeWindowState();
 				if (lastActiveState.mode === WindowMode.Fullscreen) {
-					state.mode = WindowMode.Fullscreen; // only take mode (fixes https://github.com/Microsoft/vscode/issues/19331)
+					state.mode = WindowMode.Fullscreen; // only take mode (fixes https://github.com/hernad/hyper-t/issues/19331)
 				} else {
 					state = lastActiveState;
 				}
@@ -1540,7 +1540,7 @@ export class WindowsManager implements IWindowsMainService {
 			// Bug in electron: somehow we need this timeout so that the window closes properly. That
 			// might be related to the fact that the untitled workspace prompt shows up async and this
 			// code can execute before the dialog is fully closed which then blocks the window from closing.
-			// Issue: https://github.com/Microsoft/vscode/issues/41989
+			// Issue: https://github.com/hernad/hyper-t/issues/41989
 			return timeout(0).then(() => veto);
 		}));
 	}

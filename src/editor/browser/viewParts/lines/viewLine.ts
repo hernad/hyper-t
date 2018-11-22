@@ -19,7 +19,7 @@ import { HIGH_CONTRAST, ThemeType } from 'platform/theme/common/themeService';
 
 const canUseFastRenderedViewLine = (function () {
 	if (platform.isNative) {
-		// In VSCode we know very well when the zoom level changes
+		// In hypert we know very well when the zoom level changes
 		return true;
 	}
 
@@ -231,11 +231,11 @@ export class ViewLine implements IVisibleLine {
 				// Browser rounding errors have been observed in Chrome and IE, so using the fast
 				// view line only for short lines. Please test before removing the length check...
 				// ---
-				// Another rounding error has been observed on Linux in VSCode, where <span> width
+				// Another rounding error has been observed on Linux in hypert, where <span> width
 				// rounding errors add up to an observable large number...
 				// ---
 				// Also see another example of rounding errors on Windows in
-				// https://github.com/Microsoft/vscode/issues/33178
+				// https://github.com/hernad/hyper-t/issues/33178
 				renderedViewLine = new FastRenderedViewLine(
 					this._renderedViewLine ? this._renderedViewLine.domNode : null,
 					renderLineInput,

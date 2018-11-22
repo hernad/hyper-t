@@ -11,7 +11,7 @@ import { MirrorTextModel } from 'editor/common/model/mirrorTextModel';
 import { ensureValidWordDefinition, getWordAtText } from 'editor/common/model/wordHelper';
 import { MainThreadDocumentsShape } from 'workbench/api/node/extHost.protocol';
 import { EndOfLine, Position, Range } from 'workbench/api/node/extHostTypes';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
 const _modeId2WordDefinition = new Map<string, RegExp>();
 export function setWordDefinitionFor(modeId: string, wordDefinition: RegExp): void {
@@ -26,8 +26,8 @@ export class ExtHostDocumentData extends MirrorTextModel {
 	private _proxy: MainThreadDocumentsShape;
 	private _languageId: string;
 	private _isDirty: boolean;
-	private _document: vscode.TextDocument;
-	private _textLines: vscode.TextLine[] = [];
+	private _document: hypert.TextDocument;
+	private _textLines: hypert.TextLine[] = [];
 	private _isDisposed: boolean = false;
 
 	constructor(proxy: MainThreadDocumentsShape, uri: URI, lines: string[], eol: string,
@@ -61,7 +61,7 @@ export class ExtHostDocumentData extends MirrorTextModel {
 		return true;
 	}
 
-	get document(): vscode.TextDocument {
+	get document(): hypert.TextDocument {
 		if (!this._document) {
 			const data = this;
 			this._document = {
@@ -76,7 +76,7 @@ export class ExtHostDocumentData extends MirrorTextModel {
 				getText(range?) { return range ? data._getTextInRange(range) : data.getText(); },
 				get eol() { return data._eol === '\n' ? EndOfLine.LF : EndOfLine.CRLF; },
 				get lineCount() { return data._lines.length; },
-				lineAt(lineOrPos: number | vscode.Position) { return data._lineAt(lineOrPos); },
+				lineAt(lineOrPos: number | hypert.Position) { return data._lineAt(lineOrPos); },
 				offsetAt(pos) { return data._offsetAt(pos); },
 				positionAt(offset) { return data._positionAt(offset); },
 				validateRange(ran) { return data._validateRange(ran); },
@@ -104,7 +104,7 @@ export class ExtHostDocumentData extends MirrorTextModel {
 		return this._proxy.$trySaveDocument(this._uri);
 	}
 
-	private _getTextInRange(_range: vscode.Range): string {
+	private _getTextInRange(_range: hypert.Range): string {
 		let range = this._validateRange(_range);
 
 		if (range.isEmpty) {
@@ -129,7 +129,7 @@ export class ExtHostDocumentData extends MirrorTextModel {
 		return resultLines.join(lineEnding);
 	}
 
-	private _lineAt(lineOrPosition: number | vscode.Position): vscode.TextLine {
+	private _lineAt(lineOrPosition: number | hypert.Position): hypert.TextLine {
 
 		let line: number;
 		if (lineOrPosition instanceof Position) {
@@ -167,13 +167,13 @@ export class ExtHostDocumentData extends MirrorTextModel {
 		return result;
 	}
 
-	private _offsetAt(position: vscode.Position): number {
+	private _offsetAt(position: hypert.Position): number {
 		position = this._validatePosition(position);
 		this._ensureLineStarts();
 		return this._lineStarts.getAccumulatedValue(position.line - 1) + position.character;
 	}
 
-	private _positionAt(offset: number): vscode.Position {
+	private _positionAt(offset: number): hypert.Position {
 		offset = Math.floor(offset);
 		offset = Math.max(0, offset);
 
@@ -188,7 +188,7 @@ export class ExtHostDocumentData extends MirrorTextModel {
 
 	// ---- range math
 
-	private _validateRange(range: vscode.Range): vscode.Range {
+	private _validateRange(range: hypert.Range): hypert.Range {
 		if (!(range instanceof Range)) {
 			throw new Error('Invalid argument');
 		}
@@ -202,7 +202,7 @@ export class ExtHostDocumentData extends MirrorTextModel {
 		return new Range(start.line, start.character, end.line, end.character);
 	}
 
-	private _validatePosition(position: vscode.Position): vscode.Position {
+	private _validatePosition(position: hypert.Position): hypert.Position {
 		if (!(position instanceof Position)) {
 			throw new Error('Invalid argument');
 		}
@@ -238,7 +238,7 @@ export class ExtHostDocumentData extends MirrorTextModel {
 		return new Position(line, character);
 	}
 
-	private _getWordRangeAtPosition(_position: vscode.Position, regexp?: RegExp): vscode.Range {
+	private _getWordRangeAtPosition(_position: hypert.Position, regexp?: RegExp): hypert.Range {
 		let position = this._validatePosition(_position);
 
 		if (!regexp) {

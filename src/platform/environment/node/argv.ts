@@ -122,7 +122,7 @@ export function parseMainProcessArgv(processArgv: string[]): ParsedArgs {
 	let [, ...args] = processArgv;
 
 	// If dev, remove the first non-option argument: it's the app location
-	if (process.env['VSCODE_DEV']) {
+	if (process.env['HYPERT_DEV']) {
 		args = stripAppPath(args) || [];
 	}
 
@@ -135,7 +135,7 @@ export function parseMainProcessArgv(processArgv: string[]): ParsedArgs {
 export function parseCLIProcessArgv(processArgv: string[]): ParsedArgs {
 	let [, , ...args] = processArgv;
 
-	if (process.env['VSCODE_DEV']) {
+	if (process.env['HYPERT_DEV']) {
 		args = stripAppPath(args) || [];
 	}
 

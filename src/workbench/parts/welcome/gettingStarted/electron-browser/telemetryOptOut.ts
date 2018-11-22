@@ -89,7 +89,7 @@ export class TelemetryOptOut implements IWorkbenchContribution {
 				if (!tagResult || !tagResult.total) {
 					return undefined;
 				}
-				const extensionToFetchTranslationsFrom = tagResult.firstPage.filter(e => e.publisher === 'MS-CEINTL' && e.name.indexOf('vscode-language-pack') === 0)[0] || tagResult.firstPage[0];
+				const extensionToFetchTranslationsFrom = tagResult.firstPage.filter(e => e.publisher === 'MS-CEINTL' && e.name.indexOf('hypert-language-pack') === 0)[0] || tagResult.firstPage[0];
 				if (!extensionToFetchTranslationsFrom.assets || !extensionToFetchTranslationsFrom.assets.coreTranslations) {
 					return undefined;
 				}

@@ -11,19 +11,19 @@ import { ExtHostDocumentsShape, IMainContext, MainContext, MainThreadDocumentsSh
 import { ExtHostDocumentData, setWordDefinitionFor } from 'workbench/api/node/extHostDocumentData';
 import { ExtHostDocumentsAndEditors } from 'workbench/api/node/extHostDocumentsAndEditors';
 import * as TypeConverters from 'workbench/api/node/extHostTypeConverters';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
 export class ExtHostDocuments implements ExtHostDocumentsShape {
 
-	private _onDidAddDocument = new Emitter<vscode.TextDocument>();
-	private _onDidRemoveDocument = new Emitter<vscode.TextDocument>();
-	private _onDidChangeDocument = new Emitter<vscode.TextDocumentChangeEvent>();
-	private _onDidSaveDocument = new Emitter<vscode.TextDocument>();
+	private _onDidAddDocument = new Emitter<hypert.TextDocument>();
+	private _onDidRemoveDocument = new Emitter<hypert.TextDocument>();
+	private _onDidChangeDocument = new Emitter<hypert.TextDocumentChangeEvent>();
+	private _onDidSaveDocument = new Emitter<hypert.TextDocument>();
 
-	readonly onDidAddDocument: Event<vscode.TextDocument> = this._onDidAddDocument.event;
-	readonly onDidRemoveDocument: Event<vscode.TextDocument> = this._onDidRemoveDocument.event;
-	readonly onDidChangeDocument: Event<vscode.TextDocumentChangeEvent> = this._onDidChangeDocument.event;
-	readonly onDidSaveDocument: Event<vscode.TextDocument> = this._onDidSaveDocument.event;
+	readonly onDidAddDocument: Event<hypert.TextDocument> = this._onDidAddDocument.event;
+	readonly onDidRemoveDocument: Event<hypert.TextDocument> = this._onDidRemoveDocument.event;
+	readonly onDidChangeDocument: Event<hypert.TextDocumentChangeEvent> = this._onDidChangeDocument.event;
+	readonly onDidSaveDocument: Event<hypert.TextDocument> = this._onDidSaveDocument.event;
 
 	private _toDispose: IDisposable[];
 	private _proxy: MainThreadDocumentsShape;
@@ -56,7 +56,7 @@ export class ExtHostDocuments implements ExtHostDocumentsShape {
 		return this._documentsAndEditors.allDocuments();
 	}
 
-	public getDocumentData(resource: vscode.Uri): ExtHostDocumentData {
+	public getDocumentData(resource: hypert.Uri): ExtHostDocumentData {
 		if (!resource) {
 			return undefined;
 		}

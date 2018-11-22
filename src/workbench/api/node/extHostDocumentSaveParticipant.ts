@@ -12,7 +12,7 @@ import { TextEdit } from 'workbench/api/node/extHostTypes';
 import { Range, TextDocumentSaveReason, EndOfLine } from 'workbench/api/node/extHostTypeConverters';
 import { ExtHostDocuments } from 'workbench/api/node/extHostDocuments';
 import { SaveReason } from 'workbench/services/textfile/common/textfiles';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { LinkedList } from 'base/common/linkedList';
 import { IExtensionDescription } from 'workbench/services/extensions/common/extensions';
 import { ILogService } from 'platform/log/common/log';
@@ -37,7 +37,7 @@ export class ExtHostDocumentSaveParticipant implements ExtHostDocumentSavePartic
 		this._callbacks.clear();
 	}
 
-	getOnWillSaveTextDocumentEvent(extension: IExtensionDescription): Event<vscode.TextDocumentWillSaveEvent> {
+	getOnWillSaveTextDocumentEvent(extension: IExtensionDescription): Event<hypert.TextDocumentWillSaveEvent> {
 		return (listener, thisArg, disposables) => {
 			const remove = this._callbacks.push([listener, thisArg, extension]);
 			const result = { dispose: remove };
@@ -70,7 +70,7 @@ export class ExtHostDocumentSaveParticipant implements ExtHostDocumentSavePartic
 		return always(promise, () => clearTimeout(didTimeoutHandle));
 	}
 
-	private _deliverEventAsyncAndBlameBadListeners([listener, thisArg, extension]: Listener, stubEvent: vscode.TextDocumentWillSaveEvent): Promise<any> {
+	private _deliverEventAsyncAndBlameBadListeners([listener, thisArg, extension]: Listener, stubEvent: hypert.TextDocumentWillSaveEvent): Promise<any> {
 		const errors = this._badListeners.get(listener);
 		if (errors > this._thresholds.errors) {
 			// bad listener - ignore
@@ -98,18 +98,18 @@ export class ExtHostDocumentSaveParticipant implements ExtHostDocumentSavePartic
 		});
 	}
 
-	private _deliverEventAsync(extension: IExtensionDescription, listener: Function, thisArg: any, stubEvent: vscode.TextDocumentWillSaveEvent): Promise<any> {
+	private _deliverEventAsync(extension: IExtensionDescription, listener: Function, thisArg: any, stubEvent: hypert.TextDocumentWillSaveEvent): Promise<any> {
 
-		const promises: Promise<vscode.TextEdit[]>[] = [];
+		const promises: Promise<hypert.TextEdit[]>[] = [];
 
 		const t1 = Date.now();
 		const { document, reason } = stubEvent;
 		const { version } = document;
 
-		const event = Object.freeze(<vscode.TextDocumentWillSaveEvent>{
+		const event = Object.freeze(<hypert.TextDocumentWillSaveEvent>{
 			document,
 			reason,
-			waitUntil(p: Thenable<any | vscode.TextEdit[]>) {
+			waitUntil(p: Thenable<any | hypert.TextEdit[]>) {
 				if (Object.isFrozen(promises)) {
 					throw illegalState('waitUntil can not be called async');
 				}
@@ -127,7 +127,7 @@ export class ExtHostDocumentSaveParticipant implements ExtHostDocumentSavePartic
 		// freeze promises after event call
 		Object.freeze(promises);
 
-		return new Promise<vscode.TextEdit[][]>((resolve, reject) => {
+		return new Promise<hypert.TextEdit[][]>((resolve, reject) => {
 			// join on all listener promises, reject after timeout
 			const handle = setTimeout(() => reject(new Error('timeout')), this._thresholds.timeout);
 
@@ -148,7 +148,7 @@ export class ExtHostDocumentSaveParticipant implements ExtHostDocumentSavePartic
 			};
 
 			for (const value of values) {
-				if (Array.isArray(value) && (<vscode.TextEdit[]>value).every(e => e instanceof TextEdit)) {
+				if (Array.isArray(value) && (<hypert.TextEdit[]>value).every(e => e instanceof TextEdit)) {
 					for (const { newText, newEol, range } of value) {
 						resourceEdit.edits.push({
 							range: range && Range.from(range),

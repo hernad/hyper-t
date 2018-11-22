@@ -10,7 +10,7 @@ import { ITextEditorOptions } from 'platform/editor/common/editor';
 import { EditorViewColumn } from 'workbench/api/shared/editor';
 import { IDecorationOptions, IThemeDecorationRenderOptions, IDecorationRenderOptions, IContentDecorationRenderOptions } from 'editor/common/editorCommon';
 import { EndOfLineSequence, TrackedRangeStickiness } from 'editor/common/model';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { URI } from 'base/common/uri';
 import { ProgressLocation as MainProgressLocation } from 'platform/progress/common/progress';
 import { SaveReason } from 'workbench/services/textfile/common/textfiles';
@@ -93,7 +93,7 @@ export namespace Position {
 }
 
 export namespace DiagnosticTag {
-	export function from(value: vscode.DiagnosticTag): MarkerTag {
+	export function from(value: hypert.DiagnosticTag): MarkerTag {
 		switch (value) {
 			case types.DiagnosticTag.Unnecessary:
 				return MarkerTag.Unnecessary;
@@ -103,7 +103,7 @@ export namespace DiagnosticTag {
 }
 
 export namespace Diagnostic {
-	export function from(value: vscode.Diagnostic): IMarkerData {
+	export function from(value: hypert.Diagnostic): IMarkerData {
 		return {
 			...Range.from(value.range),
 			message: value.message,
@@ -160,7 +160,7 @@ export namespace DiagnosticSeverity {
 }
 
 export namespace ViewColumn {
-	export function from(column?: vscode.ViewColumn): EditorViewColumn {
+	export function from(column?: hypert.ViewColumn): EditorViewColumn {
 		if (typeof column === 'number' && column >= types.ViewColumn.One) {
 			return column - 1; // adjust zero index (ViewColumn.ONE => 0)
 		}
@@ -172,7 +172,7 @@ export namespace ViewColumn {
 		return ACTIVE_GROUP; // default is always the active group
 	}
 
-	export function to(position?: EditorViewColumn): vscode.ViewColumn {
+	export function to(position?: EditorViewColumn): hypert.ViewColumn {
 		if (typeof position === 'number' && position >= 0) {
 			return position + 1; // adjust to index (ViewColumn.ONE => 1)
 		}
@@ -181,11 +181,11 @@ export namespace ViewColumn {
 	}
 }
 
-function isDecorationOptions(something: any): something is vscode.DecorationOptions {
+function isDecorationOptions(something: any): something is hypert.DecorationOptions {
 	return (typeof something.range !== 'undefined');
 }
 
-export function isDecorationOptionsArr(something: vscode.Range[] | vscode.DecorationOptions[]): something is vscode.DecorationOptions[] {
+export function isDecorationOptionsArr(something: hypert.Range[] | hypert.DecorationOptions[]): something is hypert.DecorationOptions[] {
 	if (something.length === 0) {
 		return true;
 	}
@@ -194,7 +194,7 @@ export function isDecorationOptionsArr(something: vscode.Range[] | vscode.Decora
 
 export namespace MarkdownString {
 
-	export function fromMany(markup: (vscode.MarkdownString | vscode.MarkedString)[]): htmlContent.IMarkdownString[] {
+	export function fromMany(markup: (hypert.MarkdownString | hypert.MarkedString)[]): htmlContent.IMarkdownString[] {
 		return markup.map(MarkdownString.from);
 	}
 
@@ -209,7 +209,7 @@ export namespace MarkdownString {
 			&& typeof (<Codeblock>thing).value === 'string';
 	}
 
-	export function from(markup: vscode.MarkdownString | vscode.MarkedString): htmlContent.IMarkdownString {
+	export function from(markup: hypert.MarkdownString | hypert.MarkedString): htmlContent.IMarkdownString {
 		let res: htmlContent.IMarkdownString;
 		if (isCodeblock(markup)) {
 			const { language, value } = markup;
@@ -238,7 +238,7 @@ export namespace MarkdownString {
 		return res;
 	}
 
-	export function to(value: htmlContent.IMarkdownString): vscode.MarkdownString {
+	export function to(value: htmlContent.IMarkdownString): hypert.MarkdownString {
 		const ret = new htmlContent.MarkdownString(value.value);
 		ret.isTrusted = value.isTrusted;
 		return ret;
@@ -252,7 +252,7 @@ export namespace MarkdownString {
 	}
 }
 
-export function fromRangeOrRangeWithMessage(ranges: vscode.Range[] | vscode.DecorationOptions[]): IDecorationOptions[] {
+export function fromRangeOrRangeWithMessage(ranges: hypert.Range[] | hypert.DecorationOptions[]): IDecorationOptions[] {
 	if (isDecorationOptionsArr(ranges)) {
 		return ranges.map(r => {
 			return {
@@ -282,7 +282,7 @@ function pathOrURIToURI(value: string | URI): URI {
 }
 
 export namespace ThemableDecorationAttachmentRenderOptions {
-	export function from(options: vscode.ThemableDecorationAttachmentRenderOptions): IContentDecorationRenderOptions {
+	export function from(options: hypert.ThemableDecorationAttachmentRenderOptions): IContentDecorationRenderOptions {
 		if (typeof options === 'undefined') {
 			return options;
 		}
@@ -304,7 +304,7 @@ export namespace ThemableDecorationAttachmentRenderOptions {
 }
 
 export namespace ThemableDecorationRenderOptions {
-	export function from(options: vscode.ThemableDecorationRenderOptions): IThemeDecorationRenderOptions {
+	export function from(options: hypert.ThemableDecorationRenderOptions): IThemeDecorationRenderOptions {
 		if (typeof options === 'undefined') {
 			return options;
 		}
@@ -355,7 +355,7 @@ export namespace DecorationRangeBehavior {
 }
 
 export namespace DecorationRenderOptions {
-	export function from(options: vscode.DecorationRenderOptions): IDecorationRenderOptions {
+	export function from(options: hypert.DecorationRenderOptions): IDecorationRenderOptions {
 		return {
 			isWholeLine: options.isWholeLine,
 			rangeBehavior: DecorationRangeBehavior.from(options.rangeBehavior),
@@ -392,7 +392,7 @@ export namespace DecorationRenderOptions {
 
 export namespace TextEdit {
 
-	export function from(edit: vscode.TextEdit): modes.TextEdit {
+	export function from(edit: hypert.TextEdit): modes.TextEdit {
 		return <modes.TextEdit>{
 			text: edit.newText,
 			eol: EndOfLine.from(edit.newEol),
@@ -408,7 +408,7 @@ export namespace TextEdit {
 }
 
 export namespace WorkspaceEdit {
-	export function from(value: vscode.WorkspaceEdit, documents?: ExtHostDocumentsAndEditors): WorkspaceEditDto {
+	export function from(value: hypert.WorkspaceEdit, documents?: ExtHostDocumentsAndEditors): WorkspaceEditDto {
 		const result: WorkspaceEditDto = {
 			edits: []
 		};
@@ -477,11 +477,11 @@ export namespace SymbolKind {
 	_fromMapping[types.SymbolKind.Operator] = modes.SymbolKind.Operator;
 	_fromMapping[types.SymbolKind.TypeParameter] = modes.SymbolKind.TypeParameter;
 
-	export function from(kind: vscode.SymbolKind): modes.SymbolKind {
+	export function from(kind: hypert.SymbolKind): modes.SymbolKind {
 		return typeof _fromMapping[kind] === 'number' ? _fromMapping[kind] : modes.SymbolKind.Property;
 	}
 
-	export function to(kind: modes.SymbolKind): vscode.SymbolKind {
+	export function to(kind: modes.SymbolKind): hypert.SymbolKind {
 		for (const k in _fromMapping) {
 			if (_fromMapping[k] === kind) {
 				return Number(k);
@@ -492,7 +492,7 @@ export namespace SymbolKind {
 }
 
 export namespace WorkspaceSymbol {
-	export function from(info: vscode.SymbolInformation): search.IWorkspaceSymbol {
+	export function from(info: hypert.SymbolInformation): search.IWorkspaceSymbol {
 		return <search.IWorkspaceSymbol>{
 			name: info.name,
 			kind: SymbolKind.from(info.kind),
@@ -511,7 +511,7 @@ export namespace WorkspaceSymbol {
 }
 
 export namespace DocumentSymbol {
-	export function from(info: vscode.DocumentSymbol): modes.DocumentSymbol {
+	export function from(info: hypert.DocumentSymbol): modes.DocumentSymbol {
 		const result: modes.DocumentSymbol = {
 			name: info.name,
 			detail: info.detail,
@@ -524,7 +524,7 @@ export namespace DocumentSymbol {
 		}
 		return result;
 	}
-	export function to(info: modes.DocumentSymbol): vscode.DocumentSymbol {
+	export function to(info: modes.DocumentSymbol): hypert.DocumentSymbol {
 		const result = new types.DocumentSymbol(
 			info.name,
 			info.detail,
@@ -540,7 +540,7 @@ export namespace DocumentSymbol {
 }
 
 export namespace location {
-	export function from(value: vscode.Location): modes.Location {
+	export function from(value: hypert.Location): modes.Location {
 		return {
 			range: value.range && Range.from(value.range),
 			uri: value.uri
@@ -553,9 +553,9 @@ export namespace location {
 }
 
 export namespace DefinitionLink {
-	export function from(value: vscode.Location | vscode.DefinitionLink): modes.DefinitionLink {
-		const definitionLink = <vscode.DefinitionLink>value;
-		const location = <vscode.Location>value;
+	export function from(value: hypert.Location | hypert.DefinitionLink): modes.DefinitionLink {
+		const definitionLink = <hypert.DefinitionLink>value;
+		const location = <hypert.Location>value;
 		return {
 			origin: definitionLink.originSelectionRange
 				? Range.from(definitionLink.originSelectionRange)
@@ -570,7 +570,7 @@ export namespace DefinitionLink {
 }
 
 export namespace Hover {
-	export function from(hover: vscode.Hover): modes.Hover {
+	export function from(hover: hypert.Hover): modes.Hover {
 		return <modes.Hover>{
 			range: Range.from(hover.range),
 			contents: MarkdownString.fromMany(hover.contents)
@@ -582,7 +582,7 @@ export namespace Hover {
 	}
 }
 export namespace DocumentHighlight {
-	export function from(documentHighlight: vscode.DocumentHighlight): modes.DocumentHighlight {
+	export function from(documentHighlight: hypert.DocumentHighlight): modes.DocumentHighlight {
 		return {
 			range: Range.from(documentHighlight.range),
 			kind: documentHighlight.kind
@@ -782,14 +782,14 @@ export namespace SignatureHelp {
 
 export namespace DocumentLink {
 
-	export function from(link: vscode.DocumentLink): modes.ILink {
+	export function from(link: hypert.DocumentLink): modes.ILink {
 		return {
 			range: Range.from(link.range),
 			url: link.target && link.target.toString()
 		};
 	}
 
-	export function to(link: modes.ILink): vscode.DocumentLink {
+	export function to(link: modes.ILink): hypert.DocumentLink {
 		return new types.DocumentLink(Range.to(link.range), link.url && URI.parse(link.url));
 	}
 }
@@ -806,7 +806,7 @@ export namespace ColorPresentation {
 		return cp;
 	}
 
-	export function from(colorPresentation: vscode.ColorPresentation): modes.IColorPresentation {
+	export function from(colorPresentation: hypert.ColorPresentation): modes.IColorPresentation {
 		return {
 			label: colorPresentation.label,
 			textEdit: colorPresentation.textEdit ? TextEdit.from(colorPresentation.textEdit) : undefined,
@@ -826,7 +826,7 @@ export namespace Color {
 
 export namespace TextDocumentSaveReason {
 
-	export function to(reason: SaveReason): vscode.TextDocumentSaveReason {
+	export function to(reason: SaveReason): hypert.TextDocumentSaveReason {
 		switch (reason) {
 			case SaveReason.AUTO:
 				return types.TextDocumentSaveReason.AfterDelay;
@@ -842,7 +842,7 @@ export namespace TextDocumentSaveReason {
 
 export namespace EndOfLine {
 
-	export function from(eol: vscode.EndOfLine): EndOfLineSequence {
+	export function from(eol: hypert.EndOfLine): EndOfLineSequence {
 		if (eol === types.EndOfLine.CRLF) {
 			return EndOfLineSequence.CRLF;
 		} else if (eol === types.EndOfLine.LF) {
@@ -851,7 +851,7 @@ export namespace EndOfLine {
 		return undefined;
 	}
 
-	export function to(eol: EndOfLineSequence): vscode.EndOfLine {
+	export function to(eol: EndOfLineSequence): hypert.EndOfLine {
 		if (eol === EndOfLineSequence.CRLF) {
 			return types.EndOfLine.CRLF;
 		} else if (eol === EndOfLineSequence.LF) {
@@ -862,7 +862,7 @@ export namespace EndOfLine {
 }
 
 export namespace ProgressLocation {
-	export function from(loc: vscode.ProgressLocation): MainProgressLocation {
+	export function from(loc: hypert.ProgressLocation): MainProgressLocation {
 		switch (loc) {
 			case types.ProgressLocation.SourceControl: return MainProgressLocation.Scm;
 			case types.ProgressLocation.Window: return MainProgressLocation.Window;
@@ -873,7 +873,7 @@ export namespace ProgressLocation {
 }
 
 export namespace FoldingRange {
-	export function from(r: vscode.FoldingRange): modes.FoldingRange {
+	export function from(r: hypert.FoldingRange): modes.FoldingRange {
 		const range: modes.FoldingRange = { start: r.start + 1, end: r.end + 1 };
 		if (r.kind) {
 			range.kind = FoldingRangeKind.from(r.kind);
@@ -883,7 +883,7 @@ export namespace FoldingRange {
 }
 
 export namespace FoldingRangeKind {
-	export function from(kind: vscode.FoldingRangeKind | undefined): modes.FoldingRangeKind | undefined {
+	export function from(kind: hypert.FoldingRangeKind | undefined): modes.FoldingRangeKind | undefined {
 		if (kind) {
 			switch (kind) {
 				case types.FoldingRangeKind.Comment:
@@ -900,7 +900,7 @@ export namespace FoldingRangeKind {
 
 export namespace TextEditorOptions {
 
-	export function from(options?: vscode.TextDocumentShowOptions): ITextEditorOptions {
+	export function from(options?: hypert.TextDocumentShowOptions): ITextEditorOptions {
 		if (options) {
 			return {
 				pinned: typeof options.preview === 'boolean' ? !options.preview : undefined,
@@ -916,7 +916,7 @@ export namespace TextEditorOptions {
 
 export namespace GlobPattern {
 
-	export function from(pattern: vscode.GlobPattern): string | types.RelativePattern {
+	export function from(pattern: hypert.GlobPattern): string | types.RelativePattern {
 		if (pattern instanceof types.RelativePattern) {
 			return pattern;
 		}
@@ -932,15 +932,15 @@ export namespace GlobPattern {
 		return pattern; // preserve `undefined` and `null`
 	}
 
-	function isRelativePattern(obj: any): obj is vscode.RelativePattern {
-		const rp = obj as vscode.RelativePattern;
+	function isRelativePattern(obj: any): obj is hypert.RelativePattern {
+		const rp = obj as hypert.RelativePattern;
 		return rp && typeof rp.base === 'string' && typeof rp.pattern === 'string';
 	}
 }
 
 export namespace LanguageSelector {
 
-	export function from(selector: vscode.DocumentSelector): languageSelector.LanguageSelector {
+	export function from(selector: hypert.DocumentSelector): languageSelector.LanguageSelector {
 		if (!selector) {
 			return undefined;
 		} else if (Array.isArray(selector)) {

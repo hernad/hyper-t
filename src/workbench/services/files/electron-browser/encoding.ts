@@ -112,7 +112,7 @@ export class ResourceEncodings extends Disposable implements IResourceEncodings 
 
 		// Folder Settings
 		this.contextService.getWorkspace().folders.forEach(folder => {
-			encodingOverride.push({ parent: joinPath(folder.uri, '.vscode'), encoding: encoding.UTF8 });
+			encodingOverride.push({ parent: joinPath(folder.uri, '.hypert'), encoding: encoding.UTF8 });
 		});
 
 		return encodingOverride;

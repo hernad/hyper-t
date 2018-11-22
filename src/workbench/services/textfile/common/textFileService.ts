@@ -267,7 +267,7 @@ export abstract class TextFileService extends Disposable implements ITextFileSer
 			else if (confirm === ConfirmResult.DONT_SAVE) {
 
 				// Make sure to revert untitled so that they do not restore
-				// see https://github.com/Microsoft/vscode/issues/29572
+				// see https://github.com/hernad/hyper-t/issues/29572
 				this.untitledEditorService.revertAll();
 
 				return this.noVeto({ cleanUpBackups: true });
@@ -736,7 +736,7 @@ export abstract class TextFileService extends Disposable implements ITextFileSer
 
 			// Handle target models if existing (if target URI is a folder, this can be multiple)
 			let handleTargetModelPromise: TPromise<any> = TPromise.as(void 0);
-			const dirtyTargetModels = this.getDirtyFileModels().filter(model => isEqualOrParent(model.getResource(), target, false /* do not ignorecase, see https://github.com/Microsoft/vscode/issues/56384 */));
+			const dirtyTargetModels = this.getDirtyFileModels().filter(model => isEqualOrParent(model.getResource(), target, false /* do not ignorecase, see https://github.com/hernad/hyper-t/issues/56384 */));
 			if (dirtyTargetModels.length) {
 				handleTargetModelPromise = this.revertAll(dirtyTargetModels.map(targetModel => targetModel.getResource()), { soft: true });
 			}

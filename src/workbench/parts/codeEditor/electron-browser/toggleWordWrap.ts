@@ -267,7 +267,7 @@ function canToggleWordWrap(uri: URI): boolean {
 	if (!uri) {
 		return false;
 	}
-	return (uri.scheme !== 'output' && uri.scheme !== 'vscode');
+	return (uri.scheme !== 'output' && uri.scheme !== 'hypert');
 }
 
 

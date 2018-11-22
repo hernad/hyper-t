@@ -61,13 +61,13 @@ if (typeof navigator === 'object' && !isElectronRenderer) {
 	_isLinux = (process.platform === 'linux');
 	_locale = LANGUAGE_DEFAULT;
 	_language = LANGUAGE_DEFAULT;
-	const rawNlsConfig = process.env['VSCODE_NLS_CONFIG'];
+	const rawNlsConfig = process.env['HYPERT_NLS_CONFIG'];
 	if (rawNlsConfig) {
 		try {
 			const nlsConfig: NLSConfig = JSON.parse(rawNlsConfig);
 			const resolved = nlsConfig.availableLanguages['*'];
 			_locale = nlsConfig.locale;
-			// VSCode's default language is 'en'
+			// hypert's default language is 'en'
 			_language = resolved ? resolved : LANGUAGE_DEFAULT;
 			_translationsConfigFile = nlsConfig._translationsConfigFile;
 		} catch (e) {

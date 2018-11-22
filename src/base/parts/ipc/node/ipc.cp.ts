@@ -69,7 +69,7 @@ export interface IIPCOptions {
 	debugBrk?: number;
 
 	/**
-	 * See https://github.com/Microsoft/vscode/issues/27665
+	 * See https://github.com/hernad/hyper-t/issues/27665
 	 * Allows to pass in fresh execArgv to the forked process such that it doesn't inherit them from `process.execArgv`.
 	 * e.g. Launching the extension host process with `--inspect-brk=xxx` and then forking a process from the extension host
 	 * results in the forked process inheriting `--inspect-brk=xxx`.
@@ -178,7 +178,7 @@ export class Client implements IChannelClient, IDisposable {
 			const args = this.options && this.options.args ? this.options.args : [];
 			const forkOpts: ForkOptions = Object.create(null);
 
-			forkOpts.env = assign(deepClone(process.env), { 'VSCODE_PARENT_PID': String(process.pid) });
+			forkOpts.env = assign(deepClone(process.env), { 'HYPERT_PARENT_PID': String(process.pid) });
 
 			if (this.options && this.options.env) {
 				forkOpts.env = assign(forkOpts.env, this.options.env);

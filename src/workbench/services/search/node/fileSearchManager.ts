@@ -12,7 +12,7 @@ import { StopWatch } from 'base/common/stopwatch';
 import { URI } from 'base/common/uri';
 import { IFileMatch, IFileSearchProviderStats, IFolderQuery, ISearchCompleteStats, IFileQuery } from 'platform/search/common/search';
 import { QueryGlobTester, resolvePatternsForProvider } from 'workbench/services/search/node/search';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
 export interface IInternalFileMatch {
 	base: URI;
@@ -47,7 +47,7 @@ class FileSearchEngine {
 
 	private globalExcludePattern?: glob.ParsedExpression;
 
-	constructor(private config: IFileQuery, private provider: vscode.FileSearchProvider) {
+	constructor(private config: IFileQuery, private provider: hypert.FileSearchProvider) {
 		this.filePattern = config.filePattern;
 		this.includePattern = config.includePattern && glob.parse(config.includePattern);
 		this.maxResults = config.maxResults || undefined;
@@ -174,7 +174,7 @@ class FileSearchEngine {
 		});
 	}
 
-	private getSearchOptionsForFolder(fq: IFolderQuery<URI>): vscode.FileSearchOptions {
+	private getSearchOptionsForFolder(fq: IFolderQuery<URI>): hypert.FileSearchOptions {
 		const includes = resolvePatternsForProvider(this.config.includePattern, fq.includePattern);
 		const excludes = resolvePatternsForProvider(this.config.excludePattern, fq.excludePattern);
 
@@ -282,7 +282,7 @@ export class FileSearchManager {
 
 	private static readonly BATCH_SIZE = 512;
 
-	fileSearch(config: IFileQuery, provider: vscode.FileSearchProvider, onBatch: (matches: IFileMatch[]) => void, token: CancellationToken): Promise<ISearchCompleteStats> {
+	fileSearch(config: IFileQuery, provider: hypert.FileSearchProvider, onBatch: (matches: IFileMatch[]) => void, token: CancellationToken): Promise<ISearchCompleteStats> {
 		const engine = new FileSearchEngine(config, provider);
 
 		let resultCount = 0;

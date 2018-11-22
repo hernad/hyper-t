@@ -73,7 +73,7 @@ export class PreferencesContribution implements IWorkbenchContribution {
 
 		// If the resource was already opened before in the group, do not prevent
 		// the opening of that resource. Otherwise we would have the same settings
-		// opened twice (https://github.com/Microsoft/vscode/issues/36447)
+		// opened twice (https://github.com/hernad/hyper-t/issues/36447)
 		if (group.isOpened(editor)) {
 			return void 0;
 		}
@@ -107,9 +107,9 @@ export class PreferencesContribution implements IWorkbenchContribution {
 
 	private start(): void {
 
-		this.textModelResolverService.registerTextModelContentProvider('vscode', {
+		this.textModelResolverService.registerTextModelContentProvider('hypert', {
 			provideTextContent: (uri: URI): Thenable<ITextModel> => {
-				if (uri.scheme !== 'vscode') {
+				if (uri.scheme !== 'hypert') {
 					return null;
 				}
 				if (uri.authority === 'schemas') {

@@ -9,7 +9,7 @@ import { Emitter } from 'base/common/event';
 import { dispose, IDisposable } from 'base/common/lifecycle';
 import { ExtHostCommands } from 'workbench/api/node/extHostCommands';
 import { ExtHostWorkspace } from 'workbench/api/node/extHostWorkspace';
-import { InputBox, InputBoxOptions, QuickInput, QuickInputButton, QuickPick, QuickPickItem, QuickPickOptions, WorkspaceFolder, WorkspaceFolderPickOptions } from 'vscode';
+import { InputBox, InputBoxOptions, QuickInput, QuickInputButton, QuickPick, QuickPickItem, QuickPickOptions, WorkspaceFolder, WorkspaceFolderPickOptions } from 'hypert';
 import { ExtHostQuickOpenShape, IMainContext, MainContext, MainThreadQuickOpenShape, TransferQuickPickItems, TransferQuickInput, TransferQuickInputButton } from './extHost.protocol';
 import { URI } from 'base/common/uri';
 import { ThemeIcon, QuickInputButtons } from 'workbench/api/node/extHostTypes';

@@ -16,7 +16,7 @@ import { ICreateWebViewShowOptions, IWebviewEditorService, WebviewInputOptions, 
 import { IEditorService } from 'workbench/services/editor/common/editorService';
 import { IExtensionService } from 'workbench/services/extensions/common/extensions';
 import { IEditorGroupsService } from 'workbench/services/group/common/editorGroupsService';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { extHostNamedCustomer } from './extHostCustomers';
 import { ITelemetryService } from 'platform/telemetry/common/telemetry';
 
@@ -114,7 +114,7 @@ export class MainThreadWebviews implements MainThreadWebviewsShape, WebviewReviv
 		webview.html = value;
 	}
 
-	public $setOptions(handle: WebviewPanelHandle, options: vscode.WebviewOptions): void {
+	public $setOptions(handle: WebviewPanelHandle, options: hypert.WebviewOptions): void {
 		const webview = this.getWebview(handle);
 		webview.setOptions(reviveWebviewOptions(options));
 	}
@@ -299,7 +299,7 @@ export class MainThreadWebviews implements MainThreadWebviewsShape, WebviewReviv
 			<head>
 				<base href="https://code.visualstudio.com/raw/">
 				<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; media-src https:; script-src 'none'; style-src vscode-core-resource: https: 'unsafe-inline'; child-src 'none'; frame-src 'none';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; media-src https:; script-src 'none'; style-src hypert-core-resource: https: 'unsafe-inline'; child-src 'none'; frame-src 'none';">
 			</head>
 			<body>${localize('errorMessage', "An error occurred while restoring view:{0}", viewType)}</body>
 		</html>`;

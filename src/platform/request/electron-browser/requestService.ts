@@ -6,7 +6,7 @@
 import { IRequestOptions, IRequestContext, IRequestFunction } from 'base/node/request';
 import { Readable } from 'stream';
 import { RequestService as NodeRequestService } from 'platform/request/node/requestService';
-import { CancellationToken } from 'vscode';
+import { CancellationToken } from 'hypert';
 import { canceled } from 'base/common/errors';
 
 /**

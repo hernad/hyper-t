@@ -761,14 +761,14 @@ export class ExtensionGalleryService implements IExtensionGalleryService {
 		return this.getAsset(asset, { headers })
 			.then(context => asJson<IExtensionManifest>(context))
 			.then(manifest => {
-				const engine = manifest.engines.vscode;
+				const engine = manifest.engines.hypert;
 
 				if (!isEngineValid(engine)) {
 					return this.getLastValidExtensionVersionReccursively(extension, versions.slice(1));
 				}
 
 				version.properties = version.properties || [];
-				version.properties.push({ key: PropertyType.Engine, value: manifest.engines.vscode });
+				version.properties.push({ key: PropertyType.Engine, value: manifest.engines.hypert });
 				return version;
 			});
 	}
@@ -834,8 +834,8 @@ export function resolveMarketplaceHeaders(environmentService: IEnvironmentServic
 		}
 
 		return {
-			'X-Market-Client-Id': `VSCode ${pkg.version}`,
-			'User-Agent': `VSCode ${pkg.version}`,
+			'X-Market-Client-Id': `hypert ${pkg.version}`,
+			'User-Agent': `hypert ${pkg.version}`,
 			'X-Market-User-Id': uuid
 		};
 	});

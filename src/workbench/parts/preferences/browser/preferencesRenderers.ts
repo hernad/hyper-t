@@ -763,7 +763,7 @@ class EditSettingRenderer extends Disposable {
 			if (configurationNode) {
 				if (this.isDefaultSettings()) {
 					if (setting.key === 'launch') {
-						// Do not show because of https://github.com/Microsoft/vscode/issues/32593
+						// Do not show because of https://github.com/hernad/hyper-t/issues/32593
 						return false;
 					}
 					return true;

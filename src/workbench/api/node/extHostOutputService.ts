@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { MainContext, MainThreadOutputServiceShape, IMainContext, ExtHostOutputServiceShape } from './extHost.protocol';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { URI } from 'base/common/uri';
 import { posix } from 'path';
 import { OutputAppender } from 'platform/output/node/outputAppender';
@@ -12,7 +12,7 @@ import { toLocalISOString } from 'base/common/date';
 import { Event, Emitter } from 'base/common/event';
 import { Disposable, IDisposable, dispose } from 'base/common/lifecycle';
 
-export abstract class AbstractExtHostOutputChannel extends Disposable implements vscode.OutputChannel {
+export abstract class AbstractExtHostOutputChannel extends Disposable implements hypert.OutputChannel {
 
 	readonly _id: Thenable<string>;
 	private readonly _name: string;
@@ -56,7 +56,7 @@ export abstract class AbstractExtHostOutputChannel extends Disposable implements
 		this._id.then(id => this._proxy.$clear(id, till));
 	}
 
-	show(columnOrPreserveFocus?: vscode.ViewColumn | boolean, preserveFocus?: boolean): void {
+	show(columnOrPreserveFocus?: hypert.ViewColumn | boolean, preserveFocus?: boolean): void {
 		this.validate();
 		this._id.then(id => this._proxy.$reveal(id, typeof columnOrPreserveFocus === 'boolean' ? columnOrPreserveFocus : preserveFocus));
 	}
@@ -120,7 +120,7 @@ export class ExtHostOutputChannelBackedByFile extends AbstractExtHostOutputChann
 		super.update();
 	}
 
-	show(columnOrPreserveFocus?: vscode.ViewColumn | boolean, preserveFocus?: boolean): void {
+	show(columnOrPreserveFocus?: hypert.ViewColumn | boolean, preserveFocus?: boolean): void {
 		this._appender.flush();
 		super.show(columnOrPreserveFocus, preserveFocus);
 	}
@@ -166,7 +166,7 @@ export class ExtHostOutputService implements ExtHostOutputServiceShape {
 		}
 	}
 
-	createOutputChannel(name: string): vscode.OutputChannel {
+	createOutputChannel(name: string): hypert.OutputChannel {
 		const channel = this._createOutputChannel(name);
 		channel._id.then(id => this._channels.set(id, channel));
 		return channel;
@@ -187,7 +187,7 @@ export class ExtHostOutputService implements ExtHostOutputServiceShape {
 		}
 	}
 
-	createOutputChannelFromLogFile(name: string, file: URI): vscode.OutputChannel {
+	createOutputChannelFromLogFile(name: string, file: URI): hypert.OutputChannel {
 		name = name.trim();
 		if (!name) {
 			throw new Error('illegal argument `name`. must not be falsy');

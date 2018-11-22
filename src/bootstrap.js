@@ -121,9 +121,9 @@ exports.setupNLS = function () {
 
 	// Get the nls configuration into the process.env as early as possible.
 	let nlsConfig = { availableLanguages: {} };
-	if (process.env['VSCODE_NLS_CONFIG']) {
+	if (process.env['HYPERT_NLS_CONFIG']) {
 		try {
-			nlsConfig = JSON.parse(process.env['VSCODE_NLS_CONFIG']);
+			nlsConfig = JSON.parse(process.env['HYPERT_NLS_CONFIG']);
 		} catch (e) {
 			// Ignore
 		}
@@ -175,7 +175,7 @@ exports.configurePortable = function () {
 	const appRoot = path.dirname(__dirname);
 
 	function getApplicationPath() {
-		if (process.env['VSCODE_DEV']) {
+		if (process.env['HYPERT_DEV']) {
 			return appRoot;
 		}
 
@@ -187,8 +187,8 @@ exports.configurePortable = function () {
 	}
 
 	function getPortableDataPath() {
-		if (process.env['VSCODE_PORTABLE']) {
-			return process.env['VSCODE_PORTABLE'];
+		if (process.env['HYPERT_PORTABLE']) {
+			return process.env['HYPERT_PORTABLE'];
 		}
 
 		if (process.platform === 'win32' || process.platform === 'linux') {
@@ -205,9 +205,9 @@ exports.configurePortable = function () {
 	const isTempPortable = isPortable && fs.existsSync(portableTempPath);
 
 	if (isPortable) {
-		process.env['VSCODE_PORTABLE'] = portableDataPath;
+		process.env['HYPERT_PORTABLE'] = portableDataPath;
 	} else {
-		delete process.env['VSCODE_PORTABLE'];
+		delete process.env['HYPERT_PORTABLE'];
 	}
 
 	if (isTempPortable) {

@@ -55,7 +55,7 @@ function getUnixShellEnvironment(): Promise<typeof process.env> {
 					delete env['ELECTRON_NO_ATTACH_CONSOLE'];
 				}
 
-				// https://github.com/Microsoft/vscode/issues/22593#issuecomment-336050758
+				// https://github.com/hernad/hyper-t/issues/22593#issuecomment-336050758
 				delete env['XDG_RUNTIME_DIR'];
 
 				resolve(env);
@@ -81,7 +81,7 @@ export function getShellEnvironment(): Promise<typeof process.env> {
 	if (_shellEnv === undefined) {
 		if (isWindows) {
 			_shellEnv = Promise.resolve({});
-		} else if (process.env['VSCODE_CLI'] === '1') {
+		} else if (process.env['HYPERT_CLI'] === '1') {
 			_shellEnv = Promise.resolve({});
 		} else {
 			_shellEnv = getUnixShellEnvironment();

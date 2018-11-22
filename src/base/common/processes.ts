@@ -9,7 +9,7 @@
 export interface CommandOptions {
 	/**
 	 * The current working directory of the executed program or shell.
-	 * If omitted VSCode's current workspace root is used.
+	 * If omitted hypert's current workspace root is used.
 	 */
 	cwd?: string;
 

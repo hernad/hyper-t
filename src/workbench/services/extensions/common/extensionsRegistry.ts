@@ -118,30 +118,30 @@ export class ExtensionPoint<T> implements IExtensionPoint<T> {
 	}
 }
 
-const schemaId = 'vscode://schemas/vscode-extensions';
+const schemaId = 'hypert://schemas/hypert-extensions';
 export const schema = {
 	properties: {
 		engines: {
 			type: 'object',
-			description: nls.localize('vscode.extension.engines', "Engine compatibility."),
+			description: nls.localize('hypert.extension.engines', "Engine compatibility."),
 			properties: {
-				'vscode': {
+				'hypert': {
 					type: 'string',
-					description: nls.localize('vscode.extension.engines.vscode', 'For VS Code extensions, specifies the VS Code version that the extension is compatible with. Cannot be *. For example: ^0.10.5 indicates compatibility with a minimum VS Code version of 0.10.5.'),
+					description: nls.localize('hypert.extension.engines.hypert', 'For HT Code extensions, specifies the VS Code version that the extension is compatible with. Cannot be *. For example: ^0.10.5 indicates compatibility with a minimum HT version of 0.10.5.'),
 					default: '^1.22.0',
 				}
 			}
 		},
 		publisher: {
-			description: nls.localize('vscode.extension.publisher', 'The publisher of the VS Code extension.'),
+			description: nls.localize('hypert.extension.publisher', 'The publisher of the VS Code extension.'),
 			type: 'string'
 		},
 		displayName: {
-			description: nls.localize('vscode.extension.displayName', 'The display name for the extension used in the VS Code gallery.'),
+			description: nls.localize('hypert.extension.displayName', 'The display name for the extension used in the VS Code gallery.'),
 			type: 'string'
 		},
 		categories: {
-			description: nls.localize('vscode.extension.categories', 'The categories used by the VS Code gallery to categorize the extension.'),
+			description: nls.localize('hypert.extension.categories', 'The categories used by the VS Code gallery to categorize the extension.'),
 			type: 'array',
 			uniqueItems: true,
 			items: {
@@ -152,27 +152,27 @@ export const schema = {
 				{
 					type: 'string',
 					const: 'Languages',
-					deprecationMessage: nls.localize('vscode.extension.category.languages.deprecated', 'Use \'Programming  Languages\' instead'),
+					deprecationMessage: nls.localize('hypert.extension.category.languages.deprecated', 'Use \'Programming  Languages\' instead'),
 				}]
 			}
 		},
 		galleryBanner: {
 			type: 'object',
-			description: nls.localize('vscode.extension.galleryBanner', 'Banner used in the VS Code marketplace.'),
+			description: nls.localize('hypert.extension.galleryBanner', 'Banner used in the VS Code marketplace.'),
 			properties: {
 				color: {
-					description: nls.localize('vscode.extension.galleryBanner.color', 'The banner color on the VS Code marketplace page header.'),
+					description: nls.localize('hypert.extension.galleryBanner.color', 'The banner color on the VS Code marketplace page header.'),
 					type: 'string'
 				},
 				theme: {
-					description: nls.localize('vscode.extension.galleryBanner.theme', 'The color theme for the font used in the banner.'),
+					description: nls.localize('hypert.extension.galleryBanner.theme', 'The color theme for the font used in the banner.'),
 					type: 'string',
 					enum: ['dark', 'light']
 				}
 			}
 		},
 		contributes: {
-			description: nls.localize('vscode.extension.contributes', 'All contributions of the VS Code extension represented by this package.'),
+			description: nls.localize('hypert.extension.contributes', 'All contributions of the VS Code extension represented by this package.'),
 			type: 'object',
 			properties: {
 				// extensions will fill in
@@ -181,67 +181,67 @@ export const schema = {
 		},
 		preview: {
 			type: 'boolean',
-			description: nls.localize('vscode.extension.preview', 'Sets the extension to be flagged as a Preview in the Marketplace.'),
+			description: nls.localize('hypert.extension.preview', 'Sets the extension to be flagged as a Preview in the Marketplace.'),
 		},
 		activationEvents: {
-			description: nls.localize('vscode.extension.activationEvents', 'Activation events for the VS Code extension.'),
+			description: nls.localize('hypert.extension.activationEvents', 'Activation events for the VS Code extension.'),
 			type: 'array',
 			items: {
 				type: 'string',
 				defaultSnippets: [
 					{
 						label: 'onLanguage',
-						description: nls.localize('vscode.extension.activationEvents.onLanguage', 'An activation event emitted whenever a file that resolves to the specified language gets opened.'),
+						description: nls.localize('hypert.extension.activationEvents.onLanguage', 'An activation event emitted whenever a file that resolves to the specified language gets opened.'),
 						body: 'onLanguage:${1:languageId}'
 					},
 					{
 						label: 'onCommand',
-						description: nls.localize('vscode.extension.activationEvents.onCommand', 'An activation event emitted whenever the specified command gets invoked.'),
+						description: nls.localize('hypert.extension.activationEvents.onCommand', 'An activation event emitted whenever the specified command gets invoked.'),
 						body: 'onCommand:${2:commandId}'
 					},
 					{
 						label: 'onDebug',
-						description: nls.localize('vscode.extension.activationEvents.onDebug', 'An activation event emitted whenever a user is about to start debugging or about to setup debug configurations.'),
+						description: nls.localize('hypert.extension.activationEvents.onDebug', 'An activation event emitted whenever a user is about to start debugging or about to setup debug configurations.'),
 						body: 'onDebug'
 					},
 					{
 						label: 'onDebugInitialConfigurations',
-						description: nls.localize('vscode.extension.activationEvents.onDebugInitialConfigurations', 'An activation event emitted whenever a "launch.json" needs to be created (and all provideDebugConfigurations methods need to be called).'),
+						description: nls.localize('hypert.extension.activationEvents.onDebugInitialConfigurations', 'An activation event emitted whenever a "launch.json" needs to be created (and all provideDebugConfigurations methods need to be called).'),
 						body: 'onDebugInitialConfigurations'
 					},
 					{
 						label: 'onDebugResolve',
-						description: nls.localize('vscode.extension.activationEvents.onDebugResolve', 'An activation event emitted whenever a debug session with the specific type is about to be launched (and a corresponding resolveDebugConfiguration method needs to be called).'),
+						description: nls.localize('hypert.extension.activationEvents.onDebugResolve', 'An activation event emitted whenever a debug session with the specific type is about to be launched (and a corresponding resolveDebugConfiguration method needs to be called).'),
 						body: 'onDebugResolve:${6:type}'
 					},
 					{
 						label: 'workspaceContains',
-						description: nls.localize('vscode.extension.activationEvents.workspaceContains', 'An activation event emitted whenever a folder is opened that contains at least a file matching the specified glob pattern.'),
+						description: nls.localize('hypert.extension.activationEvents.workspaceContains', 'An activation event emitted whenever a folder is opened that contains at least a file matching the specified glob pattern.'),
 						body: 'workspaceContains:${4:filePattern}'
 					},
 					{
 						label: 'onFileSystem',
-						description: nls.localize('vscode.extension.activationEvents.onFileSystem', 'An activation event emitted whenever a file or folder is accessed with the given scheme.'),
+						description: nls.localize('hypert.extension.activationEvents.onFileSystem', 'An activation event emitted whenever a file or folder is accessed with the given scheme.'),
 						body: 'onFileSystem:${1:scheme}'
 					},
 					{
 						label: 'onSearch',
-						description: nls.localize('vscode.extension.activationEvents.onSearch', 'An activation event emitted whenever a search is started in the folder with the given scheme.'),
+						description: nls.localize('hypert.extension.activationEvents.onSearch', 'An activation event emitted whenever a search is started in the folder with the given scheme.'),
 						body: 'onSearch:${7:scheme}'
 					},
 					{
 						label: 'onView',
 						body: 'onView:${5:viewId}',
-						description: nls.localize('vscode.extension.activationEvents.onView', 'An activation event emitted whenever the specified view is expanded.'),
+						description: nls.localize('hypert.extension.activationEvents.onView', 'An activation event emitted whenever the specified view is expanded.'),
 					},
 					{
 						label: 'onUri',
 						body: 'onUri',
-						description: nls.localize('vscode.extension.activationEvents.onUri', 'An activation event emitted whenever a system-wide Uri directed towards this extension is open.'),
+						description: nls.localize('hypert.extension.activationEvents.onUri', 'An activation event emitted whenever a system-wide Uri directed towards this extension is open.'),
 					},
 					{
 						label: '*',
-						description: nls.localize('vscode.extension.activationEvents.star', 'An activation event emitted on VS Code startup. To ensure a great end user experience, please use this activation event in your extension only when no other activation events combination works in your use-case.'),
+						description: nls.localize('hypert.extension.activationEvents.star', 'An activation event emitted on VS Code startup. To ensure a great end user experience, please use this activation event in your extension only when no other activation events combination works in your use-case.'),
 						body: '*'
 					}
 				],
@@ -249,35 +249,35 @@ export const schema = {
 		},
 		badges: {
 			type: 'array',
-			description: nls.localize('vscode.extension.badges', 'Array of badges to display in the sidebar of the Marketplace\'s extension page.'),
+			description: nls.localize('hypert.extension.badges', 'Array of badges to display in the sidebar of the Marketplace\'s extension page.'),
 			items: {
 				type: 'object',
 				required: ['url', 'href', 'description'],
 				properties: {
 					url: {
 						type: 'string',
-						description: nls.localize('vscode.extension.badges.url', 'Badge image URL.')
+						description: nls.localize('hypert.extension.badges.url', 'Badge image URL.')
 					},
 					href: {
 						type: 'string',
-						description: nls.localize('vscode.extension.badges.href', 'Badge link.')
+						description: nls.localize('hypert.extension.badges.href', 'Badge link.')
 					},
 					description: {
 						type: 'string',
-						description: nls.localize('vscode.extension.badges.description', 'Badge description.')
+						description: nls.localize('hypert.extension.badges.description', 'Badge description.')
 					}
 				}
 			}
 		},
 		markdown: {
 			type: 'string',
-			description: nls.localize('vscode.extension.markdown', "Controls the Markdown rendering engine used in the Marketplace. Either github (default) or standard."),
+			description: nls.localize('hypert.extension.markdown', "Controls the Markdown rendering engine used in the Marketplace. Either github (default) or standard."),
 			enum: ['github', 'standard'],
 			default: 'github'
 		},
 		qna: {
 			default: 'marketplace',
-			description: nls.localize('vscode.extension.qna', "Controls the Q&A link in the Marketplace. Set to marketplace to enable the default Marketplace Q & A site. Set to a string to provide the URL of a custom Q & A site. Set to false to disable Q & A altogether."),
+			description: nls.localize('hypert.extension.qna', "Controls the Q&A link in the Marketplace. Set to marketplace to enable the default Marketplace Q & A site. Set to a string to provide the URL of a custom Q & A site. Set to false to disable Q & A altogether."),
 			anyOf: [
 				{
 					type: ['string', 'boolean'],
@@ -289,7 +289,7 @@ export const schema = {
 			]
 		},
 		extensionDependencies: {
-			description: nls.localize('vscode.extension.extensionDependencies', 'Dependencies to other extensions. The identifier of an extension is always ${publisher}.${name}. For example: vscode.csharp.'),
+			description: nls.localize('hypert.extension.extensionDependencies', 'Dependencies to other extensions. The identifier of an extension is always ${publisher}.${name}. For example: hypert.csharp.'),
 			type: 'array',
 			uniqueItems: true,
 			items: {
@@ -298,7 +298,7 @@ export const schema = {
 			}
 		},
 		extensionPack: {
-			description: nls.localize('vscode.extension.contributes.extensionPack', "A set of extensions that can be installed together. The identifier of an extension is always ${publisher}.${name}. For example: vscode.csharp."),
+			description: nls.localize('hypert.extension.contributes.extensionPack', "A set of extensions that can be installed together. The identifier of an extension is always ${publisher}.${name}. For example: hypert.csharp."),
 			type: 'array',
 			uniqueItems: true,
 			items: {
@@ -309,19 +309,19 @@ export const schema = {
 		scripts: {
 			type: 'object',
 			properties: {
-				'vscode:prepublish': {
-					description: nls.localize('vscode.extension.scripts.prepublish', 'Script executed before the package is published as a VS Code extension.'),
+				'hypert:prepublish': {
+					description: nls.localize('hypert.extension.scripts.prepublish', 'Script executed before the package is published as a VS Code extension.'),
 					type: 'string'
 				},
-				'vscode:uninstall': {
-					description: nls.localize('vscode.extension.scripts.uninstall', 'Uninstall hook for VS Code extension. Script that gets executed when the extension is completely uninstalled from VS Code which is when VS Code is restarted (shutdown and start) after the extension is uninstalled. Only Node scripts are supported.'),
+				'hypert:uninstall': {
+					description: nls.localize('hypert.extension.scripts.uninstall', 'Uninstall hook for VS Code extension. Script that gets executed when the extension is completely uninstalled from VS Code which is when VS Code is restarted (shutdown and start) after the extension is uninstalled. Only Node scripts are supported.'),
 					type: 'string'
 				}
 			}
 		},
 		icon: {
 			type: 'string',
-			description: nls.localize('vscode.extension.icon', 'The path to a 128x128 pixel icon.')
+			description: nls.localize('hypert.extension.icon', 'The path to a 128x128 pixel icon.')
 		}
 	}
 };

@@ -267,7 +267,7 @@ export class TypeOperations {
 		for (let i = 0, len = selections.length; i < len; i++) {
 			const selection = selections[i];
 			if (!selection.isEmpty()) {
-				// looks like https://github.com/Microsoft/vscode/issues/2773
+				// looks like https://github.com/hernad/hyper-t/issues/2773
 				// where a cursor operation occurred before a canceled composition
 				// => ignore composition
 				commands[i] = null;
@@ -774,7 +774,7 @@ export class TypeOperations {
 					if (isBeforeCloseBrace) {
 						// In normal auto closing logic, we will auto close if the cursor is even before a closing brace intentionally.
 						// However for composition mode, we do nothing here as users might clear all the characters for composition and we don't want to do a unnecessary auto close.
-						// Related: microsoft/vscode#57250.
+						// Related: hernad/hyper-t#57250.
 						continue;
 					}
 					if (!shouldAutoCloseBefore(characterAfter)) {

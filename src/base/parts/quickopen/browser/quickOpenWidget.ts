@@ -64,7 +64,7 @@ export class QuickOpenController extends DefaultController {
 
 	onContextMenu(tree: ITree, element: any, event: ContextMenuEvent): boolean {
 		if (platform.isMacintosh) {
-			return this.onLeftClick(tree, element, event); // https://github.com/Microsoft/vscode/issues/1011
+			return this.onLeftClick(tree, element, event); // https://github.com/hernad/hyper-t/issues/1011
 		}
 
 		return super.onContextMenu(tree, element, event);

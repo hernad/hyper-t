@@ -8,7 +8,7 @@ import * as paths from 'base/common/paths';
 import * as path from 'path';
 import * as platform from 'base/common/platform';
 import * as watcher from 'workbench/services/files/node/watcher/common';
-import * as nsfw from 'vscode-nsfw';
+import * as nsfw from 'hypert-nsfw';
 import { IWatcherService, IWatcherRequest, IWatcherOptions, IWatchError } from 'workbench/services/files/node/watcher/nsfw/watcher';
 import { TPromise, TValueCallback } from 'base/common/winjs.base';
 import { ThrottledDelayer } from 'base/common/async';
@@ -64,7 +64,7 @@ export class NsfwWatcherService implements IWatcherService {
 			// the watcher consumes so many file descriptors that
 			// we are running into a limit. We only want to warn
 			// once in this case to avoid log spam.
-			// See https://github.com/Microsoft/vscode/issues/7950
+			// See https://github.com/hernad/hyper-t/issues/7950
 			if (e === 'Inotify limit reached' && !this.enospcErrorLogged) {
 				this.enospcErrorLogged = true;
 				this._onWatchEvent.fire({ message: 'Inotify limit reached (ENOSPC)' });

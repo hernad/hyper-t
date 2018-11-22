@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-declare module 'vscode' {
+declare module 'hypert' {
 
 	/**
 	 * The version of the editor.
@@ -3861,7 +3861,7 @@ declare module 'vscode' {
 	 *
 	 * *Workspace configuration* comes from Workspace Settings and shadows Global configuration.
 	 *
-	 * *Workspace Folder configuration* comes from `.vscode` folder under one of the [workspace folders](#workspace.workspaceFolders).
+	 * *Workspace Folder configuration* comes from `.hypert` folder under one of the [workspace folders](#workspace.workspaceFolders).
 	 *
 	 * *Note:* Workspace and Workspace Folder configurations contains `launch` and `tasks` settings. Their basename will be
 	 * part of the section identifier. The following snippets shows how to retrieve all configurations
@@ -3869,7 +3869,7 @@ declare module 'vscode' {
 	 *
 	 * ```ts
 	 * // launch.json configuration
-	 * const config = workspace.getConfiguration('launch', vscode.window.activeTextEditor.document.uri);
+	 * const config = workspace.getConfiguration('launch', hypert.window.activeTextEditor.document.uri);
 	 *
 	 * // retrieve values
 	 * const values = config.get('configurations');
@@ -5302,7 +5302,7 @@ declare module 'vscode' {
 	 * A type that filesystem providers should use to signal errors.
 	 *
 	 * This class has factory methods for common error-cases, like `EntryNotFound` when
-	 * a file or folder doesn't exist, use them like so: `throw vscode.FileSystemError.EntryNotFound(someUri);`
+	 * a file or folder doesn't exist, use them like so: `throw hypert.FileSystemError.EntryNotFound(someUri);`
 	 */
 	export class FileSystemError extends Error {
 
@@ -5534,7 +5534,7 @@ declare module 'vscode' {
 		readonly enableCommandUris?: boolean;
 
 		/**
-		 * Root paths from which the webview can load local (filesystem) resources using the `vscode-resource:` scheme.
+		 * Root paths from which the webview can load local (filesystem) resources using the `hypert-resource:` scheme.
 		 *
 		 * Default to the root folders of the current workspace plus the extension's install directory.
 		 *
@@ -5696,7 +5696,7 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * Restore webview panels that have been persisted when vscode shuts down.
+	 * Restore webview panels that have been persisted when hypert shuts down.
 	 *
 	 * There are two types of webview persistence:
 	 *
@@ -5712,10 +5712,10 @@ declare module 'vscode' {
 	 *
 	 * ```js
 	 * // Within the webview
-	 * const vscode = acquireVsCodeApi();
+	 * const hypert = acquireVsCodeApi();
 	 *
 	 * // Get existing state
-	 * const oldState = vscode.getState() || { value: 0 };
+	 * const oldState = hypert.getState() || { value: 0 };
 	 *
 	 * // Update state
 	 * setState({ value: oldState.value + 1 })
@@ -5889,7 +5889,7 @@ declare module 'vscode' {
 		 * the command handler function doesn't return anything.
 		 */
 		export function executeCommand<T>(command: string, ...rest: any[]): Thenable<T | undefined>;
-		export function executeCommand<T>(command: 'vscode.previewHtml', error: { '⚠️ The vscode.previewHtml command is deprecated and will be removed. Please switch to using the Webview Api': never }, ...rest: any[]): Thenable<T | undefined>;
+		export function executeCommand<T>(command: 'hypert.previewHtml', error: { '⚠️ The hypert.previewHtml command is deprecated and will be removed. Please switch to using the Webview Api': never }, ...rest: any[]): Thenable<T | undefined>;
 
 		/**
 		 * Retrieve the list of all available commands. Commands starting an underscore are
@@ -7267,7 +7267,7 @@ declare module 'vscode' {
 
 		/**
 		 * This method replaces `deleteCount` [workspace folders](#workspace.workspaceFolders) starting at index `start`
-		 * by an optional set of `workspaceFoldersToAdd` on the `vscode.workspace.workspaceFolders` array. This "splice"
+		 * by an optional set of `workspaceFoldersToAdd` on the `hypert.workspace.workspaceFolders` array. This "splice"
 		 * behavior can be used to add, remove and change workspace folders in a single operation.
 		 *
 		 * If the first workspace folder is added, removed or changed, the currently executing extensions (including the
@@ -8444,7 +8444,7 @@ declare module 'vscode' {
 		/**
 		 * Start debugging by using either a named launch or named compound configuration,
 		 * or by directly passing a [DebugConfiguration](#DebugConfiguration).
-		 * The named configurations are looked up in '.vscode/launch.json' found in the given folder.
+		 * The named configurations are looked up in '.hypert/launch.json' found in the given folder.
 		 * Before debugging starts, all unsaved files are saved and the launch configurations are brought up-to-date.
 		 * Folder specific variables used in the configuration (e.g. '${workspaceFolder}') are resolved against the given folder.
 		 * @param folder The [workspace folder](#WorkspaceFolder) for looking up named configurations and resolving variables or `undefined` for a non-folder setup.
@@ -8474,7 +8474,7 @@ declare module 'vscode' {
 	 * surface from the `activate`-call.
 	 *
 	 * ```javascript
-	 * export function activate(context: vscode.ExtensionContext) {
+	 * export function activate(context: hypert.extensionContext) {
 	 * 	let api = {
 	 * 		sum(a, b) {
 	 * 			return a + b;

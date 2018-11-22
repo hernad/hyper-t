@@ -11,8 +11,8 @@ import { IFileService } from 'platform/files/common/files';
 import { REMOTE_HOST_SCHEME } from 'platform/remote/common/remoteHosts';
 
 export const enum WebviewProtocol {
-	CoreResource = 'vscode-core-resource',
-	VsCodeResource = 'vscode-resource'
+	CoreResource = 'hypert-core-resource',
+	VsCodeResource = 'hypert-resource'
 }
 
 function resolveContent(fileService: IFileService, resource: URI, mime: string, callback: any): void {
@@ -40,7 +40,7 @@ export function registerFileProtocol(
 			const redirectedUri = URI.from({
 				scheme: REMOTE_HOST_SCHEME,
 				authority: extensionLocation.authority,
-				path: '/vscode-resource',
+				path: '/hypert-resource',
 				query: JSON.stringify({
 					requestResourcePath: requestUri.path
 				})

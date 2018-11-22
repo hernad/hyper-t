@@ -594,7 +594,7 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		try {
 			return this.instantiationService.createInstance(OutputChannelBackedByFile, { id, label: channelData ? channelData.label : '' }, this.outputDir, uri);
 		} catch (e) {
-			// Do not crash if spdlog rotating logger cannot be loaded (workaround for https://github.com/Microsoft/vscode/issues/47883)
+			// Do not crash if spdlog rotating logger cannot be loaded (workaround for https://github.com/hernad/hyper-t/issues/47883)
 			this.logService.error(e);
 			/* __GDPR__
 				"output.channel.creation.error" : {}
@@ -675,7 +675,7 @@ export class LogContentProvider {
 		return channel;
 	}
 }
-// Remove this channel when https://github.com/Microsoft/vscode/issues/47883 is fixed
+// Remove this channel when https://github.com/hernad/hyper-t/issues/47883 is fixed
 class BufferredOutputChannel extends Disposable implements OutputChannel {
 
 	readonly id: string;

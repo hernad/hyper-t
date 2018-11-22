@@ -94,7 +94,7 @@ const rootPath = path.dirname(getPathFromAmdModule(require, ''));
 const productJsonPath = path.join(rootPath, 'product.json');
 const product = require.__$__nodeRequire(productJsonPath) as IProductConfiguration;
 
-if (process.env['VSCODE_DEV']) {
+if (process.env['HYPERT_DEV']) {
 	product.nameShort += ' Dev';
 	product.nameLong += ' Dev';
 	product.dataFolderName += '-dev';

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { localize } from 'base/nls';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { basename } from 'base/common/paths';
 import { URI } from 'base/common/uri';
 import { debounceEvent, Emitter, Event } from 'base/common/event';
@@ -61,12 +61,12 @@ export class ExtHostTreeViews implements ExtHostTreeViewsShape {
 		});
 	}
 
-	registerTreeDataProvider<T>(id: string, treeDataProvider: vscode.TreeDataProvider<T>, extension: IExtensionDescription): vscode.Disposable {
+	registerTreeDataProvider<T>(id: string, treeDataProvider: hypert.TreeDataProvider<T>, extension: IExtensionDescription): hypert.Disposable {
 		const treeView = this.createTreeView(id, { treeDataProvider }, extension);
 		return { dispose: () => treeView.dispose() };
 	}
 
-	createTreeView<T>(viewId: string, options: vscode.TreeViewOptions<T>, extension: IExtensionDescription): vscode.TreeView<T> {
+	createTreeView<T>(viewId: string, options: hypert.TreeViewOptions<T>, extension: IExtensionDescription): hypert.TreeView<T> {
 		if (!options || !options.treeDataProvider) {
 			throw new Error('Options with treeDataProvider is mandatory');
 		}
@@ -124,7 +124,7 @@ export class ExtHostTreeViews implements ExtHostTreeViewsShape {
 		treeView.setVisible(isVisible);
 	}
 
-	private createExtHostTreeViewer<T>(id: string, options: vscode.TreeViewOptions<T>, extension: IExtensionDescription): ExtHostTreeView<T> {
+	private createExtHostTreeViewer<T>(id: string, options: hypert.TreeViewOptions<T>, extension: IExtensionDescription): ExtHostTreeView<T> {
 		const treeView = new ExtHostTreeView<T>(id, options, this._proxy, this.commands.converter, this.logService, extension);
 		this.treeViews.set(id, treeView);
 		return treeView;
@@ -147,7 +147,7 @@ class ExtHostTreeView<T> extends Disposable {
 	private static LABEL_HANDLE_PREFIX = '0';
 	private static ID_HANDLE_PREFIX = '1';
 
-	private readonly dataProvider: vscode.TreeDataProvider<T>;
+	private readonly dataProvider: hypert.TreeDataProvider<T>;
 
 	private roots: TreeNode[] | null = null;
 	private elements: Map<TreeItemHandle, T> = new Map<TreeItemHandle, T>();
@@ -159,21 +159,21 @@ class ExtHostTreeView<T> extends Disposable {
 	private _selectedHandles: TreeItemHandle[] = [];
 	get selectedElements(): T[] { return this._selectedHandles.map(handle => this.getExtensionElement(handle)).filter(element => !isUndefinedOrNull(element)); }
 
-	private _onDidExpandElement: Emitter<vscode.TreeViewExpansionEvent<T>> = this._register(new Emitter<vscode.TreeViewExpansionEvent<T>>());
-	readonly onDidExpandElement: Event<vscode.TreeViewExpansionEvent<T>> = this._onDidExpandElement.event;
+	private _onDidExpandElement: Emitter<hypert.TreeViewExpansionEvent<T>> = this._register(new Emitter<hypert.TreeViewExpansionEvent<T>>());
+	readonly onDidExpandElement: Event<hypert.TreeViewExpansionEvent<T>> = this._onDidExpandElement.event;
 
-	private _onDidCollapseElement: Emitter<vscode.TreeViewExpansionEvent<T>> = this._register(new Emitter<vscode.TreeViewExpansionEvent<T>>());
-	readonly onDidCollapseElement: Event<vscode.TreeViewExpansionEvent<T>> = this._onDidCollapseElement.event;
+	private _onDidCollapseElement: Emitter<hypert.TreeViewExpansionEvent<T>> = this._register(new Emitter<hypert.TreeViewExpansionEvent<T>>());
+	readonly onDidCollapseElement: Event<hypert.TreeViewExpansionEvent<T>> = this._onDidCollapseElement.event;
 
-	private _onDidChangeSelection: Emitter<vscode.TreeViewSelectionChangeEvent<T>> = this._register(new Emitter<vscode.TreeViewSelectionChangeEvent<T>>());
-	readonly onDidChangeSelection: Event<vscode.TreeViewSelectionChangeEvent<T>> = this._onDidChangeSelection.event;
+	private _onDidChangeSelection: Emitter<hypert.TreeViewSelectionChangeEvent<T>> = this._register(new Emitter<hypert.TreeViewSelectionChangeEvent<T>>());
+	readonly onDidChangeSelection: Event<hypert.TreeViewSelectionChangeEvent<T>> = this._onDidChangeSelection.event;
 
-	private _onDidChangeVisibility: Emitter<vscode.TreeViewVisibilityChangeEvent> = this._register(new Emitter<vscode.TreeViewVisibilityChangeEvent>());
-	readonly onDidChangeVisibility: Event<vscode.TreeViewVisibilityChangeEvent> = this._onDidChangeVisibility.event;
+	private _onDidChangeVisibility: Emitter<hypert.TreeViewVisibilityChangeEvent> = this._register(new Emitter<hypert.TreeViewVisibilityChangeEvent>());
+	readonly onDidChangeVisibility: Event<hypert.TreeViewVisibilityChangeEvent> = this._onDidChangeVisibility.event;
 
 	private refreshPromise: Promise<void> = Promise.resolve(null);
 
-	constructor(private viewId: string, options: vscode.TreeViewOptions<T>, private proxy: MainThreadTreeViewsShape, private commands: CommandsConverter, private logService: ILogService, private extension: IExtensionDescription) {
+	constructor(private viewId: string, options: hypert.TreeViewOptions<T>, private proxy: MainThreadTreeViewsShape, private commands: CommandsConverter, private logService: ILogService, private extension: IExtensionDescription) {
 		super();
 		this.dataProvider = options.treeDataProvider;
 		this.proxy.$registerTreeViewDataProvider(viewId, { showCollapseAll: !!options.showCollapseAll });
@@ -392,7 +392,7 @@ class ExtHostTreeView<T> extends Disposable {
 			});
 	}
 
-	private createAndRegisterTreeNode(element: T, extTreeItem: vscode.TreeItem, parentNode: TreeNode): TreeNode {
+	private createAndRegisterTreeNode(element: T, extTreeItem: hypert.TreeItem, parentNode: TreeNode): TreeNode {
 		const node = this.createTreeNode(element, extTreeItem, parentNode);
 		if (extTreeItem.id && this.elements.has(node.item.handle)) {
 			throw new Error(localize('treeView.duplicateElement', 'Element with id {0} is already registered', extTreeItem.id));
@@ -402,7 +402,7 @@ class ExtHostTreeView<T> extends Disposable {
 		return node;
 	}
 
-	private createTreeNode(element: T, extensionTreeItem: vscode.TreeItem, parent: TreeNode): TreeNode {
+	private createTreeNode(element: T, extensionTreeItem: hypert.TreeItem, parent: TreeNode): TreeNode {
 		return {
 			item: this.createTreeItem(element, extensionTreeItem, parent),
 			parent,
@@ -410,7 +410,7 @@ class ExtHostTreeView<T> extends Disposable {
 		};
 	}
 
-	private createTreeItem(element: T, extensionTreeItem: vscode.TreeItem, parent?: TreeNode): ITreeItem {
+	private createTreeItem(element: T, extensionTreeItem: hypert.TreeItem, parent?: TreeNode): ITreeItem {
 
 		const handle = this.createHandle(element, extensionTreeItem, parent);
 		const icon = this.getLightIconPath(extensionTreeItem);
@@ -431,7 +431,7 @@ class ExtHostTreeView<T> extends Disposable {
 		return item;
 	}
 
-	private createHandle(element: T, { id, label, resourceUri }: vscode.TreeItem, parent: TreeNode, returnFirst?: boolean): TreeItemHandle {
+	private createHandle(element: T, { id, label, resourceUri }: hypert.TreeItem, parent: TreeNode, returnFirst?: boolean): TreeItemHandle {
 		if (id) {
 			return `${ExtHostTreeView.ID_HANDLE_PREFIX}/${id}`;
 		}
@@ -459,7 +459,7 @@ class ExtHostTreeView<T> extends Disposable {
 		return handle;
 	}
 
-	private getLightIconPath(extensionTreeItem: vscode.TreeItem): URI {
+	private getLightIconPath(extensionTreeItem: hypert.TreeItem): URI {
 		if (extensionTreeItem.iconPath && !(extensionTreeItem.iconPath instanceof ThemeIcon)) {
 			if (typeof extensionTreeItem.iconPath === 'string'
 				|| extensionTreeItem.iconPath instanceof URI) {
@@ -470,7 +470,7 @@ class ExtHostTreeView<T> extends Disposable {
 		return void 0;
 	}
 
-	private getDarkIconPath(extensionTreeItem: vscode.TreeItem): URI {
+	private getDarkIconPath(extensionTreeItem: hypert.TreeItem): URI {
 		if (extensionTreeItem.iconPath && !(extensionTreeItem.iconPath instanceof ThemeIcon) && extensionTreeItem.iconPath['dark']) {
 			return this.getIconPath(extensionTreeItem.iconPath['dark']);
 		}

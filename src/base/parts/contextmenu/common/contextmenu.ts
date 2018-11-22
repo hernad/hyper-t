@@ -39,5 +39,5 @@ export interface IPopupOptions {
 	onHide?: () => void;
 }
 
-export const CONTEXT_MENU_CHANNEL = 'vscode:contextmenu';
-export const CONTEXT_MENU_CLOSE_CHANNEL = 'vscode:onCloseContextMenu';
+export const CONTEXT_MENU_CHANNEL = 'hypert:contextmenu';
+export const CONTEXT_MENU_CLOSE_CHANNEL = 'hypert:onCloseContextMenu';

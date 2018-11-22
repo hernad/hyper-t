@@ -23,7 +23,7 @@ import { ITextFileService } from 'workbench/services/textfile/common/textfiles';
 import { IWorkspaceEditingService } from 'workbench/services/workspace/common/workspaceEditing';
 import { ExtHostContext, ExtHostWorkspaceShape, IExtHostContext, MainContext, MainThreadWorkspaceShape } from '../node/extHost.protocol';
 import { CancellationTokenSource, CancellationToken } from 'base/common/cancellation';
-import { TextSearchComplete } from 'vscode';
+import { TextSearchComplete } from 'hypert';
 
 @extHostNamedCustomer(MainContext.MainThreadWorkspace)
 export class MainThreadWorkspace implements MainThreadWorkspaceShape {

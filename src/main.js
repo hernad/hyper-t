@@ -95,11 +95,11 @@ function onReady() {
 
 			const startup = nlsConfig => {
 				nlsConfig._languagePackSupport = true;
-				process.env['VSCODE_NLS_CONFIG'] = JSON.stringify(nlsConfig);
-				process.env['VSCODE_NODE_CACHED_DATA_DIR'] = cachedDataDir || '';
+				process.env['HYPERT_NLS_CONFIG'] = JSON.stringify(nlsConfig);
+				process.env['HYPERT_NODE_CACHED_DATA_DIR'] = cachedDataDir || '';
 
 				// Load main in AMD
-				require('./bootstrap-amd').load('./main_app');
+				require('./bootstrap-amd').load('code/electron-main/main');
 			};
 
 			// We recevied a valid nlsConfig from a user defined locale
@@ -148,7 +148,7 @@ function configureCommandlineSwitches(cliArgs, nodeCachedDataDir) {
 	// TODO@Ben Electron 2.0.x: prevent localStorage migration from SQLite to LevelDB due to issues
 	app.commandLine.appendSwitch('disable-mojo-local-storage');
 
-	// Force pre-Chrome-60 color profile handling (for https://github.com/Microsoft/vscode/issues/51791)
+	// Force pre-Chrome-60 color profile handling (for https://github.com/hernad/hyper-t/issues/51791)
 	app.commandLine.appendSwitch('disable-features', 'ColorCorrectRendering');
 
 	// Support JS Flags
@@ -210,12 +210,12 @@ function parseCLIArgs() {
 function setCurrentWorkingDirectory() {
 	try {
 		if (process.platform === 'win32') {
-			process.env['VSCODE_CWD'] = process.cwd(); // remember as environment letiable
+			process.env['HYPERT_CWD'] = process.cwd(); // remember as environment letiable
 			/*
 			process.chdir(path.dirname(app.getPath('exe'))); // always set application folder as cwd
 			*/
-		} else if (process.env['VSCODE_CWD']) {
-			process.chdir(process.env['VSCODE_CWD']);
+		} else if (process.env['HYPERT_CWD']) {
+			process.chdir(process.env['HYPERT_CWD']);
 		}
 	} catch (err) {
 		console.error(err);
@@ -225,7 +225,7 @@ function setCurrentWorkingDirectory() {
 function registerListeners() {
 
 	/**
-	 * Mac: when someone drops a file to the not-yet running VSCode, the open-file event fires even before
+	 * Mac: when someone drops a file to the not-yet running hypert, the open-file event fires even before
 	 * the app-ready event. We listen very early for open-file and remember this upon startup as path to open.
 	 *
 	 * @type {string[]}
@@ -289,7 +289,7 @@ function getNodeCachedDir() {
 			}
 
 			// IEnvironmentService.isBuilt
-			if (process.env['VSCODE_DEV']) {
+			if (process.env['HYPERT_DEV']) {
 				return undefined;
 			}
 
@@ -505,7 +505,7 @@ function getNLSConfiguration(locale) {
 		return Promise.resolve({ locale: locale, availableLanguages: {}, pseudo: true });
 	}
 
-	if (process.env['VSCODE_DEV']) {
+	if (process.env['HYPERT_DEV']) {
 		return Promise.resolve({ locale: locale, availableLanguages: {} });
 	}
 
@@ -541,7 +541,7 @@ function getNLSConfiguration(locale) {
 		}
 		const packConfig = configs[locale];
 		let mainPack;
-		if (!packConfig || typeof packConfig.hash !== 'string' || !packConfig.translations || typeof (mainPack = packConfig.translations['vscode']) !== 'string') {
+		if (!packConfig || typeof packConfig.hash !== 'string' || !packConfig.translations || typeof (mainPack = packConfig.translations['hypert']) !== 'string') {
 			return defaultResult(initialLocale);
 		}
 		return exists(mainPack).then((fileExists) => {

@@ -63,7 +63,7 @@
 	content: '';
 	display: flex;
 	flex: 0;
-	width: 5px; /* Reserve space to hide tab fade when close button is left or off (fixes https://github.com/Microsoft/vscode/issues/45728) */
+	width: 5px; /* Reserve space to hide tab fade when close button is left or off (fixes https://github.com/hernad/hyper-t/issues/45728) */
 }
 
 .monaco-workbench > .part.editor > .content .editor-group-container > .title .tabs-container > .tab.sizing-shrink.close-button-left {
@@ -72,11 +72,11 @@
 }
 
 .monaco-workbench > .part.editor > .content .editor-group-container > .title .tabs-container > .tab.dragged {
-	will-change: transform; /* forces tab to be drawn on a separate layer (fixes https://github.com/Microsoft/vscode/issues/18733) */
+	will-change: transform; /* forces tab to be drawn on a separate layer (fixes https://github.com/hernad/hyper-t/issues/18733) */
 }
 
 .monaco-workbench > .part.editor > .content .editor-group-container > .title .tabs-container > .tab.dragged-over div {
-	pointer-events: none; /* prevents cursor flickering (fixes https://github.com/Microsoft/vscode/issues/38753) */
+	pointer-events: none; /* prevents cursor flickering (fixes https://github.com/hernad/hyper-t/issues/38753) */
 }
 
 .monaco-workbench > .part.editor > .content .editor-group-container > .title .tabs-container > .tab.close-button-left {
@@ -143,12 +143,12 @@
 }
 
 .monaco-workbench > .part.editor > .content .editor-group-container > .title .tabs-container >  .tab.sizing-shrink:focus > .tab-label::after {
-	opacity: 0; /* when tab has the focus this shade breaks the tab border (fixes https://github.com/Microsoft/vscode/issues/57819) */
+	opacity: 0; /* when tab has the focus this shade breaks the tab border (fixes https://github.com/hernad/hyper-t/issues/57819) */
 }
 
 .monaco-workbench > .part.editor > .content .editor-group-container > .title .tabs-container > .tab.sizing-fit .monaco-icon-label,
 .monaco-workbench > .part.editor > .content .editor-group-container > .title .tabs-container > .tab.sizing-fit .monaco-icon-label > .monaco-icon-label-description-container {
-	overflow: visible; /* fixes https://github.com/Microsoft/vscode/issues/20182 */
+	overflow: visible; /* fixes https://github.com/hernad/hyper-t/issues/20182 */
 }
 
 .monaco-workbench > .part.editor > .content .editor-group-container > .title .tabs-container > .tab.sizing-shrink > .monaco-icon-label > .monaco-icon-label-description-container {

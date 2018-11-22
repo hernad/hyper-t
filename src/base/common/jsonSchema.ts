@@ -51,16 +51,16 @@ export interface IJSONSchema {
 	then?: IJSONSchema;
 	else?: IJSONSchema;
 
-	// VSCode extensions
-	defaultSnippets?: IJSONSchemaSnippet[]; // VSCode extension
-	errorMessage?: string; // VSCode extension
-	patternErrorMessage?: string; // VSCode extension
-	deprecationMessage?: string; // VSCode extension
-	enumDescriptions?: string[]; // VSCode extension
-	markdownEnumDescriptions?: string[]; // VSCode extension
-	markdownDescription?: string; // VSCode extension
-	doNotSuggest?: boolean; // VSCode extension
-	allowComments?: boolean; // VSCode extension
+	// hypert extensions
+	defaultSnippets?: IJSONSchemaSnippet[]; // hypert extension
+	errorMessage?: string; // hypert extension
+	patternErrorMessage?: string; // hypert extension
+	deprecationMessage?: string; // hypert extension
+	enumDescriptions?: string[]; // hypert extension
+	markdownEnumDescriptions?: string[]; // hypert extension
+	markdownDescription?: string; // hypert extension
+	doNotSuggest?: boolean; // hypert extension
+	allowComments?: boolean; // hypert extension
 }
 
 export interface IJSONSchemaMap {

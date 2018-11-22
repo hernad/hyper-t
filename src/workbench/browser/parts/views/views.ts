@@ -564,7 +564,7 @@ export class ViewsService extends Disposable implements IViewsService {
 	private onDidRegisterViewContainer(viewContainer: ViewContainer): void {
 		const viewDescriptorCollection = this.registerViewDescriptorCollection(viewContainer);
 
-		// TODO: @Joao Remove this after moving SCM Viewlet to ViewContainerViewlet - https://github.com/Microsoft/vscode/issues/49054
+		// TODO: @Joao Remove this after moving SCM Viewlet to ViewContainerViewlet - https://github.com/hernad/hyper-t/issues/49054
 		if (viewContainer.id !== SCM_VIEWLET_ID) {
 			this._register(viewDescriptorCollection.onDidChangeActiveViews(() => this.updateViewletEnablement(viewContainer, viewDescriptorCollection)));
 			this.lifecycleService.when(LifecyclePhase.Eventually).then(() => this.updateViewletEnablement(viewContainer, viewDescriptorCollection));

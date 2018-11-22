@@ -19,7 +19,7 @@ loader.config({
 	nodeRequire: require,
 	nodeMain: __filename,
 	'base/nls': nlsConfig,
-	nodeCachedDataDir: process.env['VSCODE_NODE_CACHED_DATA_DIR']
+	nodeCachedDataDir: process.env['HYPERT_NODE_CACHED_DATA_DIR']
 });
 
 // Running in Electron
@@ -31,7 +31,7 @@ if (process.env['ELECTRON_RUN_AS_NODE'] || process.versions['electron']) {
 
 // Pseudo NLS support
 if (nlsConfig.pseudo) {
-	loader(['vs/nls'], function (nlsPlugin) {
+	loader(['base/nls'], function (nlsPlugin) {
 		nlsPlugin.setPseudoTranslation(nlsConfig.pseudo);
 	});
 }

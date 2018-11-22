@@ -105,7 +105,7 @@ export class ContextMenuService extends Disposable implements IContextMenuServic
 
 					// To preserve pre-electron-2.x behaviour, we first trigger
 					// the onHide callback and then the action.
-					// Fixes https://github.com/Microsoft/vscode/issues/45601
+					// Fixes https://github.com/hernad/hyper-t/issues/45601
 					onHide();
 
 					// Run action which will close the menu

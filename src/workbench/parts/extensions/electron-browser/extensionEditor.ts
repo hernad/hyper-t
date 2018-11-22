@@ -50,12 +50,12 @@ import { KeybindingParser } from 'base/common/keybindingParser';
 import { IStorageService } from 'platform/storage/common/storage';
 
 function renderBody(body: string): string {
-	const styleSheetPath = require.toUrl('./media/markdown.css').replace('file://', 'vscode-core-resource://');
+	const styleSheetPath = require.toUrl('./media/markdown.css').replace('file://', 'hypert-core-resource://');
 	return `<!DOCTYPE html>
 		<html>
 			<head>
 				<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; media-src https:; script-src 'none'; style-src vscode-core-resource:; child-src 'none'; frame-src 'none';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; media-src https:; script-src 'none'; style-src hypert-core-resource:; child-src 'none'; frame-src 'none';">
 				<link rel="stylesheet" type="text/css" href="${styleSheetPath}">
 			</head>
 			<body>

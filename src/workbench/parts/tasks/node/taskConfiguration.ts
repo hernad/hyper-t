@@ -70,7 +70,7 @@ export interface ShellConfiguration {
 export interface CommandOptions {
 	/**
 	 * The current working directory of the executed program or shell.
-	 * If omitted VSCode's current workspace root is used.
+	 * If omitted hypert's current workspace root is used.
 	 */
 	cwd?: string;
 
@@ -1218,8 +1218,8 @@ namespace ConfiguringTask {
 	const grunt = 'grunt.';
 	const jake = 'jake.';
 	const gulp = 'gulp.';
-	const npm = 'vscode.npm.';
-	const typescript = 'vscode.typescript.';
+	const npm = 'hypert.npm.';
+	const typescript = 'hypert.typescript.';
 
 	interface CustomizeShape {
 		customize: string;
@@ -1276,7 +1276,7 @@ namespace ConfiguringTask {
 		}
 		let configElement: Tasks.TaskSourceConfigElement = {
 			workspaceFolder: context.workspaceFolder,
-			file: '.vscode\\tasks.json',
+			file: '.hypert\\tasks.json',
 			index,
 			element: external
 		};
@@ -1339,7 +1339,7 @@ namespace CustomTask {
 		let result: Tasks.CustomTask = {
 			type: Tasks.CUSTOMIZED_TASK_TYPE,
 			_id: context.uuidMap.getUUID(taskName),
-			_source: Objects.assign({}, source, { config: { index, element: external, file: '.vscode\\tasks.json', workspaceFolder: context.workspaceFolder } }),
+			_source: Objects.assign({}, source, { config: { index, element: external, file: '.hypert\\tasks.json', workspaceFolder: context.workspaceFolder } }),
 			_label: taskName,
 			name: taskName,
 			identifier: taskName,

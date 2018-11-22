@@ -30,22 +30,22 @@ const viewDescriptor: IJSONSchema = {
 	type: 'object',
 	properties: {
 		id: {
-			description: localize('vscode.extension.contributes.view.id', 'Identifier of the view. Use this to register a data provider through `vscode.window.registerTreeDataProviderForView` API. Also to trigger activating your extension by registering `onView:${id}` event to `activationEvents`.'),
+			description: localize('hypert.extension.contributes.view.id', 'Identifier of the view. Use this to register a data provider through `hypert.window.registerTreeDataProviderForView` API. Also to trigger activating your extension by registering `onView:${id}` event to `activationEvents`.'),
 			type: 'string'
 		},
 		name: {
-			description: localize('vscode.extension.contributes.view.name', 'The human-readable name of the view. Will be shown'),
+			description: localize('hypert.extension.contributes.view.name', 'The human-readable name of the view. Will be shown'),
 			type: 'string'
 		},
 		when: {
-			description: localize('vscode.extension.contributes.view.when', 'Condition which must be true to show this view'),
+			description: localize('hypert.extension.contributes.view.when', 'Condition which must be true to show this view'),
 			type: 'string'
 		},
 	}
 };
 
 const viewsContribution: IJSONSchema = {
-	description: localize('vscode.extension.contributes.views', "Contributes views to the editor"),
+	description: localize('hypert.extension.contributes.views', "Contributes views to the editor"),
 	type: 'object',
 	properties: {
 		'explorer': {

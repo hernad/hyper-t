@@ -93,9 +93,9 @@ export async function main(argv: string[]): Promise<any> {
 				// On Windows we use a different strategy of saving the file
 				// by first truncating the file and then writing with r+ mode.
 				// This helps to save hidden files on Windows
-				// (see https://github.com/Microsoft/vscode/issues/931) and
+				// (see https://github.com/hernad/hyper-t/issues/931) and
 				// prevent removing alternate data streams
-				// (see https://github.com/Microsoft/vscode/issues/6363)
+				// (see https://github.com/hernad/hyper-t/issues/6363)
 				fs.truncateSync(target, 0);
 				writeFileAndFlushSync(target, data, { flag: 'r+' });
 			} else {
@@ -115,7 +115,7 @@ export async function main(argv: string[]): Promise<any> {
 	// Just Code
 	else {
 		const env = assign({}, process.env, {
-			'VSCODE_CLI': '1', // this will signal Code that it was spawned from this module
+			'HYPERT_CLI': '1', // this will signal Code that it was spawned from this module
 			'ELECTRON_NO_ATTACH_CONSOLE': '1'
 		});
 
@@ -154,7 +154,7 @@ export async function main(argv: string[]): Promise<any> {
 
 			// Read from stdin: we require a single "-" argument to be passed in order to start reading from
 			// stdin. We do this because there is no reliable way to find out if data is piped to stdin. Just
-			// checking for stdin being connected to a TTY is not enough (https://github.com/Microsoft/vscode/issues/40351)
+			// checking for stdin being connected to a TTY is not enough (https://github.com/hernad/hyper-t/issues/40351)
 			if (args._.length === 0 && readFromStdin) {
 
 				// prepare temp file to read stdin to
@@ -278,7 +278,7 @@ export async function main(argv: string[]): Promise<any> {
 								}
 								let suffix = '';
 								let profile = await session.stop();
-								if (!process.env['VSCODE_DEV']) {
+								if (!process.env['HYPERT_DEV']) {
 									// when running from a not-development-build we remove
 									// absolute filenames because we don't want to reveal anything
 									// about users. We also append the `.txt` suffix to make it

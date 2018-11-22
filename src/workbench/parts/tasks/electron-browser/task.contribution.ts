@@ -1040,7 +1040,7 @@ class TaskService extends Disposable implements ITaskService {
 			if (editorConfig.editor.insertSpaces) {
 				content = content.replace(/(\n)(\t+)/g, (_, s1, s2) => s1 + strings.repeat(' ', s2.length * editorConfig.editor.tabSize));
 			}
-			promise = this.fileService.createFile(workspaceFolder.toResource('.vscode/tasks.json'), content).then(() => { });
+			promise = this.fileService.createFile(workspaceFolder.toResource('.hypert/tasks.json'), content).then(() => { });
 		} else {
 			// We have a global task configuration
 			if (index === -1) {
@@ -1077,7 +1077,7 @@ class TaskService extends Disposable implements ITaskService {
 			*/
 			this.telemetryService.publicLog(TaskService.CustomizationTelemetryEventName, event);
 			if (openConfig) {
-				let resource = workspaceFolder.toResource('.vscode/tasks.json');
+				let resource = workspaceFolder.toResource('.hypert/tasks.json');
 				this.editorService.openEditor({
 					resource,
 					options: {
@@ -2210,7 +2210,7 @@ class TaskService extends Disposable implements ITaskService {
 		}
 
 		let openTaskFile = (workspaceFolder: IWorkspaceFolder): void => {
-			let resource = workspaceFolder.toResource('.vscode/tasks.json');
+			let resource = workspaceFolder.toResource('.hypert/tasks.json');
 			let configFileCreated = false;
 			this.fileService.resolveFile(resource).then((stat) => stat, () => undefined).then((stat) => {
 				if (stat) {
@@ -2269,7 +2269,7 @@ class TaskService extends Disposable implements ITaskService {
 		}
 
 		let stats = this.contextService.getWorkspace().folders.map<TPromise<IFileStat>>((folder) => {
-			return this.fileService.resolveFile(folder.toResource('.vscode/tasks.json')).then(stat => stat, () => undefined);
+			return this.fileService.resolveFile(folder.toResource('.hypert/tasks.json')).then(stat => stat, () => undefined);
 		});
 
 		let createLabel = nls.localize('TaskService.createJsonFile', 'Create tasks.json file from template');
@@ -2569,7 +2569,7 @@ statusbarRegistry.registerStatusbarItem(new StatusbarItemDescriptor(BuildStatusB
 statusbarRegistry.registerStatusbarItem(new StatusbarItemDescriptor(TaskStatusBarItem, StatusbarAlignment.LEFT, 50 /* Medium Priority */));
 
 // tasks.json validation
-let schemaId = 'vscode://schemas/tasks';
+let schemaId = 'hypert://schemas/tasks';
 let schema: IJSONSchema = {
 	id: schemaId,
 	description: 'Task definition file',

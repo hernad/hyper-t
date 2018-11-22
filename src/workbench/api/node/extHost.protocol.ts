@@ -41,7 +41,7 @@ import { IExtensionDescription } from 'workbench/services/extensions/common/exte
 import { IRPCProtocol, ProxyIdentifier, createExtHostContextProxyIdentifier as createExtId, createMainContextProxyIdentifier as createMainId } from 'workbench/services/extensions/node/proxyIdentifier';
 import { IProgressOptions, IProgressStep } from 'platform/progress/common/progress';
 import { SaveReason } from 'workbench/services/textfile/common/textfiles';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
 export interface IEnvironment {
 	isExtensionDevelopmentDebug: boolean;
@@ -265,7 +265,7 @@ export interface ISerializedDocumentFilter {
 	$serialized: true;
 	language?: string;
 	scheme?: string;
-	pattern?: vscode.GlobPattern;
+	pattern?: hypert.GlobPattern;
 	exclusive?: boolean;
 }
 
@@ -422,7 +422,7 @@ export interface MainThreadQuickOpenShape extends IDisposable {
 	$show(instance: number, options: IPickOptions<TransferQuickPickItems>, token: CancellationToken): Thenable<number | number[]>;
 	$setItems(instance: number, items: TransferQuickPickItems[]): Thenable<void>;
 	$setError(instance: number, error: Error): Thenable<void>;
-	$input(options: vscode.InputBoxOptions, validateInput: boolean, token: CancellationToken): Thenable<string>;
+	$input(options: hypert.InputBoxOptions, validateInput: boolean, token: CancellationToken): Thenable<string>;
 	$createOrUpdate(params: TransferQuickInput): Thenable<void>;
 	$dispose(id: number): Thenable<void>;
 }
@@ -449,13 +449,13 @@ export interface WebviewPanelShowOptions {
 }
 
 export interface MainThreadWebviewsShape extends IDisposable {
-	$createWebviewPanel(handle: WebviewPanelHandle, viewType: string, title: string, showOptions: WebviewPanelShowOptions, options: vscode.WebviewPanelOptions & vscode.WebviewOptions, extensionId: string, extensionLocation: UriComponents): void;
+	$createWebviewPanel(handle: WebviewPanelHandle, viewType: string, title: string, showOptions: WebviewPanelShowOptions, options: hypert.WebviewPanelOptions & hypert.WebviewOptions, extensionId: string, extensionLocation: UriComponents): void;
 	$disposeWebview(handle: WebviewPanelHandle): void;
 	$reveal(handle: WebviewPanelHandle, showOptions: WebviewPanelShowOptions): void;
 	$setTitle(handle: WebviewPanelHandle, value: string): void;
 	$setIconPath(handle: WebviewPanelHandle, value: { light: UriComponents, dark: UriComponents } | undefined): void;
 	$setHtml(handle: WebviewPanelHandle, value: string): void;
-	$setOptions(handle: WebviewPanelHandle, options: vscode.WebviewOptions): void;
+	$setOptions(handle: WebviewPanelHandle, options: hypert.WebviewOptions): void;
 	$postMessage(handle: WebviewPanelHandle, value: any): Thenable<boolean>;
 
 	$registerSerializer(viewType: string): void;
@@ -472,7 +472,7 @@ export interface ExtHostWebviewsShape {
 	$onMessage(handle: WebviewPanelHandle, message: any): void;
 	$onDidChangeWebviewPanelViewState(handle: WebviewPanelHandle, newState: WebviewPanelViewState): void;
 	$onDidDisposeWebviewPanel(handle: WebviewPanelHandle): Thenable<void>;
-	$deserializeWebviewPanel(newWebviewHandle: WebviewPanelHandle, viewType: string, title: string, state: any, position: EditorViewColumn, options: vscode.WebviewOptions): Thenable<void>;
+	$deserializeWebviewPanel(newWebviewHandle: WebviewPanelHandle, viewType: string, title: string, state: any, position: EditorViewColumn, options: hypert.WebviewOptions): Thenable<void>;
 }
 
 export interface MainThreadUrlsShape extends IDisposable {
@@ -486,7 +486,7 @@ export interface ExtHostUrlsShape {
 
 export interface MainThreadWorkspaceShape extends IDisposable {
 	$startFileSearch(includePattern: string, includeFolder: URI, excludePatternOrDisregardExcludes: string | false, maxResults: number, token: CancellationToken): Thenable<UriComponents[]>;
-	$startTextSearch(query: IPatternInfo, options: ITextQueryBuilderOptions, requestId: number, token: CancellationToken): Thenable<vscode.TextSearchComplete>;
+	$startTextSearch(query: IPatternInfo, options: ITextQueryBuilderOptions, requestId: number, token: CancellationToken): Thenable<hypert.TextSearchComplete>;
 	$checkExists(includes: string[], token: CancellationToken): Thenable<boolean>;
 	$saveAll(includeUntitled?: boolean): Thenable<boolean>;
 	$updateWorkspaceFolders(extensionName: string, index: number, deleteCount: number, workspaceFoldersToAdd: { uri: UriComponents, name?: string }[]): Thenable<void>;
@@ -598,7 +598,7 @@ export interface MainThreadDebugServiceShape extends IDisposable {
 	$registerDebugAdapterProvider(type: string, handle: number): Thenable<void>;
 	$unregisterDebugConfigurationProvider(handle: number): void;
 	$unregisterDebugAdapterProvider(handle: number): void;
-	$startDebugging(folder: UriComponents | undefined, nameOrConfig: string | vscode.DebugConfiguration): Thenable<boolean>;
+	$startDebugging(folder: UriComponents | undefined, nameOrConfig: string | hypert.DebugConfiguration): Thenable<boolean>;
 	$customDebugAdapterRequest(id: DebugSessionUUID, command: string, args: any): Thenable<any>;
 	$appendDebugConsole(value: string): void;
 	$startBreakpointEvents(): void;

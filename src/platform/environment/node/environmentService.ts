@@ -17,13 +17,13 @@ import { getPathFromAmdModule } from 'base/common/amd';
 import { URI } from 'base/common/uri';
 
 // Read this before there's any chance it is overwritten
-// Related to https://github.com/Microsoft/vscode/issues/30624
+// Related to https://github.com/hernad/hyper-t/issues/30624
 const xdgRuntimeDir = process.env['XDG_RUNTIME_DIR'];
 
 function getNixIPCHandle(userDataPath: string, type: string): string {
 	if (xdgRuntimeDir) {
 		const scope = crypto.createHash('md5').update(userDataPath).digest('hex').substr(0, 8);
-		return path.join(xdgRuntimeDir, `vscode-${scope}-${pkg.version}-${type}.sock`);
+		return path.join(xdgRuntimeDir, `hypert-${scope}-${pkg.version}-${type}.sock`);
 	}
 
 	return path.join(userDataPath, `${pkg.version}-${type}.sock`);
@@ -92,8 +92,8 @@ export class EnvironmentService implements IEnvironmentService {
 
 	@memoize
 	get userDataPath(): string {
-		if (process.env['VSCODE_PORTABLE']) {
-			return path.join(process.env['VSCODE_PORTABLE'], 'user-data');
+		if (process.env['HYPERT_PORTABLE']) {
+			return path.join(process.env['HYPERT_PORTABLE'], 'user-data');
 		}
 
 		return parseUserDataDir(this._args, process);
@@ -152,10 +152,10 @@ export class EnvironmentService implements IEnvironmentService {
 
 		if (fromArgs) {
 			return fromArgs;
-		} else if (process.env['VSCODE_EXTENSIONS']) {
-			return process.env['VSCODE_EXTENSIONS'];
-		} else if (process.env['VSCODE_PORTABLE']) {
-			return path.join(process.env['VSCODE_PORTABLE'], 'extensions');
+		} else if (process.env['HYPERT_EXTENSIONS']) {
+			return process.env['HYPERT_EXTENSIONS'];
+		} else if (process.env['HYPERT_PORTABLE']) {
+			return path.join(process.env['HYPERT_PORTABLE'], 'extensions');
 		} else {
 			return path.join(this.userHome, product.dataFolderName, 'extensions');
 		}
@@ -204,7 +204,7 @@ export class EnvironmentService implements IEnvironmentService {
 	@memoize
 	get debugSearch(): IDebugParams { return parseSearchPort(this._args, this.isBuilt); }
 
-	get isBuilt(): boolean { return !process.env['VSCODE_DEV']; }
+	get isBuilt(): boolean { return !process.env['HYPERT_DEV']; }
 	get verbose(): boolean { return this._args.verbose; }
 	get log(): string { return this._args.log; }
 
@@ -222,7 +222,7 @@ export class EnvironmentService implements IEnvironmentService {
 	get sharedIPCHandle(): string { return getIPCHandle(this.userDataPath, 'shared'); }
 
 	@memoize
-	get nodeCachedDataDir(): string { return process.env['VSCODE_NODE_CACHED_DATA_DIR'] || undefined; }
+	get nodeCachedDataDir(): string { return process.env['HYPERT_NODE_CACHED_DATA_DIR'] || undefined; }
 
 	get disableUpdates(): boolean { return !!this._args['disable-updates']; }
 	get disableCrashReporter(): boolean { return !!this._args['disable-crash-reporter']; }
@@ -231,12 +231,12 @@ export class EnvironmentService implements IEnvironmentService {
 	get driverVerbose(): boolean { return this._args['driver-verbose']; }
 
 	constructor(private _args: ParsedArgs, private _execPath: string) {
-		if (!process.env['VSCODE_LOGS']) {
+		if (!process.env['HYPERT_LOGS']) {
 			const key = toLocalISOString(new Date()).replace(/-|:|\.\d+Z$/g, '');
-			process.env['VSCODE_LOGS'] = path.join(this.userDataPath, 'logs', key);
+			process.env['HYPERT_LOGS'] = path.join(this.userDataPath, 'logs', key);
 		}
 
-		this.logsPath = process.env['VSCODE_LOGS'];
+		this.logsPath = process.env['HYPERT_LOGS'];
 	}
 }
 
@@ -261,13 +261,13 @@ function parsePathArg(arg: string, process: NodeJS.Process): string {
 	}
 
 	// Determine if the arg is relative or absolute, if relative use the original CWD
-	// (VSCODE_CWD), not the potentially overridden one (process.cwd()).
+	// (HYPERT_CWD), not the potentially overridden one (process.cwd()).
 	const resolved = path.resolve(arg);
 
 	if (path.normalize(arg) === resolved) {
 		return resolved;
 	} else {
-		return path.resolve(process.env['VSCODE_CWD'] || process.cwd(), arg);
+		return path.resolve(process.env['HYPERT_CWD'] || process.cwd(), arg);
 	}
 }
 

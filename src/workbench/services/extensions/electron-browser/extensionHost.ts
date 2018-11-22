@@ -175,10 +175,10 @@ export class ExtensionHostProcessWorker implements IExtensionHostStarter {
 						AMD_ENTRYPOINT: 'workbench/node/extensionHostProcess',
 						PIPE_LOGGING: 'true',
 						VERBOSE_LOGGING: true,
-						VSCODE_IPC_HOOK_EXTHOST: pipeName,
-						VSCODE_HANDLES_UNCAUGHT_ERRORS: true,
-						VSCODE_LOG_STACK: !this._isExtensionDevTestFromCli && (this._isExtensionDevHost || !this._environmentService.isBuilt || product.quality !== 'stable' || this._environmentService.verbose),
-						VSCODE_LOG_LEVEL: this._environmentService.verbose ? 'trace' : this._environmentService.log
+						HYPERT_IPC_HOOK_EXTHOST: pipeName,
+						HYPERT_HANDLES_UNCAUGHT_ERRORS: true,
+						HYPERT_LOG_STACK: !this._isExtensionDevTestFromCli && (this._isExtensionDevHost || !this._environmentService.isBuilt || product.quality !== 'stable' || this._environmentService.verbose),
+						HYPERT_LOG_LEVEL: this._environmentService.verbose ? 'trace' : this._environmentService.log
 					}),
 					// We only detach the extension host on windows. Linux and Mac orphan by default
 					// and detach under Linux and Mac create another process group.
@@ -197,7 +197,7 @@ export class ExtensionHostProcessWorker implements IExtensionHostStarter {
 					if (!portData.expected) {
 						// No one asked for 'inspect' or 'inspect-brk', only us. We add another
 						// option such that the extension host can manipulate the execArgv array
-						opts.env.VSCODE_PREVENT_FOREIGN_INSPECT = true;
+						opts.env.HYPERT_PREVENT_FOREIGN_INSPECT = true;
 					}
 				}
 
@@ -498,7 +498,7 @@ export class ExtensionHostProcessWorker implements IExtensionHostStarter {
 
 		// When CLI testing make sure to exit with proper exit code
 		else {
-			ipc.send('vscode:exit', code);
+			ipc.send('hypert:exit', code);
 		}
 	}
 

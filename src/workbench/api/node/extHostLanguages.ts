@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { MainContext, MainThreadLanguagesShape, IMainContext } from './extHost.protocol';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { ExtHostDocuments } from 'workbench/api/node/extHostDocuments';
 
 export class ExtHostLanguages {
@@ -24,7 +24,7 @@ export class ExtHostLanguages {
 		return this._proxy.$getLanguages();
 	}
 
-	changeLanguage(uri: vscode.Uri, languageId: string): Thenable<vscode.TextDocument> {
+	changeLanguage(uri: hypert.Uri, languageId: string): Thenable<hypert.TextDocument> {
 		return this._proxy.$changeLanguage(uri, languageId).then(() => {
 			return this._documents.getDocumentData(uri).document;
 		});

@@ -12,7 +12,7 @@ export function popup(items: IContextMenuItem[], options?: IPopupOptions): void 
 	const processedItems: IContextMenuItem[] = [];
 
 	const contextMenuId = contextMenuIdPool++;
-	const onClickChannel = `vscode:onContextMenu${contextMenuId}`;
+	const onClickChannel = `hypert:onContextMenu${contextMenuId}`;
 	const onClickChannelHandler = (_event: Event, itemId: number, context: IContextMenuEvent) => {
 		const item = processedItems[itemId];
 		if (item.click) {

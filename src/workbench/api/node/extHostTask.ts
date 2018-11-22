@@ -19,7 +19,7 @@ import { MainContext, MainThreadTaskShape, ExtHostTaskShape, IMainContext } from
 
 import * as types from 'workbench/api/node/extHostTypes';
 import { ExtHostWorkspace } from 'workbench/api/node/extHostWorkspace';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import {
 	TaskDefinitionDTO, TaskExecutionDTO, TaskPresentationOptionsDTO, ProcessExecutionOptionsDTO, ProcessExecutionDTO,
 	ShellExecutionOptionsDTO, ShellExecutionDTO, TaskDTO, TaskHandleDTO, TaskFilterDTO, TaskProcessStartedDTO, TaskProcessEndedDTO, TaskSystemInfoDTO
@@ -34,7 +34,7 @@ import { CancellationToken } from 'base/common/cancellation';
 
 /*
 namespace ProblemPattern {
-	export function from(value: vscode.ProblemPattern | vscode.MultiLineProblemPattern): Problems.ProblemPattern | Problems.MultiLineProblemPattern {
+	export function from(value: hypert.ProblemPattern | hypert.MultiLineProblemPattern): Problems.ProblemPattern | Problems.MultiLineProblemPattern {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -53,8 +53,8 @@ namespace ProblemPattern {
 		}
 	}
 
-	function copyProperty(target: Problems.ProblemPattern, source: vscode.ProblemPattern, tk: keyof Problems.ProblemPattern) {
-		let sk: keyof vscode.ProblemPattern = tk;
+	function copyProperty(target: Problems.ProblemPattern, source: hypert.ProblemPattern, tk: keyof Problems.ProblemPattern) {
+		let sk: keyof hypert.ProblemPattern = tk;
 		let value = source[sk];
 		if (typeof value === 'number') {
 			target[tk] = value;
@@ -68,7 +68,7 @@ namespace ProblemPattern {
 		return defaultValue;
 	}
 
-	function fromSingle(problemPattern: vscode.ProblemPattern): Problems.ProblemPattern {
+	function fromSingle(problemPattern: hypert.ProblemPattern): Problems.ProblemPattern {
 		if (problemPattern === void 0 || problemPattern === null || !(problemPattern.regexp instanceof RegExp)) {
 			return undefined;
 		}
@@ -101,7 +101,7 @@ namespace ProblemPattern {
 }
 
 namespace ApplyTo {
-	export function from(value: vscode.ApplyToKind): Problems.ApplyToKind {
+	export function from(value: hypert.ApplyToKind): Problems.ApplyToKind {
 		if (value === void 0 || value === null) {
 			return Problems.ApplyToKind.allDocuments;
 		}
@@ -116,7 +116,7 @@ namespace ApplyTo {
 }
 
 namespace FileLocation {
-	export function from(value: vscode.FileLocationKind | string): { kind: Problems.FileLocationKind; prefix?: string } {
+	export function from(value: hypert.FileLocationKind | string): { kind: Problems.FileLocationKind; prefix?: string } {
 		if (value === void 0 || value === null) {
 			return { kind: Problems.FileLocationKind.Auto };
 		}
@@ -134,7 +134,7 @@ namespace FileLocation {
 }
 
 namespace WatchingPattern {
-	export function from(value: RegExp | vscode.BackgroundPattern): Problems.WatchingPattern {
+	export function from(value: RegExp | hypert.BackgroundPattern): Problems.WatchingPattern {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -155,7 +155,7 @@ namespace WatchingPattern {
 }
 
 namespace BackgroundMonitor {
-	export function from(value: vscode.BackgroundMonitor): Problems.WatchingMatcher {
+	export function from(value: hypert.BackgroundMonitor): Problems.WatchingMatcher {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -169,7 +169,7 @@ namespace BackgroundMonitor {
 }
 
 namespace ProblemMatcher {
-	export function from(values: (string | vscode.ProblemMatcher)[]): (string | Problems.ProblemMatcher)[] {
+	export function from(values: (string | hypert.ProblemMatcher)[]): (string | Problems.ProblemMatcher)[] {
 		if (values === void 0 || values === null) {
 			return undefined;
 		}
@@ -183,7 +183,7 @@ namespace ProblemMatcher {
 		return result;
 	}
 
-	function fromSingle(problemMatcher: vscode.ProblemMatcher): Problems.ProblemMatcher {
+	function fromSingle(problemMatcher: hypert.ProblemMatcher): Problems.ProblemMatcher {
 		if (problemMatcher === void 0 || problemMatcher === null) {
 			return undefined;
 		}
@@ -203,7 +203,7 @@ namespace ProblemMatcher {
 */
 
 namespace TaskRevealKind {
-	export function from(value: vscode.TaskRevealKind): tasks.RevealKind {
+	export function from(value: hypert.TaskRevealKind): tasks.RevealKind {
 		if (value === void 0 || value === null) {
 			return tasks.RevealKind.Always;
 		}
@@ -218,7 +218,7 @@ namespace TaskRevealKind {
 }
 
 namespace TaskPanelKind {
-	export function from(value: vscode.TaskPanelKind): tasks.PanelKind {
+	export function from(value: hypert.TaskPanelKind): tasks.PanelKind {
 		if (value === void 0 || value === null) {
 			return tasks.PanelKind.Shared;
 		}
@@ -234,7 +234,7 @@ namespace TaskPanelKind {
 }
 
 namespace PresentationOptions {
-	export function from(value: vscode.TaskPresentationOptions): tasks.PresentationOptions {
+	export function from(value: hypert.TaskPresentationOptions): tasks.PresentationOptions {
 		if (value === void 0 || value === null) {
 			return { reveal: tasks.RevealKind.Always, echo: true, focus: false, panel: tasks.PanelKind.Shared, showReuseMessage: true, clear: false };
 		}
@@ -267,7 +267,7 @@ namespace CommandOptions {
 	function isShellConfiguration(value: any): value is { executable: string; shellArgs?: string[] } {
 		return value && typeof value.executable === 'string';
 	}
-	export function from(value: vscode.ShellExecutionOptions | vscode.ProcessExecutionOptions): tasks.CommandOptions {
+	export function from(value: hypert.ShellExecutionOptions | hypert.ProcessExecutionOptions): tasks.CommandOptions {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -293,7 +293,7 @@ namespace CommandOptions {
 }
 
 namespace ShellQuoteOptions {
-	export function from(value: vscode.ShellQuotingOptions): tasks.ShellQuotingOptions {
+	export function from(value: hypert.ShellQuotingOptions): tasks.ShellQuotingOptions {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -306,7 +306,7 @@ namespace ShellQuoteOptions {
 }
 
 namespace ShellConfiguration {
-	export function from(value: { executable?: string, shellArgs?: string[], quotes?: vscode.ShellQuotingOptions }): tasks.ShellConfiguration {
+	export function from(value: { executable?: string, shellArgs?: string[], quotes?: hypert.ShellQuotingOptions }): tasks.ShellConfiguration {
 		if (value === void 0 || value === null || !value.executable) {
 			return undefined;
 		}
@@ -321,7 +321,7 @@ namespace ShellConfiguration {
 }
 
 namespace ShellString {
-	export function from(value: (string | vscode.ShellQuotedString)[]): tasks.CommandString[] {
+	export function from(value: (string | hypert.ShellQuotedString)[]): tasks.CommandString[] {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -331,7 +331,7 @@ namespace ShellString {
 
 namespace Tasks {
 
-	export function from(tasks: vscode.Task[], rootFolder: vscode.WorkspaceFolder, extension: IExtensionDescription): tasks.ContributedTask[] {
+	export function from(tasks: hypert.Task[], rootFolder: hypert.WorkspaceFolder, extension: IExtensionDescription): tasks.ContributedTask[] {
 		if (tasks === void 0 || tasks === null) {
 			return [];
 		}
@@ -345,7 +345,7 @@ namespace Tasks {
 		return result;
 	}
 
-	function fromSingle(task: vscode.Task, rootFolder: vscode.WorkspaceFolder, extension: IExtensionDescription): tasks.ContributedTask {
+	function fromSingle(task: hypert.Task, rootFolder: hypert.WorkspaceFolder, extension: IExtensionDescription): tasks.ContributedTask {
 		if (typeof task.name !== 'string') {
 			return undefined;
 		}
@@ -363,8 +363,8 @@ namespace Tasks {
 		}
 		command.presentation = PresentationOptions.from(task.presentationOptions);
 
-		let taskScope: types.TaskScope.Global | types.TaskScope.Workspace | vscode.WorkspaceFolder | undefined = task.scope;
-		let workspaceFolder: vscode.WorkspaceFolder | undefined;
+		let taskScope: types.TaskScope.Global | types.TaskScope.Workspace | hypert.WorkspaceFolder | undefined = task.scope;
+		let workspaceFolder: hypert.WorkspaceFolder | undefined;
 		let scope: tasks.TaskScope;
 		// For backwards compatibility
 		if (taskScope === void 0) {
@@ -410,7 +410,7 @@ namespace Tasks {
 		return result;
 	}
 
-	function getProcessCommand(value: vscode.ProcessExecution): tasks.CommandConfiguration {
+	function getProcessCommand(value: hypert.ProcessExecution): tasks.CommandConfiguration {
 		if (typeof value.process !== 'string') {
 			return undefined;
 		}
@@ -427,7 +427,7 @@ namespace Tasks {
 		return result;
 	}
 
-	function getShellCommand(value: vscode.ShellExecution): tasks.CommandConfiguration {
+	function getShellCommand(value: hypert.ShellExecution): tasks.CommandConfiguration {
 		if (value.args) {
 			if (typeof value.command !== 'string' && typeof value.command.value !== 'string') {
 				return undefined;
@@ -460,13 +460,13 @@ namespace Tasks {
 }
 
 namespace TaskDefinitionDTO {
-	export function from(value: vscode.TaskDefinition): TaskDefinitionDTO {
+	export function from(value: hypert.TaskDefinition): TaskDefinitionDTO {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
 		return value;
 	}
-	export function to(value: TaskDefinitionDTO): vscode.TaskDefinition {
+	export function to(value: TaskDefinitionDTO): hypert.TaskDefinition {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -475,13 +475,13 @@ namespace TaskDefinitionDTO {
 }
 
 namespace TaskPresentationOptionsDTO {
-	export function from(value: vscode.TaskPresentationOptions): TaskPresentationOptionsDTO {
+	export function from(value: hypert.TaskPresentationOptions): TaskPresentationOptionsDTO {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
 		return value;
 	}
-	export function to(value: TaskPresentationOptionsDTO): vscode.TaskPresentationOptions {
+	export function to(value: TaskPresentationOptionsDTO): hypert.TaskPresentationOptions {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -490,13 +490,13 @@ namespace TaskPresentationOptionsDTO {
 }
 
 namespace ProcessExecutionOptionsDTO {
-	export function from(value: vscode.ProcessExecutionOptions): ProcessExecutionOptionsDTO {
+	export function from(value: hypert.ProcessExecutionOptions): ProcessExecutionOptionsDTO {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
 		return value;
 	}
-	export function to(value: ProcessExecutionOptionsDTO): vscode.ProcessExecutionOptions {
+	export function to(value: ProcessExecutionOptionsDTO): hypert.ProcessExecutionOptions {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -509,7 +509,7 @@ namespace ProcessExecutionDTO {
 		let candidate = value as ProcessExecutionDTO;
 		return candidate && !!candidate.process;
 	}
-	export function from(value: vscode.ProcessExecution): ProcessExecutionDTO {
+	export function from(value: hypert.ProcessExecution): ProcessExecutionDTO {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -531,13 +531,13 @@ namespace ProcessExecutionDTO {
 }
 
 namespace ShellExecutionOptionsDTO {
-	export function from(value: vscode.ShellExecutionOptions): ShellExecutionOptionsDTO {
+	export function from(value: hypert.ShellExecutionOptions): ShellExecutionOptionsDTO {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
 		return value;
 	}
-	export function to(value: ShellExecutionOptionsDTO): vscode.ShellExecutionOptions {
+	export function to(value: ShellExecutionOptionsDTO): hypert.ShellExecutionOptions {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -550,7 +550,7 @@ namespace ShellExecutionDTO {
 		let candidate = value as ShellExecutionDTO;
 		return candidate && (!!candidate.commandLine || !!candidate.command);
 	}
-	export function from(value: vscode.ShellExecution): ShellExecutionDTO {
+	export function from(value: hypert.ShellExecution): ShellExecutionDTO {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -594,7 +594,7 @@ namespace TaskHandleDTO {
 
 namespace TaskDTO {
 
-	export function from(value: vscode.Task, extension: IExtensionDescription): TaskDTO {
+	export function from(value: hypert.Task, extension: IExtensionDescription): TaskDTO {
 		if (value === void 0 || value === null) {
 			return undefined;
 		}
@@ -645,8 +645,8 @@ namespace TaskDTO {
 		} else if (ShellExecutionDTO.is(value.execution)) {
 			execution = ShellExecutionDTO.to(value.execution);
 		}
-		let definition: vscode.TaskDefinition = TaskDefinitionDTO.to(value.definition);
-		let scope: vscode.TaskScope.Global | vscode.TaskScope.Workspace | vscode.WorkspaceFolder;
+		let definition: hypert.TaskDefinition = TaskDefinitionDTO.to(value.definition);
+		let scope: hypert.TaskScope.Global | hypert.TaskScope.Workspace | hypert.WorkspaceFolder;
 		if (value.source) {
 			if (value.source.scope !== void 0) {
 				if (typeof value.source.scope === 'number') {
@@ -679,11 +679,11 @@ namespace TaskDTO {
 }
 
 namespace TaskFilterDTO {
-	export function from(value: vscode.TaskFilter): TaskFilterDTO {
+	export function from(value: hypert.TaskFilter): TaskFilterDTO {
 		return value;
 	}
 
-	export function to(value: TaskFilterDTO): vscode.TaskFilter {
+	export function to(value: TaskFilterDTO): hypert.TaskFilter {
 		if (!value) {
 			return undefined;
 		}
@@ -691,12 +691,12 @@ namespace TaskFilterDTO {
 	}
 }
 
-class TaskExecutionImpl implements vscode.TaskExecution {
+class TaskExecutionImpl implements hypert.TaskExecution {
 
-	constructor(private readonly _tasks: ExtHostTask, readonly _id: string, private readonly _task: vscode.Task) {
+	constructor(private readonly _tasks: ExtHostTask, readonly _id: string, private readonly _task: hypert.Task) {
 	}
 
-	public get task(): vscode.Task {
+	public get task(): hypert.Task {
 		return this._task;
 	}
 
@@ -712,10 +712,10 @@ class TaskExecutionImpl implements vscode.TaskExecution {
 }
 
 namespace TaskExecutionDTO {
-	export function to(value: TaskExecutionDTO, tasks: ExtHostTask): vscode.TaskExecution {
+	export function to(value: TaskExecutionDTO, tasks: ExtHostTask): hypert.TaskExecution {
 		return new TaskExecutionImpl(tasks, value.id, TaskDTO.to(value.task, tasks.extHostWorkspace));
 	}
-	export function from(value: vscode.TaskExecution): TaskExecutionDTO {
+	export function from(value: hypert.TaskExecution): TaskExecutionDTO {
 		return {
 			id: (value as TaskExecutionImpl)._id,
 			task: undefined
@@ -724,7 +724,7 @@ namespace TaskExecutionDTO {
 }
 
 interface HandlerData {
-	provider: vscode.TaskProvider;
+	provider: hypert.TaskProvider;
 	extension: IExtensionDescription;
 }
 
@@ -740,11 +740,11 @@ export class ExtHostTask implements ExtHostTaskShape {
 	private _handlers: Map<number, HandlerData>;
 	private _taskExecutions: Map<string, TaskExecutionImpl>;
 
-	private readonly _onDidExecuteTask: Emitter<vscode.TaskStartEvent> = new Emitter<vscode.TaskStartEvent>();
-	private readonly _onDidTerminateTask: Emitter<vscode.TaskEndEvent> = new Emitter<vscode.TaskEndEvent>();
+	private readonly _onDidExecuteTask: Emitter<hypert.TaskStartEvent> = new Emitter<hypert.TaskStartEvent>();
+	private readonly _onDidTerminateTask: Emitter<hypert.TaskEndEvent> = new Emitter<hypert.TaskEndEvent>();
 
-	private readonly _onDidTaskProcessStarted: Emitter<vscode.TaskProcessStartEvent> = new Emitter<vscode.TaskProcessStartEvent>();
-	private readonly _onDidTaskProcessEnded: Emitter<vscode.TaskProcessEndEvent> = new Emitter<vscode.TaskProcessEndEvent>();
+	private readonly _onDidTaskProcessStarted: Emitter<hypert.TaskProcessStartEvent> = new Emitter<hypert.TaskProcessStartEvent>();
+	private readonly _onDidTaskProcessEnded: Emitter<hypert.TaskProcessEndEvent> = new Emitter<hypert.TaskProcessEndEvent>();
 
 	constructor(mainContext: IMainContext, workspaceService: ExtHostWorkspace, editorService: ExtHostDocumentsAndEditors, configurationService: ExtHostConfiguration) {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadTask);
@@ -762,7 +762,7 @@ export class ExtHostTask implements ExtHostTaskShape {
 		return this._workspaceService;
 	}
 
-	public registerTaskProvider(extension: IExtensionDescription, provider: vscode.TaskProvider): vscode.Disposable {
+	public registerTaskProvider(extension: IExtensionDescription, provider: hypert.TaskProvider): hypert.Disposable {
 		if (!provider) {
 			return new types.Disposable(() => { });
 		}
@@ -779,9 +779,9 @@ export class ExtHostTask implements ExtHostTaskShape {
 		// this._proxy.$registerTaskSystem(scheme, info);  hernad out-debug
 	}
 
-	public fetchTasks(filter?: vscode.TaskFilter): Thenable<vscode.Task[]> {
+	public fetchTasks(filter?: hypert.TaskFilter): Thenable<hypert.Task[]> {
 		return this._proxy.$fetchTasks(TaskFilterDTO.from(filter)).then((values) => {
-			let result: vscode.Task[] = [];
+			let result: hypert.Task[] = [];
 			for (let value of values) {
 				let task = TaskDTO.to(value, this._workspaceService);
 				if (task) {
@@ -792,7 +792,7 @@ export class ExtHostTask implements ExtHostTaskShape {
 		});
 	}
 
-	public executeTask(extension: IExtensionDescription, task: vscode.Task): Thenable<vscode.TaskExecution> {
+	public executeTask(extension: IExtensionDescription, task: hypert.Task): Thenable<hypert.TaskExecution> {
 		let tTask = (task as types.Task);
 		// We have a preserved ID. So the task didn't change.
 		if (tTask._id !== void 0) {
@@ -806,20 +806,20 @@ export class ExtHostTask implements ExtHostTaskShape {
 		}
 	}
 
-	public get taskExecutions(): vscode.TaskExecution[] {
-		let result: vscode.TaskExecution[] = [];
+	public get taskExecutions(): hypert.TaskExecution[] {
+		let result: hypert.TaskExecution[] = [];
 		this._taskExecutions.forEach(value => result.push(value));
 		return result;
 	}
 
-	public terminateTask(execution: vscode.TaskExecution): Thenable<void> {
+	public terminateTask(execution: hypert.TaskExecution): Thenable<void> {
 		if (!(execution instanceof TaskExecutionImpl)) {
 			throw new Error('No valid task execution provided');
 		}
 		return this._proxy.$terminateTask((execution as TaskExecutionImpl)._id);
 	}
 
-	public get onDidStartTask(): Event<vscode.TaskStartEvent> {
+	public get onDidStartTask(): Event<hypert.TaskStartEvent> {
 		return this._onDidExecuteTask.event;
 	}
 
@@ -829,7 +829,7 @@ export class ExtHostTask implements ExtHostTaskShape {
 		});
 	}
 
-	public get onDidEndTask(): Event<vscode.TaskEndEvent> {
+	public get onDidEndTask(): Event<hypert.TaskEndEvent> {
 		return this._onDidTerminateTask.event;
 	}
 
@@ -841,7 +841,7 @@ export class ExtHostTask implements ExtHostTaskShape {
 		});
 	}
 
-	public get onDidStartTaskProcess(): Event<vscode.TaskProcessStartEvent> {
+	public get onDidStartTaskProcess(): Event<hypert.TaskProcessStartEvent> {
 		return this._onDidTaskProcessStarted.event;
 	}
 
@@ -855,7 +855,7 @@ export class ExtHostTask implements ExtHostTaskShape {
 		}
 	}
 
-	public get onDidEndTaskProcess(): Event<vscode.TaskProcessEndEvent> {
+	public get onDidEndTaskProcess(): Event<hypert.TaskProcessEndEvent> {
 		return this._onDidTaskProcessEnded.event;
 	}
 
@@ -875,7 +875,7 @@ export class ExtHostTask implements ExtHostTaskShape {
 			return Promise.reject(new Error('no handler found'));
 		}
 		return asThenable(() => handler.provider.provideTasks(CancellationToken.None)).then(value => {
-			let sanitized: vscode.Task[] = [];
+			let sanitized: hypert.Task[] = [];
 			for (let task of value) {
 				if (task.definition && validTypes[task.definition.type] === true) {
 					sanitized.push(task);
@@ -934,7 +934,7 @@ export class ExtHostTask implements ExtHostTaskShape {
 		return this._handleCounter++;
 	}
 
-	private getTaskExecution(execution: TaskExecutionDTO | string, task?: vscode.Task): TaskExecutionImpl {
+	private getTaskExecution(execution: TaskExecutionDTO | string, task?: hypert.Task): TaskExecutionImpl {
 		if (typeof execution === 'string') {
 			return this._taskExecutions.get(execution);
 		}

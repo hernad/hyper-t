@@ -109,7 +109,7 @@ export class SettingsEditor2Input extends EditorInput {
 
 	public getResource(): URI {
 		return URI.from({
-			scheme: 'vscode-settings',
+			scheme: 'hypert-settings',
 			path: `settingseditor`
 		});
 	}

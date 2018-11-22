@@ -31,7 +31,7 @@ export function validatePaths(args: ParsedArgs): ParsedArgs {
 }
 
 function doValidatePaths(args: string[], gotoLineMode?: boolean): string[] {
-	const cwd = process.env['VSCODE_CWD'] || process.cwd();
+	const cwd = process.env['HYPERT_CWD'] || process.cwd();
 	const result = args.map(arg => {
 		let pathCandidate = String(arg);
 
@@ -71,7 +71,7 @@ function preparePath(cwd: string, p: string): string {
 
 	// Trim trailing quotes
 	if (platform.isWindows) {
-		p = strings.rtrim(p, '"'); // https://github.com/Microsoft/vscode/issues/1498
+		p = strings.rtrim(p, '"'); // https://github.com/hernad/hyper-t/issues/1498
 	}
 
 	// Trim whitespaces

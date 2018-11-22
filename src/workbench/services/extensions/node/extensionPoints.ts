@@ -306,7 +306,7 @@ export interface IRelaxedExtensionDescription {
 	isUnderDevelopment: boolean;
 	extensionLocation: URI;
 	engines: {
-		vscode: string;
+		hypert: string;
 	};
 	main?: string;
 	enableProposedApi?: boolean;
@@ -384,8 +384,8 @@ class ExtensionManifestValidator extends ExtensionManifestHandler {
 			notices.push(nls.localize('extensionDescription.engines', "property `{0}` is mandatory and must be of type `object`", 'engines'));
 			return false;
 		}
-		if (typeof extensionDescription.engines.vscode !== 'string') {
-			notices.push(nls.localize('extensionDescription.engines.vscode', "property `{0}` is mandatory and must be of type `string`", 'engines.vscode'));
+		if (typeof extensionDescription.engines.hypert !== 'string') {
+			notices.push(nls.localize('extensionDescription.engines.hypert', "property `{0}` is mandatory and must be of type `string`", 'engines.hypert'));
 			return false;
 		}
 		if (typeof extensionDescription.extensionDependencies !== 'undefined') {

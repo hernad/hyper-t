@@ -299,7 +299,7 @@ function packageTask(platform, arch, opts) {
 		const watermark = gulp.src(['resources/letterpress.svg', 'resources/letterpress-dark.svg', 'resources/letterpress-hc.svg'], { base: '.' });
 
 		// TODO the API should be copied to `out` during compile, not here
-		const api = gulp.src('src/vscode.d.ts').pipe(rename('out/vscode.d.ts'));
+		const api = gulp.src('src/hypert.d.ts').pipe(rename('out/hypert.d.ts'));
 
 		const depsSrc = [
 			..._.flatten(productionDependencies.map(d => path.relative(root, d.path)).map(d => [`${d}/**`, `!${d}/**/{test,tests}/**`])),

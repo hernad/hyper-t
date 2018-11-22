@@ -14,13 +14,13 @@
  * - Copy this file to your project.
  */
 
-declare module 'vscode' {
+declare module 'hypert' {
 
 	export namespace window {
 		export function sampleFunction(): Thenable<any>;
 	}
 
-	//#region Joh - https://github.com/Microsoft/vscode/issues/57093
+	//#region Joh - https://github.com/hernad/hyper-t/issues/57093
 
 	/**
 	 * An insert text rule defines how the [`insertText`](#CompletionItem.insertText) of a
@@ -92,7 +92,7 @@ declare module 'vscode' {
 
 	/**
 	 * A file glob pattern to match file paths against.
-	 * TODO@roblou - merge this with the GlobPattern docs/definition in vscode.d.ts.
+	 * TODO@roblou - merge this with the GlobPattern docs/definition in hypert.d.ts.
 	 * @see [GlobPattern](#GlobPattern)
 	 */
 	export type GlobString = string;
@@ -118,19 +118,19 @@ declare module 'vscode' {
 
 		/**
 		 * Whether external files that exclude files, like .gitignore, should be respected.
-		 * See the vscode setting `"search.useIgnoreFiles"`.
+		 * See the hypert setting `"search.useIgnoreFiles"`.
 		 */
 		useIgnoreFiles: boolean;
 
 		/**
 		 * Whether symlinks should be followed while searching.
-		 * See the vscode setting `"search.followSymlinks"`.
+		 * See the hypert setting `"search.followSymlinks"`.
 		 */
 		followSymlinks: boolean;
 
 		/**
 		 * Whether global files that exclude files, like .gitignore, should be respected.
-		 * See the vscode setting `"search.useGlobalIgnoreFiles"`.
+		 * See the hypert setting `"search.useGlobalIgnoreFiles"`.
 		 */
 		useGlobalIgnoreFiles: boolean;
 
@@ -174,7 +174,7 @@ declare module 'vscode' {
 
 		/**
 		 * Interpret files using this encoding.
-		 * See the vscode setting `"files.encoding"`
+		 * See the hypert setting `"files.encoding"`
 		 */
 		encoding?: string;
 
@@ -368,25 +368,25 @@ declare module 'vscode' {
 
 		/**
 		 * Whether external files that exclude files, like .gitignore, should be respected.
-		 * See the vscode setting `"search.useIgnoreFiles"`.
+		 * See the hypert setting `"search.useIgnoreFiles"`.
 		 */
 		useIgnoreFiles?: boolean;
 
 		/**
 		 * Whether global files that exclude files, like .gitignore, should be respected.
-		 * See the vscode setting `"search.useGlobalIgnoreFiles"`.
+		 * See the hypert setting `"search.useGlobalIgnoreFiles"`.
 		 */
 		useGlobalIgnoreFiles?: boolean;
 
 		/**
 		 * Whether symlinks should be followed while searching.
-		 * See the vscode setting `"search.followSymlinks"`.
+		 * See the hypert setting `"search.followSymlinks"`.
 		 */
 		followSymlinks?: boolean;
 
 		/**
 		 * Interpret files using this encoding.
-		 * See the vscode setting `"files.encoding"`
+		 * See the hypert setting `"files.encoding"`
 		 */
 		encoding?: string;
 
@@ -1103,7 +1103,7 @@ declare module 'vscode' {
 
 	//#endregion
 
-	//#region mjbvz,joh: https://github.com/Microsoft/vscode/issues/43768
+	//#region mjbvz,joh: https://github.com/hernad/hyper-t/issues/43768
 	export interface FileRenameEvent {
 		readonly oldUri: Uri;
 		readonly newUri: Uri;

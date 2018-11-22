@@ -5,7 +5,7 @@
 
 import { Event, Emitter } from 'base/common/event';
 import { ExtHostWindowShape, MainContext, MainThreadWindowShape, IMainContext } from './extHost.protocol';
-import { WindowState } from 'vscode';
+import { WindowState } from 'hypert';
 
 export class ExtHostWindow implements ExtHostWindowShape {
 

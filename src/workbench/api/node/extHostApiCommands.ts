@@ -5,7 +5,7 @@
 
 import { URI } from 'base/common/uri';
 import { IDisposable } from 'base/common/lifecycle';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import * as typeConverters from 'workbench/api/node/extHostTypeConverters';
 import * as types from 'workbench/api/node/extHostTypes';
 import { IRawColorInfo, WorkspaceEditDto } from 'workbench/api/node/extHost.protocol';
@@ -33,13 +33,13 @@ export class ExtHostApiCommands {
 	}
 
 	registerCommands() {
-		this._register('vscode.executeWorkspaceSymbolProvider', this._executeWorkspaceSymbolProvider, {
+		this._register('hypert.executeWorkspaceSymbolProvider', this._executeWorkspaceSymbolProvider, {
 			description: 'Execute all workspace symbol provider.',
 			args: [{ name: 'query', description: 'Search string', constraint: String }],
 			returns: 'A promise that resolves to an array of SymbolInformation-instances.'
 
 		});
-		this._register('vscode.executeDefinitionProvider', this._executeDefinitionProvider, {
+		this._register('hypert.executeDefinitionProvider', this._executeDefinitionProvider, {
 			description: 'Execute all definition provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -47,7 +47,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of Location-instances.'
 		});
-		this._register('vscode.executeDeclarationProvider', this._executeDeclaraionProvider, {
+		this._register('hypert.executeDeclarationProvider', this._executeDeclaraionProvider, {
 			description: 'Execute all declaration provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -55,7 +55,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of Location-instances.'
 		});
-		this._register('vscode.executeTypeDefinitionProvider', this._executeTypeDefinitionProvider, {
+		this._register('hypert.executeTypeDefinitionProvider', this._executeTypeDefinitionProvider, {
 			description: 'Execute all type definition providers.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -63,7 +63,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of Location-instances.'
 		});
-		this._register('vscode.executeImplementationProvider', this._executeImplementationProvider, {
+		this._register('hypert.executeImplementationProvider', this._executeImplementationProvider, {
 			description: 'Execute all implementation providers.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -71,7 +71,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of Location-instance.'
 		});
-		this._register('vscode.executeHoverProvider', this._executeHoverProvider, {
+		this._register('hypert.executeHoverProvider', this._executeHoverProvider, {
 			description: 'Execute all hover provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -79,7 +79,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of Hover-instances.'
 		});
-		this._register('vscode.executeDocumentHighlights', this._executeDocumentHighlights, {
+		this._register('hypert.executeDocumentHighlights', this._executeDocumentHighlights, {
 			description: 'Execute document highlight provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -87,7 +87,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of DocumentHighlight-instances.'
 		});
-		this._register('vscode.executeReferenceProvider', this._executeReferenceProvider, {
+		this._register('hypert.executeReferenceProvider', this._executeReferenceProvider, {
 			description: 'Execute reference provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -95,7 +95,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of Location-instances.'
 		});
-		this._register('vscode.executeDocumentRenameProvider', this._executeDocumentRenameProvider, {
+		this._register('hypert.executeDocumentRenameProvider', this._executeDocumentRenameProvider, {
 			description: 'Execute rename provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -104,7 +104,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to a WorkspaceEdit.'
 		});
-		this._register('vscode.executeSignatureHelpProvider', this._executeSignatureHelpProvider, {
+		this._register('hypert.executeSignatureHelpProvider', this._executeSignatureHelpProvider, {
 			description: 'Execute signature help provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -113,14 +113,14 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to SignatureHelp.'
 		});
-		this._register('vscode.executeDocumentSymbolProvider', this._executeDocumentSymbolProvider, {
+		this._register('hypert.executeDocumentSymbolProvider', this._executeDocumentSymbolProvider, {
 			description: 'Execute document symbol provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI }
 			],
 			returns: 'A promise that resolves to an array of SymbolInformation and DocumentSymbol instances.'
 		});
-		this._register('vscode.executeCompletionItemProvider', this._executeCompletionItemProvider, {
+		this._register('hypert.executeCompletionItemProvider', this._executeCompletionItemProvider, {
 			description: 'Execute completion item provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -130,7 +130,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to a CompletionList-instance.'
 		});
-		this._register('vscode.executeCodeActionProvider', this._executeCodeActionProvider, {
+		this._register('hypert.executeCodeActionProvider', this._executeCodeActionProvider, {
 			description: 'Execute code action provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -138,7 +138,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of Command-instances.'
 		});
-		this._register('vscode.executeCodeLensProvider', this._executeCodeLensProvider, {
+		this._register('hypert.executeCodeLensProvider', this._executeCodeLensProvider, {
 			description: 'Execute CodeLens provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -146,7 +146,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of CodeLens-instances.'
 		});
-		this._register('vscode.executeFormatDocumentProvider', this._executeFormatDocumentProvider, {
+		this._register('hypert.executeFormatDocumentProvider', this._executeFormatDocumentProvider, {
 			description: 'Execute document format provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -154,7 +154,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of TextEdits.'
 		});
-		this._register('vscode.executeFormatRangeProvider', this._executeFormatRangeProvider, {
+		this._register('hypert.executeFormatRangeProvider', this._executeFormatRangeProvider, {
 			description: 'Execute range format provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -163,7 +163,7 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of TextEdits.'
 		});
-		this._register('vscode.executeFormatOnTypeProvider', this._executeFormatOnTypeProvider, {
+		this._register('hypert.executeFormatOnTypeProvider', this._executeFormatOnTypeProvider, {
 			description: 'Execute document format provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
@@ -173,21 +173,21 @@ export class ExtHostApiCommands {
 			],
 			returns: 'A promise that resolves to an array of TextEdits.'
 		});
-		this._register('vscode.executeLinkProvider', this._executeDocumentLinkProvider, {
+		this._register('hypert.executeLinkProvider', this._executeDocumentLinkProvider, {
 			description: 'Execute document link provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI }
 			],
 			returns: 'A promise that resolves to an array of DocumentLink-instances.'
 		});
-		this._register('vscode.executeDocumentColorProvider', this._executeDocumentColorProvider, {
+		this._register('hypert.executeDocumentColorProvider', this._executeDocumentColorProvider, {
 			description: 'Execute document color provider.',
 			args: [
 				{ name: 'uri', description: 'Uri of a text document', constraint: URI },
 			],
 			returns: 'A promise that resolves to an array of ColorInformation objects.'
 		});
-		this._register('vscode.executeColorPresentationProvider', this._executeColorPresentationProvider, {
+		this._register('hypert.executeColorPresentationProvider', this._executeColorPresentationProvider, {
 			description: 'Execute color presentation provider.',
 			args: [
 				{ name: 'color', description: 'The color to show and insert', constraint: types.Color },
@@ -215,7 +215,7 @@ export class ExtHostApiCommands {
 			description: `
 					Render the HTML of the resource in an editor view.
 
-					See [working with the HTML preview](https://code.visualstudio.com/docs/extensionAPI/vscode-api-commands#working-with-the-html-preview) for more information about the HTML preview's integration with the editor and for best practices for extension authors.
+					See [working with the HTML preview](https://code.visualstudio.com/docs/extensionAPI/hypert-api-commands#working-with-the-html-preview) for more information about the HTML preview's integration with the editor and for best practices for extension authors.
 				`,
 			args: [
 				{ name: 'uri', description: 'Uri of the resource to preview.', constraint: (value: any) => value instanceof URI || typeof value === 'string' },
@@ -239,15 +239,15 @@ export class ExtHostApiCommands {
 				{ name: 'left', description: 'Left-hand side resource of the diff editor', constraint: URI },
 				{ name: 'right', description: 'Right-hand side resource of the diff editor', constraint: URI },
 				{ name: 'title', description: '(optional) Human readable title for the diff editor', constraint: (v: any) => v === void 0 || typeof v === 'string' },
-				{ name: 'options', description: '(optional) Editor options, see vscode.TextDocumentShowOptions' }
+				{ name: 'options', description: '(optional) Editor options, see hypert.TextDocumentShowOptions' }
 			]
 		});
 
 		this._register(OpenAPICommand.ID, adjustHandler(OpenAPICommand.execute), {
-			description: 'Opens the provided resource in the editor. Can be a text or binary file, or a http(s) url. If you need more control over the options for opening a text file, use vscode.window.showTextDocument instead.',
+			description: 'Opens the provided resource in the editor. Can be a text or binary file, or a http(s) url. If you need more control over the options for opening a text file, use hypert.window.showTextDocument instead.',
 			args: [
 				{ name: 'resource', description: 'Resource to open', constraint: URI },
-				{ name: 'columnOrOptions', description: '(optional) Either the column in which to open or editor options, see vscode.TextDocumentShowOptions', constraint: (v: any) => v === void 0 || typeof v === 'number' || typeof v === 'object' }
+				{ name: 'columnOrOptions', description: '(optional) Either the column in which to open or editor options, see hypert.TextDocumentShowOptions', constraint: (v: any) => v === void 0 || typeof v === 'number' || typeof v === 'object' }
 			]
 		});
 
@@ -427,7 +427,7 @@ export class ExtHostApiCommands {
 		});
 	}
 
-	private _executeDocumentSymbolProvider(resource: URI): Thenable<vscode.SymbolInformation[]> {
+	private _executeDocumentSymbolProvider(resource: URI): Thenable<hypert.SymbolInformation[]> {
 		const args = {
 			resource
 		};
@@ -435,7 +435,7 @@ export class ExtHostApiCommands {
 			if (isFalsyOrEmpty(value)) {
 				return undefined;
 			}
-			class MergedInfo extends types.SymbolInformation implements vscode.DocumentSymbol {
+			class MergedInfo extends types.SymbolInformation implements hypert.DocumentSymbol {
 				static to(symbol: modes.DocumentSymbol): MergedInfo {
 					let res = new MergedInfo(
 						symbol.name,
@@ -451,15 +451,15 @@ export class ExtHostApiCommands {
 				}
 
 				detail: string;
-				range: vscode.Range;
-				selectionRange: vscode.Range;
-				children: vscode.DocumentSymbol[];
+				range: hypert.Range;
+				selectionRange: hypert.Range;
+				children: hypert.DocumentSymbol[];
 			}
 			return value.map(MergedInfo.to);
 		});
 	}
 
-	private _executeCodeActionProvider(resource: URI, range: types.Range): Thenable<(vscode.CodeAction | vscode.Command)[]> {
+	private _executeCodeActionProvider(resource: URI, range: types.Range): Thenable<(hypert.CodeAction | hypert.Command)[]> {
 		const args = {
 			resource,
 			range: typeConverters.Range.from(range)
@@ -484,7 +484,7 @@ export class ExtHostApiCommands {
 			}));
 	}
 
-	private _executeCodeLensProvider(resource: URI, itemResolveCount: number): Thenable<vscode.CodeLens[]> {
+	private _executeCodeLensProvider(resource: URI, itemResolveCount: number): Thenable<hypert.CodeLens[]> {
 		const args = { resource, itemResolveCount };
 		return this._commands.executeCommand<modes.ICodeLensSymbol[]>('_executeCodeLensProvider', args)
 			.then(tryMapWith(item => {
@@ -495,7 +495,7 @@ export class ExtHostApiCommands {
 
 	}
 
-	private _executeFormatDocumentProvider(resource: URI, options: vscode.FormattingOptions): Thenable<vscode.TextEdit[]> {
+	private _executeFormatDocumentProvider(resource: URI, options: hypert.FormattingOptions): Thenable<hypert.TextEdit[]> {
 		const args = {
 			resource,
 			options
@@ -504,7 +504,7 @@ export class ExtHostApiCommands {
 			.then(tryMapWith(edit => new types.TextEdit(typeConverters.Range.to(edit.range), edit.text)));
 	}
 
-	private _executeFormatRangeProvider(resource: URI, range: types.Range, options: vscode.FormattingOptions): Thenable<vscode.TextEdit[]> {
+	private _executeFormatRangeProvider(resource: URI, range: types.Range, options: hypert.FormattingOptions): Thenable<hypert.TextEdit[]> {
 		const args = {
 			resource,
 			range: typeConverters.Range.from(range),
@@ -514,7 +514,7 @@ export class ExtHostApiCommands {
 			.then(tryMapWith(edit => new types.TextEdit(typeConverters.Range.to(edit.range), edit.text)));
 	}
 
-	private _executeFormatOnTypeProvider(resource: URI, position: types.Position, ch: string, options: vscode.FormattingOptions): Thenable<vscode.TextEdit[]> {
+	private _executeFormatOnTypeProvider(resource: URI, position: types.Position, ch: string, options: hypert.FormattingOptions): Thenable<hypert.TextEdit[]> {
 		const args = {
 			resource,
 			position: typeConverters.Position.from(position),
@@ -525,7 +525,7 @@ export class ExtHostApiCommands {
 			.then(tryMapWith(edit => new types.TextEdit(typeConverters.Range.to(edit.range), edit.text)));
 	}
 
-	private _executeDocumentLinkProvider(resource: URI): Thenable<vscode.DocumentLink[]> {
+	private _executeDocumentLinkProvider(resource: URI): Thenable<hypert.DocumentLink[]> {
 		return this._commands.executeCommand<modes.ILink[]>('_executeLinkProvider', resource)
 			.then(tryMapWith(typeConverters.DocumentLink.to));
 	}

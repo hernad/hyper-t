@@ -562,7 +562,7 @@ export class EditorService extends Disposable implements EditorServiceImpl {
 		let input: ICachedEditorInput;
 
 		// File
-		if (forceFile /* fix for https://github.com/Microsoft/vscode/issues/48275 */ || this.fileService.canHandleResource(resource)) {
+		if (forceFile /* fix for https://github.com/hernad/hyper-t/issues/48275 */ || this.fileService.canHandleResource(resource)) {
 			input = this.fileInputFactory.createFileInput(resource, encoding, instantiationService);
 		}
 

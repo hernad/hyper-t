@@ -9,23 +9,23 @@ import { ExtHostDocumentsAndEditors } from 'workbench/api/node/extHostDocumentsA
 import { ExtHostTextEditor, TextEditorDecorationType } from 'workbench/api/node/extHostTextEditor';
 import * as TypeConverters from 'workbench/api/node/extHostTypeConverters';
 import { TextEditorSelectionChangeKind } from 'workbench/api/node/extHostTypes';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
 export class ExtHostEditors implements ExtHostEditorsShape {
 
-	private readonly _onDidChangeTextEditorSelection = new Emitter<vscode.TextEditorSelectionChangeEvent>();
-	private readonly _onDidChangeTextEditorOptions = new Emitter<vscode.TextEditorOptionsChangeEvent>();
-	private readonly _onDidChangeTextEditorVisibleRanges = new Emitter<vscode.TextEditorVisibleRangesChangeEvent>();
-	private readonly _onDidChangeTextEditorViewColumn = new Emitter<vscode.TextEditorViewColumnChangeEvent>();
-	private readonly _onDidChangeActiveTextEditor = new Emitter<vscode.TextEditor | undefined>();
-	private readonly _onDidChangeVisibleTextEditors = new Emitter<vscode.TextEditor[]>();
+	private readonly _onDidChangeTextEditorSelection = new Emitter<hypert.TextEditorSelectionChangeEvent>();
+	private readonly _onDidChangeTextEditorOptions = new Emitter<hypert.TextEditorOptionsChangeEvent>();
+	private readonly _onDidChangeTextEditorVisibleRanges = new Emitter<hypert.TextEditorVisibleRangesChangeEvent>();
+	private readonly _onDidChangeTextEditorViewColumn = new Emitter<hypert.TextEditorViewColumnChangeEvent>();
+	private readonly _onDidChangeActiveTextEditor = new Emitter<hypert.TextEditor | undefined>();
+	private readonly _onDidChangeVisibleTextEditors = new Emitter<hypert.TextEditor[]>();
 
-	readonly onDidChangeTextEditorSelection: Event<vscode.TextEditorSelectionChangeEvent> = this._onDidChangeTextEditorSelection.event;
-	readonly onDidChangeTextEditorOptions: Event<vscode.TextEditorOptionsChangeEvent> = this._onDidChangeTextEditorOptions.event;
-	readonly onDidChangeTextEditorVisibleRanges: Event<vscode.TextEditorVisibleRangesChangeEvent> = this._onDidChangeTextEditorVisibleRanges.event;
-	readonly onDidChangeTextEditorViewColumn: Event<vscode.TextEditorViewColumnChangeEvent> = this._onDidChangeTextEditorViewColumn.event;
-	readonly onDidChangeActiveTextEditor: Event<vscode.TextEditor | undefined> = this._onDidChangeActiveTextEditor.event;
-	readonly onDidChangeVisibleTextEditors: Event<vscode.TextEditor[]> = this._onDidChangeVisibleTextEditors.event;
+	readonly onDidChangeTextEditorSelection: Event<hypert.TextEditorSelectionChangeEvent> = this._onDidChangeTextEditorSelection.event;
+	readonly onDidChangeTextEditorOptions: Event<hypert.TextEditorOptionsChangeEvent> = this._onDidChangeTextEditorOptions.event;
+	readonly onDidChangeTextEditorVisibleRanges: Event<hypert.TextEditorVisibleRangesChangeEvent> = this._onDidChangeTextEditorVisibleRanges.event;
+	readonly onDidChangeTextEditorViewColumn: Event<hypert.TextEditorViewColumnChangeEvent> = this._onDidChangeTextEditorViewColumn.event;
+	readonly onDidChangeActiveTextEditor: Event<hypert.TextEditor | undefined> = this._onDidChangeActiveTextEditor.event;
+	readonly onDidChangeVisibleTextEditors: Event<hypert.TextEditor[]> = this._onDidChangeVisibleTextEditors.event;
 
 
 	private _proxy: MainThreadTextEditorsShape;
@@ -46,14 +46,14 @@ export class ExtHostEditors implements ExtHostEditorsShape {
 		return this._extHostDocumentsAndEditors.activeEditor();
 	}
 
-	getVisibleTextEditors(): vscode.TextEditor[] {
+	getVisibleTextEditors(): hypert.TextEditor[] {
 		return this._extHostDocumentsAndEditors.allEditors();
 	}
 
-	showTextDocument(document: vscode.TextDocument, column: vscode.ViewColumn, preserveFocus: boolean): Thenable<vscode.TextEditor>;
-	showTextDocument(document: vscode.TextDocument, options: { column: vscode.ViewColumn, preserveFocus: boolean, pinned: boolean }): Thenable<vscode.TextEditor>;
-	showTextDocument(document: vscode.TextDocument, columnOrOptions: vscode.ViewColumn | vscode.TextDocumentShowOptions, preserveFocus?: boolean): Thenable<vscode.TextEditor>;
-	showTextDocument(document: vscode.TextDocument, columnOrOptions: vscode.ViewColumn | vscode.TextDocumentShowOptions, preserveFocus?: boolean): Thenable<vscode.TextEditor> {
+	showTextDocument(document: hypert.TextDocument, column: hypert.ViewColumn, preserveFocus: boolean): Thenable<hypert.TextEditor>;
+	showTextDocument(document: hypert.TextDocument, options: { column: hypert.ViewColumn, preserveFocus: boolean, pinned: boolean }): Thenable<hypert.TextEditor>;
+	showTextDocument(document: hypert.TextDocument, columnOrOptions: hypert.ViewColumn | hypert.TextDocumentShowOptions, preserveFocus?: boolean): Thenable<hypert.TextEditor>;
+	showTextDocument(document: hypert.TextDocument, columnOrOptions: hypert.ViewColumn | hypert.TextDocumentShowOptions, preserveFocus?: boolean): Thenable<hypert.TextEditor> {
 		let options: ITextDocumentShowOptions;
 		if (typeof columnOrOptions === 'number') {
 			options = {
@@ -83,11 +83,11 @@ export class ExtHostEditors implements ExtHostEditorsShape {
 		});
 	}
 
-	createTextEditorDecorationType(options: vscode.DecorationRenderOptions): vscode.TextEditorDecorationType {
+	createTextEditorDecorationType(options: hypert.DecorationRenderOptions): hypert.TextEditorDecorationType {
 		return new TextEditorDecorationType(this._proxy, options);
 	}
 
-	applyWorkspaceEdit(edit: vscode.WorkspaceEdit): Thenable<boolean> {
+	applyWorkspaceEdit(edit: hypert.WorkspaceEdit): Thenable<boolean> {
 		const dto = TypeConverters.WorkspaceEdit.from(edit, this._extHostDocumentsAndEditors);
 		return this._proxy.$tryApplyWorkspaceEdit(dto);
 	}
@@ -146,7 +146,7 @@ export class ExtHostEditors implements ExtHostEditorsShape {
 		}
 	}
 
-	getDiffInformation(id: string): Thenable<vscode.LineChange[]> {
+	getDiffInformation(id: string): Thenable<hypert.LineChange[]> {
 		return Promise.resolve(this._proxy.$getDiffInformation(id));
 	}
 }

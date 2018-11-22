@@ -1,3 +1,4 @@
+/*
 import { app, ipcMain as ipc, Event, protocol, contentTracing, systemPreferences } from "electron";
 import * as platform from 'base/common/platform';
 
@@ -123,7 +124,7 @@ export class HyperApplication {
 		// "com.microsoft.", which breaks native tabs for VS Code when using this
 		// identifier (from the official build).
 		// Explicitly opt out of the patch here before creating any windows.
-		// See: https://github.com/Microsoft/vscode/issues/35361#issuecomment-399794085
+		// See: https://github.com/hernad/hyper-t/issues/35361#issuecomment-399794085
 		try {
 			if (platform.isMacintosh && this.configurationService.getValue<boolean>('window.nativeTabs') === true && !systemPreferences.getUserDefault('NSUseImprovedLayoutPass', 'boolean')) {
 				systemPreferences.setUserDefault('NSUseImprovedLayoutPass', 'boolean', true as any);
@@ -294,7 +295,7 @@ export class HyperApplication {
 
 	// Open our first window
 	const macOpenFiles = (<any>global).macOpenFiles as string[];
-	const context = !!process.env['VSCODE_CLI'] ? OpenContext.CLI : OpenContext.DESKTOP;
+	const context = !!process.env['HYPERT_CLI'] ? OpenContext.CLI : OpenContext.DESKTOP;
 	const hasCliArgs = hasArgs(args._);
 	const hasFolderURIs = hasArgs(args['folder-uri']);
 	const hasFileURIs = hasArgs(args['file-uri']);
@@ -384,7 +385,7 @@ export class HyperApplication {
 	//services.set(IIssueService, new SyncDescriptor(IssueService, [machineId, this.userEnv]));
 	services.set(IMenubarService, new SyncDescriptor(MenubarService));
 
-	/*
+	
 	// Telemtry
 	if (!this.environmentService.isExtensionDevelopment && !this.environmentService.args['disable-telemetry'] && !!product.enableTelemetry) {
 		const channel = getDelayedChannel(this.sharedProcessClient.then(c => c.getChannel('telemetryAppender')));
@@ -397,7 +398,7 @@ export class HyperApplication {
 	} else {
 		services.set(ITelemetryService, NullTelemetryService);
 	}
-	*/
+	
 	services.set(ITelemetryService, NullTelemetryService);
 
 	return this.instantiationService.createChild(services);
@@ -435,7 +436,7 @@ export class HyperApplication {
 
 		app.on('accessibility-support-changed', (event: Event, accessibilitySupportEnabled: boolean) => {
 			if (this.windowsMainService) {
-				this.windowsMainService.sendToAll('vscode:accessibilitySupportChanged', accessibilitySupportEnabled);
+				this.windowsMainService.sendToAll('hypert:accessibilitySupportChanged', accessibilitySupportEnabled);
 			}
 		});
 
@@ -448,7 +449,7 @@ export class HyperApplication {
 			}
 		});
 
-	/*	
+		
 		// Security related measures (https://electronjs.org/docs/tutorial/security)
 		// DO NOT CHANGE without consulting the documentation
 		app.on('web-contents-created', (event: any, contents) => {
@@ -483,7 +484,7 @@ export class HyperApplication {
 				shell.openExternal(url);
 			});
 		});
-	*/
+	
 
 		const connectionPool: Map<string, ActiveConnection> = new Map<string, ActiveConnection>();
 
@@ -567,11 +568,11 @@ export class HyperApplication {
 			runningTimeout = setTimeout(() => {
 				if (this.windowsMainService) {
 					this.windowsMainService.open({
-						context: OpenContext.DOCK /* can also be opening from finder while app is running */,
+						context: OpenContext.DOCK,
 						cli: this.environmentService.args,
 						urisToOpen: macOpenFileURIs,
-						preferNewWindow: true /* dropping on the dock or opening from finder prefers to open in a new window */
-					});
+						preferNewWindow: true 
+			     	});
 					macOpenFileURIs = [];
 					runningTimeout = null;
 				}
@@ -582,62 +583,62 @@ export class HyperApplication {
 			this.windowsMainService.openNewWindow(OpenContext.DESKTOP); //macOS native tab "+" button
 		});
 
-		ipc.on('vscode:exit', (event: Event, code: number) => {
-			this.logService.trace('IPC#vscode:exit', code);
+		ipc.on('hypert:exit', (event: Event, code: number) => {
+			this.logService.trace('IPC#hypert:exit', code);
 
 			this.dispose();
 			this.lifecycleService.kill(code);
 		});
 
-		ipc.on('vscode:fetchShellEnv', (event: Event) => {
+		ipc.on('hypert:fetchShellEnv', (event: Event) => {
 			const webContents = event.sender;
 			getShellEnvironment().then(shellEnv => {
 				if (!webContents.isDestroyed()) {
-					webContents.send('vscode:acceptShellEnv', shellEnv);
+					webContents.send('hypert:acceptShellEnv', shellEnv);
 				}
 			}, err => {
 				if (!webContents.isDestroyed()) {
-					webContents.send('vscode:acceptShellEnv', {});
+					webContents.send('hypert:acceptShellEnv', {});
 				}
 
 				this.logService.error('Error fetching shell env', err);
 			});
 		});
 
-/*
-		ipc.on('vscode:broadcast', (event: Event, windowId: number, broadcast: { channel: string; payload: any; }) => {
+
+		ipc.on('hypert:broadcast', (event: Event, windowId: number, broadcast: { channel: string; payload: any; }) => {
 			if (this.windowsMainService && broadcast.channel && !isUndefinedOrNull(broadcast.payload)) {
-				this.logService.trace('IPC#vscode:broadcast', broadcast.channel, broadcast.payload);
+				this.logService.trace('IPC#hypert:broadcast', broadcast.channel, broadcast.payload);
 
 				// Handle specific events on main side
 				this.onBroadcast(broadcast.channel, broadcast.payload);
 
 				// Send to all windows (except sender window)
-				this.windowsMainService.sendToAll('vscode:broadcast', broadcast, [windowId]);
+				this.windowsMainService.sendToAll('hypert:broadcast', broadcast, [windowId]);
 			}
 		});
 
-		ipc.on('vscode:labelRegisterFormatter', (event: any, data: RegisterFormatterEvent) => {
+		ipc.on('hypert:labelRegisterFormatter', (event: any, data: RegisterFormatterEvent) => {
 			this.labelService.registerFormatter(data.selector, data.formatter);
 		});
 
-*/
-		ipc.on('vscode:toggleDevTools', (event: Event) => {
+
+		ipc.on('hypert:toggleDevTools', (event: Event) => {
 			event.sender.toggleDevTools();
 		});
 
-		ipc.on('vscode:openDevTools', (event: Event) => {
+		ipc.on('hypert:openDevTools', (event: Event) => {
 			event.sender.openDevTools();
 		});
 
-		ipc.on('vscode:reloadWindow', (event: Event) => {
+		ipc.on('hypert:reloadWindow', (event: Event) => {
 			event.sender.reload();
 		});
 
 		// Keyboard layout changes
 		KeyboardLayoutMonitor.INSTANCE.onDidChangeKeyboardLayout(() => {
 			if (this.windowsMainService) {
-				this.windowsMainService.sendToAll('vscode:keyboardLayoutChanged', false);
+				this.windowsMainService.sendToAll('hypert:keyboardLayoutChanged', false);
 			}
 		});
   }
@@ -653,7 +654,7 @@ export class HyperApplication {
 
 			// handle on client side
 			if (this.windowsMainService) {
-				this.windowsMainService.sendToFocused('vscode:reportError', JSON.stringify(friendlyError));
+				this.windowsMainService.sendToFocused('hypert:reportError', JSON.stringify(friendlyError));
 			}
 		}
 
@@ -669,6 +670,8 @@ export class HyperApplication {
 
 
 }
+
+*/
 
 /*
 function createWindow() {
@@ -727,7 +730,7 @@ app.on("activate", () => {
 // code. You can also put them in separate files and require them here.
 
 
-
+/*
 import { parseMainProcessArgv } from 'platform/environment/node/argv';
 import { setUnexpectedErrorHandler } from 'base/common/errors';
 import { ParsedArgs } from 'platform/environment/common/environment';
@@ -842,7 +845,7 @@ function startup(args: ParsedArgs): void {
 	// We need to buffer the spdlog logs until we are sure
 	// we are the only instance running, otherwise we'll have concurrent
 	// log file access on Windows
-	// https://github.com/Microsoft/vscode/issues/41218
+	// https://github.com/hernad/hyper-t/issues/41218
 	const bufferLogService = new BufferLogService();
 	const instantiationService = createServices(args, bufferLogService);
 
@@ -851,13 +854,13 @@ function startup(args: ParsedArgs): void {
 		// Patch `process.env` with the instance's environment
 		const environmentService = accessor.get(IEnvironmentService);
 		const instanceEnv: typeof process.env = {
-			VSCODE_IPC_HOOK: environmentService.mainIPCHandle,
-			VSCODE_NLS_CONFIG: process.env['VSCODE_NLS_CONFIG'],
-			VSCODE_LOGS: process.env['VSCODE_LOGS']
+			HYPERT_IPC_HOOK: environmentService.mainIPCHandle,
+			HYPERT_NLS_CONFIG: process.env['HYPERT_NLS_CONFIG'],
+			HYPERT_LOGS: process.env['HYPERT_LOGS']
 		};
 
-		if (process.env['VSCODE_PORTABLE']) {
-			instanceEnv['VSCODE_PORTABLE'] = process.env['VSCODE_PORTABLE'];
+		if (process.env['HYPERT_PORTABLE']) {
+			instanceEnv['HYPERT_PORTABLE'] = process.env['HYPERT_PORTABLE'];
 		}
 
 		assign(process.env, instanceEnv);
@@ -918,9 +921,9 @@ function setupIPC(accessor: ServicesAccessor): Thenable<Server> {
 				app.dock.show();
 			}
 
-			// Set the VSCODE_PID variable here when we are sure we are the first
+			// Set the HYPERT_PID variable here when we are sure we are the first
 			// instance to startup. Otherwise we would wrongly overwrite the PID
-			process.env['VSCODE_PID'] = String(process.pid);
+			process.env['HYPERT_PID'] = String(process.pid);
 
 			return server;
 		}, err => {
@@ -1104,3 +1107,5 @@ function quit(accessor: ServicesAccessor, reason?: ExpectedError | Error): void 
 }
 
 main();
+
+*/

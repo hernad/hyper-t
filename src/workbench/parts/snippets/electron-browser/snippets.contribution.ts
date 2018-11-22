@@ -24,7 +24,7 @@ export interface ISnippetsService {
 	getSnippetsSync(languageId: LanguageId): Snippet[];
 }
 
-const languageScopeSchemaId = 'vscode://schemas/snippets';
+const languageScopeSchemaId = 'hypert://schemas/snippets';
 const languageScopeSchema: IJSONSchema = {
 	id: languageScopeSchemaId,
 	allowComments: true,
@@ -59,7 +59,7 @@ const languageScopeSchema: IJSONSchema = {
 };
 
 
-const globalSchemaId = 'vscode://schemas/global-snippets';
+const globalSchemaId = 'hypert://schemas/global-snippets';
 const globalSchema: IJSONSchema = {
 	id: globalSchemaId,
 	allowComments: true,

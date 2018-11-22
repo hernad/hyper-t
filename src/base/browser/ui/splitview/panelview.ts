@@ -239,7 +239,7 @@ class PanelDraggable extends Disposable {
 
 	private static readonly DefaultDragOverBackgroundColor = new Color(new RGBA(128, 128, 128, 0.5));
 
-	private dragOverCounter = 0; // see https://github.com/Microsoft/vscode/issues/14470
+	private dragOverCounter = 0; // see https://github.com/hernad/hyper-t/issues/14470
 
 	private _onDidDrop = this._register(new Emitter<{ from: Panel, to: Panel }>());
 	readonly onDidDrop = this._onDidDrop.event;
@@ -387,7 +387,7 @@ export class PanelView extends Disposable {
 	addPanel(panel: Panel, size: number, index = this.splitview.length): void {
 		const disposables: IDisposable[] = [];
 
-		// https://github.com/Microsoft/vscode/issues/59950
+		// https://github.com/hernad/hyper-t/issues/59950
 		let shouldAnimate = false;
 		disposables.push(scheduleAtNextAnimationFrame(() => shouldAnimate = true));
 

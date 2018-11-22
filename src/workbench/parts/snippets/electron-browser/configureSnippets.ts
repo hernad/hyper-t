@@ -207,7 +207,7 @@ CommandsRegistry.registerCommand(id, async accessor => {
 	for (const folder of workspaceService.getWorkspace().folders) {
 		globalSnippetPicks.push({
 			label: nls.localize('new.folder', "New Snippets file for '{0}'...", folder.name),
-			uri: folder.toResource('.vscode')
+			uri: folder.toResource('.hypert')
 		});
 	}
 

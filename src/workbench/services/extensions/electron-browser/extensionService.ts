@@ -258,7 +258,7 @@ export class ExtensionHostProcessManager extends Disposable {
 	}
 }
 
-schema.properties.engines.properties.vscode.default = `^${pkg.version}`;
+schema.properties.engines.properties.hypert.default = `^${pkg.version}`;
 
 export class ExtensionService extends Disposable implements IExtensionService {
 
@@ -330,7 +330,7 @@ export class ExtensionService extends Disposable implements IExtensionService {
 		// extension host more (LifecyclePhase.Running) because
 		// some editors require the extension host to restore
 		// and this would result in a deadlock
-		// see https://github.com/Microsoft/vscode/issues/41322
+		// see https://github.com/hernad/hyper-t/issues/41322
 		lifecycleService.when(LifecyclePhase.Restoring).then(() => {
 			// reschedule to ensure this runs after restoring viewlets, panels, and editors
 			runWhenIdle(() => {
@@ -399,7 +399,7 @@ export class ExtensionService extends Disposable implements IExtensionService {
 				Severity.Error,
 				nls.localize('extensionHostProcess.versionMismatchCrash', "Extension host cannot start: version mismatch."),
 				[{
-					label: nls.localize('relaunch', "Relaunch VS Code"),
+					label: nls.localize('relaunch', "Relaunch Hyper-t"),
 					run: () => {
 						this._instantiationService.invokeFunction((accessor) => {
 							const windowsService = accessor.get(IWindowsService);
@@ -841,7 +841,7 @@ export class ExtensionService extends Disposable implements IExtensionService {
 		return translationConfig.then((translations) => {
 			const version = pkg.version;
 			const commit = product.commit;
-			const devMode = !!process.env['VSCODE_DEV'];
+			const devMode = !!process.env['HYPERT_DEV'];
 			const locale = platform.locale;
 
 			const builtinExtensions = this._scanExtensionsWithCache(
@@ -860,7 +860,7 @@ export class ExtensionService extends Disposable implements IExtensionService {
 				const builtInExtensions = pfs.readFile(builtInExtensionsFilePath, 'utf8')
 					.then<IBuiltInExtension[]>(raw => JSON.parse(raw));
 
-				const controlFilePath = path.join(os.homedir(), '.vscode-oss-dev', 'extensions', 'control.json');
+				const controlFilePath = path.join(os.homedir(), '.hypert-oss-dev', 'extensions', 'control.json');
 				const controlFile = pfs.readFile(controlFilePath, 'utf8')
 					.then<IBuiltInExtensionControl>(raw => JSON.parse(raw), () => ({} as any));
 

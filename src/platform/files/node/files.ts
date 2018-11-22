@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-// See https://github.com/Microsoft/vscode/issues/30180
+// See https://github.com/hernad/hyper-t/issues/30180
 const WIN32_MAX_FILE_SIZE = 300 * 1024 * 1024; // 300 MB
 const GENERAL_MAX_FILE_SIZE = 16 * 1024 * 1024 * 1024; // 16 GB
 

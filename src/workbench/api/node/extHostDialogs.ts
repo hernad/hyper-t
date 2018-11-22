@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { URI } from 'base/common/uri';
 import { MainContext, MainThreadDiaglogsShape, IMainContext } from 'workbench/api/node/extHost.protocol';
 
@@ -15,13 +15,13 @@ export class ExtHostDialogs {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadDialogs);
 	}
 
-	showOpenDialog(options: vscode.OpenDialogOptions): Thenable<URI[]> {
+	showOpenDialog(options: hypert.OpenDialogOptions): Thenable<URI[]> {
 		return this._proxy.$showOpenDialog(options).then(filepaths => {
 			return filepaths && filepaths.map(URI.revive);
 		});
 	}
 
-	showSaveDialog(options: vscode.SaveDialogOptions): Thenable<URI> {
+	showSaveDialog(options: hypert.SaveDialogOptions): Thenable<URI> {
 		return this._proxy.$showSaveDialog(options).then(filepath => {
 			return filepath && URI.revive(filepath);
 		});

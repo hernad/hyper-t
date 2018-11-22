@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { IMainContext, MainContext, MainThreadClipboardShape } from 'workbench/api/node/extHost.protocol';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
-export class ExtHostClipboard implements vscode.Clipboard {
+export class ExtHostClipboard implements hypert.Clipboard {
 
 	private readonly _proxy: MainThreadClipboardShape;
 

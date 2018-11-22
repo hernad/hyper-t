@@ -192,7 +192,7 @@ export class ProgressService2 implements IProgressService2 {
 				if (typeof message === 'string') {
 					let newMessage: string;
 					if (typeof options.title === 'string') {
-						newMessage = `${options.title}: ${message}`; // always prefix with overall title if we have it (https://github.com/Microsoft/vscode/issues/50932)
+						newMessage = `${options.title}: ${message}`; // always prefix with overall title if we have it (https://github.com/hernad/hyper-t/issues/50932)
 					} else {
 						newMessage = message;
 					}

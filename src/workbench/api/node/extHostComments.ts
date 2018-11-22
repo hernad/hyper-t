@@ -8,7 +8,7 @@ import { URI, UriComponents } from 'base/common/uri';
 import * as modes from 'editor/common/modes';
 import { ExtHostDocuments } from 'workbench/api/node/extHostDocuments';
 import * as extHostTypeConverter from 'workbench/api/node/extHostTypeConverters';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { ExtHostCommentsShape, IMainContext, MainContext, MainThreadCommentsShape } from './extHost.protocol';
 import { CommandsConverter } from './extHostCommands';
 import { IRange } from 'editor/common/core/range';
@@ -19,8 +19,8 @@ export class ExtHostComments implements ExtHostCommentsShape {
 
 	private _proxy: MainThreadCommentsShape;
 
-	private _documentProviders = new Map<number, vscode.DocumentCommentProvider>();
-	private _workspaceProviders = new Map<number, vscode.WorkspaceCommentProvider>();
+	private _documentProviders = new Map<number, hypert.DocumentCommentProvider>();
+	private _workspaceProviders = new Map<number, hypert.WorkspaceCommentProvider>();
 
 	constructor(
 		mainContext: IMainContext,
@@ -32,8 +32,8 @@ export class ExtHostComments implements ExtHostCommentsShape {
 
 	registerWorkspaceCommentProvider(
 		extensionId: string,
-		provider: vscode.WorkspaceCommentProvider
-	): vscode.Disposable {
+		provider: hypert.WorkspaceCommentProvider
+	): hypert.Disposable {
 		const handle = ExtHostComments.handlePool++;
 		this._workspaceProviders.set(handle, provider);
 		this._proxy.$registerWorkspaceCommentProvider(handle, extensionId);
@@ -48,8 +48,8 @@ export class ExtHostComments implements ExtHostCommentsShape {
 	}
 
 	registerDocumentCommentProvider(
-		provider: vscode.DocumentCommentProvider
-	): vscode.Disposable {
+		provider: hypert.DocumentCommentProvider
+	): hypert.Disposable {
 		const handle = ExtHostComments.handlePool++;
 		this._documentProviders.set(handle, provider);
 		this._proxy.$registerDocumentCommentProvider(handle);
@@ -65,7 +65,7 @@ export class ExtHostComments implements ExtHostCommentsShape {
 
 	$createNewCommentThread(handle: number, uri: UriComponents, range: IRange, text: string): Thenable<modes.CommentThread> {
 		const data = this._documents.getDocumentData(URI.revive(uri));
-		const ran = <vscode.Range>extHostTypeConverter.Range.to(range);
+		const ran = <hypert.Range>extHostTypeConverter.Range.to(range);
 
 		if (!data || !data.document) {
 			return Promise.resolve(null);
@@ -79,7 +79,7 @@ export class ExtHostComments implements ExtHostCommentsShape {
 
 	$replyToCommentThread(handle: number, uri: UriComponents, range: IRange, thread: modes.CommentThread, text: string): Thenable<modes.CommentThread> {
 		const data = this._documents.getDocumentData(URI.revive(uri));
-		const ran = <vscode.Range>extHostTypeConverter.Range.to(range);
+		const ran = <hypert.Range>extHostTypeConverter.Range.to(range);
 
 		if (!data || !data.document) {
 			return Promise.resolve(null);
@@ -142,7 +142,7 @@ export class ExtHostComments implements ExtHostCommentsShape {
 			));
 	}
 
-	private registerListeners(handle: number, provider: vscode.DocumentCommentProvider | vscode.WorkspaceCommentProvider) {
+	private registerListeners(handle: number, provider: hypert.DocumentCommentProvider | hypert.WorkspaceCommentProvider) {
 		provider.onDidChangeCommentThreads(event => {
 
 			this._proxy.$onDidCommentThreadsChange(handle, {
@@ -154,14 +154,14 @@ export class ExtHostComments implements ExtHostCommentsShape {
 	}
 }
 
-function convertCommentInfo(owner: number, provider: vscode.DocumentCommentProvider, vscodeCommentInfo: vscode.CommentInfo, commandsConverter: CommandsConverter): modes.CommentInfo {
+function convertCommentInfo(owner: number, provider: hypert.DocumentCommentProvider, vscodeCommentInfo: hypert.CommentInfo, commandsConverter: CommandsConverter): modes.CommentInfo {
 	return {
 		threads: vscodeCommentInfo.threads.map(x => convertToCommentThread(provider, x, commandsConverter)),
 		commentingRanges: vscodeCommentInfo.commentingRanges ? vscodeCommentInfo.commentingRanges.map(range => extHostTypeConverter.Range.from(range)) : []
 	};
 }
 
-function convertToCommentThread(provider: vscode.DocumentCommentProvider | vscode.WorkspaceCommentProvider, vscodeCommentThread: vscode.CommentThread, commandsConverter: CommandsConverter): modes.CommentThread {
+function convertToCommentThread(provider: hypert.DocumentCommentProvider | hypert.WorkspaceCommentProvider, vscodeCommentThread: hypert.CommentThread, commandsConverter: CommandsConverter): modes.CommentThread {
 	return {
 		threadId: vscodeCommentThread.threadId,
 		resource: vscodeCommentThread.resource.toString(),
@@ -171,7 +171,7 @@ function convertToCommentThread(provider: vscode.DocumentCommentProvider | vscod
 	};
 }
 
-function convertFromCommentThread(commentThread: modes.CommentThread): vscode.CommentThread {
+function convertFromCommentThread(commentThread: modes.CommentThread): hypert.CommentThread {
 	return {
 		threadId: commentThread.threadId,
 		resource: URI.parse(commentThread.resource),
@@ -181,7 +181,7 @@ function convertFromCommentThread(commentThread: modes.CommentThread): vscode.Co
 	};
 }
 
-function convertFromComment(comment: modes.Comment): vscode.Comment {
+function convertFromComment(comment: modes.Comment): hypert.Comment {
 	let userIconPath: URI;
 	if (comment.userIconPath) {
 		try {
@@ -201,9 +201,9 @@ function convertFromComment(comment: modes.Comment): vscode.Comment {
 	};
 }
 
-function convertToComment(provider: vscode.DocumentCommentProvider | vscode.WorkspaceCommentProvider, vscodeComment: vscode.Comment, commandsConverter: CommandsConverter): modes.Comment {
-	const canEdit = !!(provider as vscode.DocumentCommentProvider).editComment && vscodeComment.canEdit;
-	const canDelete = !!(provider as vscode.DocumentCommentProvider).deleteComment && vscodeComment.canDelete;
+function convertToComment(provider: hypert.DocumentCommentProvider | hypert.WorkspaceCommentProvider, vscodeComment: hypert.Comment, commandsConverter: CommandsConverter): modes.Comment {
+	const canEdit = !!(provider as hypert.DocumentCommentProvider).editComment && vscodeComment.canEdit;
+	const canDelete = !!(provider as hypert.DocumentCommentProvider).deleteComment && vscodeComment.canDelete;
 	const iconPath = vscodeComment.userIconPath ? vscodeComment.userIconPath.toString() : vscodeComment.gravatar;
 	return {
 		commentId: vscodeComment.commentId,

@@ -140,7 +140,7 @@ function save(
 			else {
 
 				// Force a change to the file to trigger external watchers if any
-				// fixes https://github.com/Microsoft/vscode/issues/59655
+				// fixes https://github.com/hernad/hyper-t/issues/59655
 				options = ensureForcedSave(options);
 
 				savePromise = textFileService.saveAs(resource, void 0, options);

@@ -30,14 +30,14 @@ import { IFileService } from 'platform/files/common/files';
 
 // implementation
 
-const DEFAULT_THEME_ID = 'vs-dark vscode-theme-defaults-themes-dark_plus-json';
+const DEFAULT_THEME_ID = 'vs-dark hypert-theme-defaults-themes-dark_plus-json';
 const DEFAULT_THEME_SETTING_VALUE = 'Default Dark+';
 
 const PERSISTED_THEME_STORAGE_KEY = 'colorThemeData';
 const PERSISTED_ICON_THEME_STORAGE_KEY = 'iconThemeData';
 
-const defaultThemeExtensionId = 'vscode-theme-defaults';
-const oldDefaultThemeExtensionId = 'vscode-theme-colorful-defaults';
+const defaultThemeExtensionId = 'hypert-theme-defaults';
+const oldDefaultThemeExtensionId = 'hypert-theme-colorful-defaults';
 
 const DEFAULT_ICON_THEME_SETTING_VALUE = 'vs-seti';
 const fileIconsEnabledClass = 'file-icons-enabled';

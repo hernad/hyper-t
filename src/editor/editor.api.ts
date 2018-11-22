@@ -46,14 +46,14 @@ global.monaco = api;
 if (typeof global.require !== 'undefined' && typeof global.require.config === 'function') {
 	global.require.config({
 		ignoreDuplicateModules: [
-			'vscode-languageserver-types',
-			'vscode-languageserver-types/main',
+			'hypert-languageserver-types',
+			'hypert-languageserver-types/main',
 			'vscode-nls',
 			'vscode-nls/vscode-nls',
 			'jsonc-parser',
 			'jsonc-parser/main',
-			'vscode-uri',
-			'vscode-uri/index',
+			'hypert-uri',
+			'hypert-uri/index',
 			'vs/basic-languages/typescript/typescript'
 		]
 	});

@@ -76,7 +76,7 @@ export class ExtensionHostMain {
 		this._environment = initData.environment;
 		this._workspace = initData.workspace;
 
-		const allowExit = !!this._environment.extensionTestsPath; // to support other test frameworks like Jasmin that use process.exit (https://github.com/Microsoft/vscode/issues/37708)
+		const allowExit = !!this._environment.extensionTestsPath; // to support other test frameworks like Jasmin that use process.exit (https://github.com/hernad/hyper-t/issues/37708)
 		patchProcess(allowExit);
 
 		// services

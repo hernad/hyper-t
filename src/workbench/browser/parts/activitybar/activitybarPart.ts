@@ -169,7 +169,7 @@ export class ActivitybarPart extends Part {
 
 		this.createGlobalActivityActionBar(globalActivities);
 
-		// TODO@Ben: workaround for https://github.com/Microsoft/vscode/issues/45700
+		// TODO@Ben: workaround for https://github.com/hernad/hyper-t/issues/45700
 		// It looks like there are rendering glitches on macOS with Chrome 61 when
 		// using --webkit-mask with a background color that is different from the image
 		// The workaround is to promote the element onto its own drawing layer. We do

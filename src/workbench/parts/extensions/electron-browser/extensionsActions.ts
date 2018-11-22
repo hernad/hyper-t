@@ -1972,7 +1972,7 @@ export abstract class AbstractConfigureRecommendedExtensionsAction extends Actio
 							selection
 						}
 					})),
-				error => Promise.reject(new Error(localize('OpenExtensionsFile.failed', "Unable to create 'extensions.json' file inside the '.vscode' folder ({0}).", error))));
+				error => Promise.reject(new Error(localize('OpenExtensionsFile.failed', "Unable to create 'extensions.json' file inside the '.hypert' folder ({0}).", error))));
 	}
 
 	protected openWorkspaceConfigurationFile(workspaceConfigurationFile: URI): Promise<any> {
@@ -2137,7 +2137,7 @@ export class ConfigureWorkspaceRecommendedExtensionsAction extends AbstractConfi
 	public run(): Promise<any> {
 		switch (this.contextService.getWorkbenchState()) {
 			case WorkbenchState.FOLDER:
-				return this.openExtensionsFile(this.contextService.getWorkspace().folders[0].toResource(paths.join('.vscode', 'extensions.json')));
+				return this.openExtensionsFile(this.contextService.getWorkspace().folders[0].toResource(paths.join('.hypert', 'extensions.json')));
 			case WorkbenchState.WORKSPACE:
 				return this.openWorkspaceConfigurationFile(this.contextService.getWorkspace().configuration);
 		}
@@ -2182,7 +2182,7 @@ export class ConfigureWorkspaceFolderRecommendedExtensionsAction extends Abstrac
 		return Promise.resolve(pickFolderPromise)
 			.then(workspaceFolder => {
 				if (workspaceFolder) {
-					return this.openExtensionsFile(workspaceFolder.toResource(paths.join('.vscode', 'extensions.json')));
+					return this.openExtensionsFile(workspaceFolder.toResource(paths.join('.hypert', 'extensions.json')));
 				}
 				return null;
 			});
@@ -2235,7 +2235,7 @@ export class AddToWorkspaceFolderRecommendationsAction extends AbstractConfigure
 				if (!workspaceFolder) {
 					return Promise.resolve(null);
 				}
-				const configurationFile = workspaceFolder.toResource(paths.join('.vscode', 'extensions.json'));
+				const configurationFile = workspaceFolder.toResource(paths.join('.hypert', 'extensions.json'));
 				return this.getWorkspaceFolderExtensionsConfigContent(configurationFile).then(content => {
 					const extensionIdLowerCase = extensionId.toLowerCase();
 					if (shouldRecommend) {

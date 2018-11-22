@@ -71,7 +71,7 @@ export class LifecycleService extends Disposable implements ILifecycleService {
 		const windowId = this.windowService.getCurrentWindowId();
 
 		// Main side indicates that window is about to unload, check for vetos
-		ipc.on('vscode:onBeforeUnload', (event, reply: { okChannel: string, cancelChannel: string, reason: ShutdownReason }) => {
+		ipc.on('hypert:onBeforeUnload', (event, reply: { okChannel: string, cancelChannel: string, reason: ShutdownReason }) => {
 			this.logService.trace(`lifecycle: onBeforeUnload (reason: ${reply.reason})`);
 
 			// store shutdown reason to retrieve next startup
@@ -91,7 +91,7 @@ export class LifecycleService extends Disposable implements ILifecycleService {
 		});
 
 		// Main side indicates that we will indeed shutdown
-		ipc.on('vscode:onWillUnload', (event, reply: { replyChannel: string, reason: ShutdownReason }) => {
+		ipc.on('hypert:onWillUnload', (event, reply: { replyChannel: string, reason: ShutdownReason }) => {
 			this.logService.trace(`lifecycle: onWillUnload (reason: ${reply.reason})`);
 
 			// trigger onShutdown events and joining

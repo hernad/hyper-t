@@ -20,11 +20,11 @@ const configurationEntrySchema: IJSONSchema = {
 	defaultSnippets: [{ body: { title: '', properties: {} } }],
 	properties: {
 		title: {
-			description: nls.localize('vscode.extension.contributes.configuration.title', 'A summary of the settings. This label will be used in the settings file as separating comment.'),
+			description: nls.localize('hypert.extension.contributes.configuration.title', 'A summary of the settings. This label will be used in the settings file as separating comment.'),
 			type: 'string'
 		},
 		properties: {
-			description: nls.localize('vscode.extension.contributes.configuration.properties', 'Description of the configuration properties.'),
+			description: nls.localize('hypert.extension.contributes.configuration.properties', 'Description of the configuration properties.'),
 			type: 'object',
 			additionalProperties: {
 				anyOf: [
@@ -79,9 +79,9 @@ const configurationEntrySchema: IJSONSchema = {
 
 let registeredDefaultConfigurations: IDefaultConfigurationExtension[] = [];
 
-// BEGIN VSCode extension point `configurationDefaults`
+// BEGIN hypert extension point `configurationDefaults`
 const defaultConfigurationExtPoint = ExtensionsRegistry.registerExtensionPoint<IConfigurationNode>('configurationDefaults', [], {
-	description: nls.localize('vscode.extension.contributes.defaultConfiguration', 'Contributes default editor configuration settings by language.'),
+	description: nls.localize('hypert.extension.contributes.defaultConfiguration', 'Contributes default editor configuration settings by language.'),
 	type: 'object',
 	defaultSnippets: [{ body: {} }],
 	patternProperties: {
@@ -102,12 +102,12 @@ defaultConfigurationExtPoint.setHandler(extensions => {
 		};
 	});
 });
-// END VSCode extension point `configurationDefaults`
+// END hypert extension point `configurationDefaults`
 
 
-// BEGIN VSCode extension point `configuration`
+// BEGIN hypert extension point `configuration`
 const configurationExtPoint = ExtensionsRegistry.registerExtensionPoint<IConfigurationNode>('configuration', [defaultConfigurationExtPoint], {
-	description: nls.localize('vscode.extension.contributes.configuration', 'Contributes configuration settings.'),
+	description: nls.localize('hypert.extension.contributes.configuration', 'Contributes configuration settings.'),
 	oneOf: [
 		configurationEntrySchema,
 		{
@@ -144,7 +144,7 @@ configurationExtPoint.setHandler(extensions => {
 	}
 	configurationRegistry.registerConfigurations(configurations, registeredDefaultConfigurations, false);
 });
-// END VSCode extension point `configuration`
+// END hypert extension point `configuration`
 
 function validateProperties(configuration: IConfigurationNode, extension: IExtensionPointUser<any>): void {
 	let properties = configuration.properties;
@@ -189,7 +189,7 @@ function validateProperties(configuration: IConfigurationNode, extension: IExten
 }
 
 const jsonRegistry = Registry.as<IJSONContributionRegistry>(JSONExtensions.JSONContribution);
-jsonRegistry.registerSchema('vscode://schemas/workspaceConfig', {
+jsonRegistry.registerSchema('hypert://schemas/workspaceConfig', {
 	allowComments: true,
 	default: {
 		folders: [
@@ -252,7 +252,7 @@ jsonRegistry.registerSchema('vscode://schemas/workspaceConfig', {
 			type: 'object',
 			default: {},
 			description: nls.localize('workspaceConfig.extensions.description', "Workspace extensions"),
-			$ref: 'vscode://schemas/extensions'
+			$ref: 'hypert://schemas/extensions'
 		}
 	},
 	additionalProperties: false,

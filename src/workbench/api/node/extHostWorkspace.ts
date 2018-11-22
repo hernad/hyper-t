@@ -22,18 +22,18 @@ import { Workspace, WorkspaceFolder } from 'platform/workspace/common/workspace'
 import { Range, RelativePattern } from 'workbench/api/node/extHostTypes';
 import { ITextQueryBuilderOptions } from 'workbench/parts/search/common/queryBuilder';
 import { IExtensionDescription } from 'workbench/services/extensions/common/extensions';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { ExtHostWorkspaceShape, IMainContext, IWorkspaceData, MainContext, MainThreadMessageServiceShape, MainThreadWorkspaceShape } from './extHost.protocol';
 
 function isFolderEqual(folderA: URI, folderB: URI): boolean {
 	return isEqual(folderA, folderB, !isLinux);
 }
 
-function compareWorkspaceFolderByUri(a: vscode.WorkspaceFolder, b: vscode.WorkspaceFolder): number {
+function compareWorkspaceFolderByUri(a: hypert.WorkspaceFolder, b: hypert.WorkspaceFolder): number {
 	return isFolderEqual(a.uri, b.uri) ? 0 : compare(a.uri.toString(), b.uri.toString());
 }
 
-function compareWorkspaceFolderByUriAndNameAndIndex(a: vscode.WorkspaceFolder, b: vscode.WorkspaceFolder): number {
+function compareWorkspaceFolderByUriAndNameAndIndex(a: hypert.WorkspaceFolder, b: hypert.WorkspaceFolder): number {
 	if (a.index !== b.index) {
 		return a.index < b.index ? -1 : 1;
 	}
@@ -41,27 +41,27 @@ function compareWorkspaceFolderByUriAndNameAndIndex(a: vscode.WorkspaceFolder, b
 	return isFolderEqual(a.uri, b.uri) ? compare(a.name, b.name) : compare(a.uri.toString(), b.uri.toString());
 }
 
-function delta(oldFolders: vscode.WorkspaceFolder[], newFolders: vscode.WorkspaceFolder[], compare: (a: vscode.WorkspaceFolder, b: vscode.WorkspaceFolder) => number): { removed: vscode.WorkspaceFolder[], added: vscode.WorkspaceFolder[] } {
+function delta(oldFolders: hypert.WorkspaceFolder[], newFolders: hypert.WorkspaceFolder[], compare: (a: hypert.WorkspaceFolder, b: hypert.WorkspaceFolder) => number): { removed: hypert.WorkspaceFolder[], added: hypert.WorkspaceFolder[] } {
 	const oldSortedFolders = oldFolders.slice(0).sort(compare);
 	const newSortedFolders = newFolders.slice(0).sort(compare);
 
 	return arrayDelta(oldSortedFolders, newSortedFolders, compare);
 }
 
-interface MutableWorkspaceFolder extends vscode.WorkspaceFolder {
+interface MutableWorkspaceFolder extends hypert.WorkspaceFolder {
 	name: string;
 	index: number;
 }
 
 class ExtHostWorkspaceImpl extends Workspace {
 
-	static toExtHostWorkspace(data: IWorkspaceData, previousConfirmedWorkspace?: ExtHostWorkspaceImpl, previousUnconfirmedWorkspace?: ExtHostWorkspaceImpl): { workspace: ExtHostWorkspaceImpl, added: vscode.WorkspaceFolder[], removed: vscode.WorkspaceFolder[] } {
+	static toExtHostWorkspace(data: IWorkspaceData, previousConfirmedWorkspace?: ExtHostWorkspaceImpl, previousUnconfirmedWorkspace?: ExtHostWorkspaceImpl): { workspace: ExtHostWorkspaceImpl, added: hypert.WorkspaceFolder[], removed: hypert.WorkspaceFolder[] } {
 		if (!data) {
 			return { workspace: null, added: [], removed: [] };
 		}
 
 		const { id, name, folders } = data;
-		const newWorkspaceFolders: vscode.WorkspaceFolder[] = [];
+		const newWorkspaceFolders: hypert.WorkspaceFolder[] = [];
 
 		// If we have an existing workspace, we try to find the folders that match our
 		// data and update their properties. It could be that an extension stored them
@@ -105,10 +105,10 @@ class ExtHostWorkspaceImpl extends Workspace {
 		return undefined;
 	}
 
-	private readonly _workspaceFolders: vscode.WorkspaceFolder[] = [];
-	private readonly _structure = TernarySearchTree.forPaths<vscode.WorkspaceFolder>();
+	private readonly _workspaceFolders: hypert.WorkspaceFolder[] = [];
+	private readonly _structure = TernarySearchTree.forPaths<hypert.WorkspaceFolder>();
 
-	private constructor(id: string, private _name: string, folders: vscode.WorkspaceFolder[]) {
+	private constructor(id: string, private _name: string, folders: hypert.WorkspaceFolder[]) {
 		super(id, folders.map(f => new WorkspaceFolder(f)));
 
 		// setup the workspace folder data structure
@@ -122,11 +122,11 @@ class ExtHostWorkspaceImpl extends Workspace {
 		return this._name;
 	}
 
-	get workspaceFolders(): vscode.WorkspaceFolder[] {
+	get workspaceFolders(): hypert.WorkspaceFolder[] {
 		return this._workspaceFolders.slice(0);
 	}
 
-	getWorkspaceFolder(uri: URI, resolveParent?: boolean): vscode.WorkspaceFolder {
+	getWorkspaceFolder(uri: URI, resolveParent?: boolean): hypert.WorkspaceFolder {
 		if (resolveParent && this._structure.get(uri.toString())) {
 			// `uri` is a workspace folder so we check for its parent
 			uri = dirname(uri);
@@ -134,14 +134,14 @@ class ExtHostWorkspaceImpl extends Workspace {
 		return this._structure.findSubstr(uri.toString());
 	}
 
-	resolveWorkspaceFolder(uri: URI): vscode.WorkspaceFolder {
+	resolveWorkspaceFolder(uri: URI): hypert.WorkspaceFolder {
 		return this._structure.get(uri.toString());
 	}
 }
 
 export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 
-	private readonly _onDidChangeWorkspace = new Emitter<vscode.WorkspaceFoldersChangeEvent>();
+	private readonly _onDidChangeWorkspace = new Emitter<hypert.WorkspaceFoldersChangeEvent>();
 	private readonly _proxy: MainThreadWorkspaceShape;
 
 	private _confirmedWorkspace: ExtHostWorkspaceImpl;
@@ -149,7 +149,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 
 	private _messageService: MainThreadMessageServiceShape;
 
-	readonly onDidChangeWorkspace: Event<vscode.WorkspaceFoldersChangeEvent> = this._onDidChangeWorkspace.event;
+	readonly onDidChangeWorkspace: Event<hypert.WorkspaceFoldersChangeEvent> = this._onDidChangeWorkspace.event;
 
 	private readonly _activeSearchCallbacks: ((match: IRawFileMatch2) => any)[] = [];
 
@@ -178,15 +178,15 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 		return this._unconfirmedWorkspace || this._confirmedWorkspace;
 	}
 
-	getWorkspaceFolders(): vscode.WorkspaceFolder[] {
+	getWorkspaceFolders(): hypert.WorkspaceFolder[] {
 		if (!this._actualWorkspace) {
 			return undefined;
 		}
 		return this._actualWorkspace.workspaceFolders.slice(0);
 	}
 
-	updateWorkspaceFolders(extension: IExtensionDescription, index: number, deleteCount: number, ...workspaceFoldersToAdd: { uri: vscode.Uri, name?: string }[]): boolean {
-		const validatedDistinctWorkspaceFoldersToAdd: { uri: vscode.Uri, name?: string }[] = [];
+	updateWorkspaceFolders(extension: IExtensionDescription, index: number, deleteCount: number, ...workspaceFoldersToAdd: { uri: hypert.Uri, name?: string }[]): boolean {
+		const validatedDistinctWorkspaceFoldersToAdd: { uri: hypert.Uri, name?: string }[] = [];
 		if (Array.isArray(workspaceFoldersToAdd)) {
 			workspaceFoldersToAdd.forEach(folderToAdd => {
 				if (URI.isUri(folderToAdd.uri) && !validatedDistinctWorkspaceFoldersToAdd.some(f => isFolderEqual(f.uri, folderToAdd.uri))) {
@@ -249,14 +249,14 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 		return true;
 	}
 
-	getWorkspaceFolder(uri: vscode.Uri, resolveParent?: boolean): vscode.WorkspaceFolder {
+	getWorkspaceFolder(uri: hypert.Uri, resolveParent?: boolean): hypert.WorkspaceFolder {
 		if (!this._actualWorkspace) {
 			return undefined;
 		}
 		return this._actualWorkspace.getWorkspaceFolder(uri, resolveParent);
 	}
 
-	resolveWorkspaceFolder(uri: vscode.Uri): vscode.WorkspaceFolder {
+	resolveWorkspaceFolder(uri: hypert.Uri): hypert.WorkspaceFolder {
 		if (!this._actualWorkspace) {
 			return undefined;
 		}
@@ -280,7 +280,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 		return folders[0].uri.fsPath;
 	}
 
-	getRelativePath(pathOrUri: string | vscode.Uri, includeWorkspace?: boolean): string {
+	getRelativePath(pathOrUri: string | hypert.Uri, includeWorkspace?: boolean): string {
 
 		let path: string;
 		if (typeof pathOrUri === 'string') {
@@ -313,7 +313,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 		return normalize(result, true);
 	}
 
-	private trySetWorkspaceFolders(folders: vscode.WorkspaceFolder[]): void {
+	private trySetWorkspaceFolders(folders: hypert.WorkspaceFolder[]): void {
 
 		// Update directly here. The workspace is unconfirmed as long as we did not get an
 		// acknowledgement from the main side (via $acceptWorkspaceData)
@@ -345,7 +345,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 
 	// --- search ---
 
-	findFiles(include: string | RelativePattern, exclude: vscode.GlobPattern, maxResults: number, extensionId: string, token: vscode.CancellationToken = CancellationToken.None): Thenable<vscode.Uri[]> {
+	findFiles(include: string | RelativePattern, exclude: hypert.GlobPattern, maxResults: number, extensionId: string, token: hypert.CancellationToken = CancellationToken.None): Thenable<hypert.Uri[]> {
 		this._logService.trace(`extHostWorkspace#findFiles: fileSearch, extension: ${extensionId}, entryPoint: findFiles`);
 
 		let includePattern: string;
@@ -380,12 +380,12 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 			.then(data => Array.isArray(data) ? data.map(URI.revive) : []);
 	}
 
-	findTextInFiles(query: vscode.TextSearchQuery, options: vscode.FindTextInFilesOptions, callback: (result: vscode.TextSearchResult) => void, extensionId: string, token: vscode.CancellationToken = CancellationToken.None): Thenable<vscode.TextSearchComplete> {
+	findTextInFiles(query: hypert.TextSearchQuery, options: hypert.FindTextInFilesOptions, callback: (result: hypert.TextSearchResult) => void, extensionId: string, token: hypert.CancellationToken = CancellationToken.None): Thenable<hypert.TextSearchComplete> {
 		this._logService.trace(`extHostWorkspace#findTextInFiles: textSearch, extension: ${extensionId}, entryPoint: findTextInFiles`);
 
 		const requestId = this._requestIdProvider.getNext();
 
-		const globPatternToString = (pattern: vscode.GlobPattern | string) => {
+		const globPatternToString = (pattern: hypert.GlobPattern | string) => {
 			if (typeof pattern === 'string') {
 				return pattern;
 			}
@@ -393,7 +393,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 			return join(pattern.base, pattern.pattern);
 		};
 
-		const previewOptions: vscode.TextSearchPreviewOptions = typeof options.previewOptions === 'undefined' ?
+		const previewOptions: hypert.TextSearchPreviewOptions = typeof options.previewOptions === 'undefined' ?
 			{
 				matchLines: 100,
 				charsPerLine: 10000
@@ -425,7 +425,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 			const uri = URI.revive(p.resource);
 			p.results.forEach(result => {
 				if (resultIsMatch(result)) {
-					callback(<vscode.TextSearchMatch>{
+					callback(<hypert.TextSearchMatch>{
 						uri,
 						preview: {
 							text: result.preview.text,
@@ -438,7 +438,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape {
 							r => new Range(r.startLineNumber, r.startColumn, r.endLineNumber, r.endColumn))
 					});
 				} else {
-					callback(<vscode.TextSearchContext>{
+					callback(<hypert.TextSearchContext>{
 						uri,
 						text: result.text,
 						lineNumber: result.lineNumber

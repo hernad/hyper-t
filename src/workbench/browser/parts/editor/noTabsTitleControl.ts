@@ -93,7 +93,7 @@ export class NoTabsTitleControl extends TitleControl {
 
 		// Close editor on middle mouse click
 		if (e instanceof MouseEvent && e.button === 1 /* Middle Button */) {
-			EventHelper.stop(e, true /* for https://github.com/Microsoft/vscode/issues/56715 */);
+			EventHelper.stop(e, true /* for https://github.com/hernad/hyper-t/issues/56715 */);
 
 			this.group.closeEditor(this.group.activeEditor);
 		}

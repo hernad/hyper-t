@@ -360,7 +360,7 @@ export class RemoteFileService extends FileService {
 
 				if (fileStat.isDirectory) {
 					// todo@joh cannot copy a folder
-					// https://github.com/Microsoft/vscode/issues/41547
+					// https://github.com/hernad/hyper-t/issues/41547
 					throw new FileOperationError(
 						localize('fileIsDirectoryError', "File is directory"),
 						FileOperationResult.FILE_IS_DIRECTORY,
@@ -609,7 +609,7 @@ export class RemoteFileService extends FileService {
 
 			return prepare.then(() => {
 				// todo@ben, can only copy text files
-				// https://github.com/Microsoft/vscode/issues/41543
+				// https://github.com/hernad/hyper-t/issues/41543
 				return this.resolveContent(source, { acceptTextOnly: true }).then(content => {
 					return this._withProvider(target).then(provider => {
 						return this._writeFile(

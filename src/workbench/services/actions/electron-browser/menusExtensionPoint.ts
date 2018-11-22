@@ -77,26 +77,26 @@ namespace schema {
 		type: 'object',
 		properties: {
 			command: {
-				description: localize('vscode.extension.contributes.menuItem.command', 'Identifier of the command to execute. The command must be declared in the \'commands\'-section'),
+				description: localize('hypert.extension.contributes.menuItem.command', 'Identifier of the command to execute. The command must be declared in the \'commands\'-section'),
 				type: 'string'
 			},
 			alt: {
-				description: localize('vscode.extension.contributes.menuItem.alt', 'Identifier of an alternative command to execute. The command must be declared in the \'commands\'-section'),
+				description: localize('hypert.extension.contributes.menuItem.alt', 'Identifier of an alternative command to execute. The command must be declared in the \'commands\'-section'),
 				type: 'string'
 			},
 			when: {
-				description: localize('vscode.extension.contributes.menuItem.when', 'Condition which must be true to show this item'),
+				description: localize('hypert.extension.contributes.menuItem.when', 'Condition which must be true to show this item'),
 				type: 'string'
 			},
 			group: {
-				description: localize('vscode.extension.contributes.menuItem.group', 'Group into which this command belongs'),
+				description: localize('hypert.extension.contributes.menuItem.group', 'Group into which this command belongs'),
 				type: 'string'
 			}
 		}
 	};
 
 	export const menusContribtion: IJSONSchema = {
-		description: localize('vscode.extension.contributes.menus', "Contributes menu items to the editor"),
+		description: localize('hypert.extension.contributes.menus', "Contributes menu items to the editor"),
 		type: 'object',
 		properties: {
 			'commandPalette': {
@@ -231,19 +231,19 @@ namespace schema {
 		type: 'object',
 		properties: {
 			command: {
-				description: localize('vscode.extension.contributes.commandType.command', 'Identifier of the command to execute'),
+				description: localize('hypert.extension.contributes.commandType.command', 'Identifier of the command to execute'),
 				type: 'string'
 			},
 			title: {
-				description: localize('vscode.extension.contributes.commandType.title', 'Title by which the command is represented in the UI'),
+				description: localize('hypert.extension.contributes.commandType.title', 'Title by which the command is represented in the UI'),
 				type: 'string'
 			},
 			category: {
-				description: localize('vscode.extension.contributes.commandType.category', '(Optional) Category string by the command is grouped in the UI'),
+				description: localize('hypert.extension.contributes.commandType.category', '(Optional) Category string by the command is grouped in the UI'),
 				type: 'string'
 			},
 			icon: {
-				description: localize('vscode.extension.contributes.commandType.icon', '(Optional) Icon which is used to represent the command in the UI. Either a file path or a themable configuration'),
+				description: localize('hypert.extension.contributes.commandType.icon', '(Optional) Icon which is used to represent the command in the UI. Either a file path or a themable configuration'),
 				anyOf: [{
 					type: 'string'
 				},
@@ -251,11 +251,11 @@ namespace schema {
 					type: 'object',
 					properties: {
 						light: {
-							description: localize('vscode.extension.contributes.commandType.icon.light', 'Icon path when a light theme is used'),
+							description: localize('hypert.extension.contributes.commandType.icon.light', 'Icon path when a light theme is used'),
 							type: 'string'
 						},
 						dark: {
-							description: localize('vscode.extension.contributes.commandType.icon.dark', 'Icon path when a dark theme is used'),
+							description: localize('hypert.extension.contributes.commandType.icon.dark', 'Icon path when a dark theme is used'),
 							type: 'string'
 						}
 					}
@@ -265,7 +265,7 @@ namespace schema {
 	};
 
 	export const commandsContribution: IJSONSchema = {
-		description: localize('vscode.extension.contributes.commands', "Contributes commands to the command palette."),
+		description: localize('hypert.extension.contributes.commands', "Contributes commands to the command palette."),
 		oneOf: [
 			commandType,
 			{

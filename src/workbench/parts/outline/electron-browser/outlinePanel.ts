@@ -384,7 +384,7 @@ export class OutlinePanel extends ViewletPanel {
 
 	setVisible(visible: boolean): void {
 		if (visible && this.isExpanded() && !this._requestOracle) {
-			// workaround for https://github.com/Microsoft/vscode/issues/60011
+			// workaround for https://github.com/hernad/hyper-t/issues/60011
 			this.setExpanded(true);
 		}
 		super.setVisible(visible);
@@ -495,7 +495,7 @@ export class OutlinePanel extends ViewletPanel {
 
 		let newSize = TreeElement.size(model);
 		if (newSize > 7500) {
-			// this is a workaround for performance issues with the tree: https://github.com/Microsoft/vscode/issues/18180
+			// this is a workaround for performance issues with the tree: https://github.com/hernad/hyper-t/issues/18180
 			return this._showMessage(localize('too-many-symbols', "We are sorry, but this file is too large for showing an outline."));
 		}
 

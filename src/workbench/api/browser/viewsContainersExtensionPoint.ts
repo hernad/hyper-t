@@ -47,23 +47,23 @@ const viewsContainerSchema: IJSONSchema = {
 	type: 'object',
 	properties: {
 		id: {
-			description: localize({ key: 'vscode.extension.contributes.views.containers.id', comment: ['Contribution refers to those that an extension contributes to VS Code through an extension/contribution point. '] }, "Unique id used to identify the container in which views can be contributed using 'views' contribution point"),
+			description: localize({ key: 'hypert.extension.contributes.views.containers.id', comment: ['Contribution refers to those that an extension contributes to VS Code through an extension/contribution point. '] }, "Unique id used to identify the container in which views can be contributed using 'views' contribution point"),
 			type: 'string',
 			pattern: '^[a-zA-Z0-9_-]+$'
 		},
 		title: {
-			description: localize('vscode.extension.contributes.views.containers.title', 'Human readable string used to render the container'),
+			description: localize('hypert.extension.contributes.views.containers.title', 'Human readable string used to render the container'),
 			type: 'string'
 		},
 		icon: {
-			description: localize('vscode.extension.contributes.views.containers.icon', "Path to the container icon. Icons are 24x24 centered on a 50x40 block and have a fill color of 'rgb(215, 218, 224)' or '#d7dae0'. It is recommended that icons be in SVG, though any image file type is accepted."),
+			description: localize('hypert.extension.contributes.views.containers.icon', "Path to the container icon. Icons are 24x24 centered on a 50x40 block and have a fill color of 'rgb(215, 218, 224)' or '#d7dae0'. It is recommended that icons be in SVG, though any image file type is accepted."),
 			type: 'string'
 		}
 	}
 };
 
 export const viewsContainersContribution: IJSONSchema = {
-	description: localize('vscode.extension.contributes.viewsContainers', 'Contributes views containers to the editor'),
+	description: localize('hypert.extension.contributes.viewsContainers', 'Contributes views containers to the editor'),
 	type: 'object',
 	properties: {
 		'activitybar': {

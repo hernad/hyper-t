@@ -154,7 +154,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 			let checkOrphanedPromise: Thenable<boolean>;
 			if (newInOrphanModeGuess) {
 				// We have received reports of users seeing delete events even though the file still
-				// exists (network shares issue: https://github.com/Microsoft/vscode/issues/13665).
+				// exists (network shares issue: https://github.com/hernad/hyper-t/issues/13665).
 				// Since we do not want to mark the model as orphaned, we have to check if the
 				// file is really gone and not just a faulty file event.
 				checkOrphanedPromise = timeout(100).then(() => {
@@ -358,7 +358,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 						"settingsType": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
 					}
 				*/
-				this.telemetryService.publicLog('settingsRead', { settingsType }); // Do not log read to user settings.json and .vscode folder as a fileGet event as it ruins our JSON usage data
+				this.telemetryService.publicLog('settingsRead', { settingsType }); // Do not log read to user settings.json and .hypert folder as a fileGet event as it ruins our JSON usage data
 			} else {
 				/* __GDPR__
 					"fileGet" : {
@@ -447,7 +447,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 				// We restored a backup so we have to set the model as being dirty
 				// We also want to trigger auto save if it is enabled to simulate the exact same behaviour
-				// you would get if manually making the model dirty (fixes https://github.com/Microsoft/vscode/issues/16977)
+				// you would get if manually making the model dirty (fixes https://github.com/hernad/hyper-t/issues/16977)
 				if (hasBackupContent) {
 					this.makeDirty();
 					if (this.autoSaveAfterMilliesEnabled) {
@@ -476,7 +476,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 	private installModelListeners(): void {
 
-		// See https://github.com/Microsoft/vscode/issues/30189
+		// See https://github.com/hernad/hyper-t/issues/30189
 		// This code has been extracted to a different method because it caused a memory leak
 		// where `value` was captured in the content change listener closure scope.
 
@@ -673,7 +673,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 			// was triggerd followed by a dispose() operation right after without waiting. Typically we cannot
 			// be disposed if we are dirty, but if we are not dirty, save() and dispose() can still be triggered
 			// one after the other without waiting for the save() to complete. If we are disposed(), we risk
-			// saving contents to disk that are stale (see https://github.com/Microsoft/vscode/issues/50942).
+			// saving contents to disk that are stale (see https://github.com/hernad/hyper-t/issues/50942).
 			// To fix this issue, we will not store the contents to disk when we got disposed.
 			if (this.disposed) {
 				return void 0;
@@ -720,7 +720,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 							"settingsType": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
 						}
 					*/
-					this.telemetryService.publicLog('settingsWritten', { settingsType }); // Do not log write to user settings.json and .vscode folder as a filePUT event as it ruins our JSON usage data
+					this.telemetryService.publicLog('settingsWritten', { settingsType }); // Do not log write to user settings.json and .hypert folder as a filePUT event as it ruins our JSON usage data
 				} else {
 					/* __GDPR__
 						"filePUT" : {
@@ -750,7 +750,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 				this._onDidStateChange.fire(StateChange.SAVED);
 			}, error => {
 				if (!error) {
-					error = new Error('Unknown Save Error'); // TODO@remote we should never get null as error (https://github.com/Microsoft/vscode/issues/55051)
+					error = new Error('Unknown Save Error'); // TODO@remote we should never get null as error (https://github.com/hernad/hyper-t/issues/55051)
 				}
 
 				this.logService.error(`doSave(${versionId}) - exit - resulted in a save error: ${error.toString()}`, this.resource);
@@ -800,10 +800,10 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		// Check for workspace settings file
 		const folders = this.contextService.getWorkspace().folders;
 		for (let i = 0; i < folders.length; i++) {
-			if (isEqualOrParent(this.resource, folders[i].toResource('.vscode'))) {
+			if (isEqualOrParent(this.resource, folders[i].toResource('.hypert'))) {
 				const filename = path.basename(this.resource.fsPath);
 				if (TextFileEditorModel.WHITELIST_WORKSPACE_JSON.indexOf(filename) > -1) {
-					return `.vscode/${filename}`;
+					return `.hypert/${filename}`;
 				}
 			}
 		}

@@ -10,7 +10,7 @@ import { NodeStringDecoder, StringDecoder } from 'string_decoder';
 import { createRegExp, startsWith, startsWithUTF8BOM, stripUTF8BOM } from 'base/common/strings';
 import { URI } from 'base/common/uri';
 import { IExtendedExtensionSearchOptions, SearchError, SearchErrorCode, serializeSearchError } from 'platform/search/common/search';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { rgPath } from 'vscode-ripgrep';
 import { anchorGlob, createTextSearchResult, IOutputChannel, Maybe, Range } from './ripgrepSearchUtils';
 
@@ -21,7 +21,7 @@ export class RipgrepTextSearchEngine {
 
 	constructor(private outputChannel: IOutputChannel) { }
 
-	provideTextSearchResults(query: vscode.TextSearchQuery, options: vscode.TextSearchOptions, progress: vscode.Progress<vscode.TextSearchResult>, token: vscode.CancellationToken): Thenable<vscode.TextSearchComplete> {
+	provideTextSearchResults(query: hypert.TextSearchQuery, options: hypert.TextSearchOptions, progress: hypert.Progress<hypert.TextSearchResult>, token: hypert.CancellationToken): Thenable<hypert.TextSearchComplete> {
 		this.outputChannel.appendLine(`provideTextSearchResults ${query.pattern}, ${JSON.stringify({
 			...options,
 			...{
@@ -50,7 +50,7 @@ export class RipgrepTextSearchEngine {
 
 			let gotResult = false;
 			const ripgrepParser = new RipgrepParser(options.maxResults, cwd, options.previewOptions);
-			ripgrepParser.on('result', (match: vscode.TextSearchResult) => {
+			ripgrepParser.on('result', (match: hypert.TextSearchResult) => {
 				gotResult = true;
 				progress.report(match);
 			});
@@ -148,7 +148,7 @@ export class RipgrepParser extends EventEmitter {
 
 	private numResults = 0;
 
-	constructor(private maxResults: number, private rootFolder: string, private previewOptions?: vscode.TextSearchPreviewOptions) {
+	constructor(private maxResults: number, private rootFolder: string, private previewOptions?: hypert.TextSearchPreviewOptions) {
 		super();
 		this.stringDecoder = new StringDecoder();
 	}
@@ -213,7 +213,7 @@ export class RipgrepParser extends EventEmitter {
 		}
 	}
 
-	private createTextSearchMatch(data: IRgMatch, uri: vscode.Uri): vscode.TextSearchMatch {
+	private createTextSearchMatch(data: IRgMatch, uri: hypert.Uri): hypert.TextSearchMatch {
 		const lineNumber = data.line_number - 1;
 		const fullText = bytesOrTextToString(data.lines);
 		const fullTextBytes = Buffer.from(fullText);
@@ -260,7 +260,7 @@ export class RipgrepParser extends EventEmitter {
 		return createTextSearchResult(uri, fullText, <Range[]>ranges, this.previewOptions);
 	}
 
-	private createTextSearchContext(data: IRgMatch, uri: URI): vscode.TextSearchContext[] {
+	private createTextSearchContext(data: IRgMatch, uri: URI): hypert.TextSearchContext[] {
 		const text = bytesOrTextToString(data.lines);
 		const startLine = data.line_number;
 		return text
@@ -275,7 +275,7 @@ export class RipgrepParser extends EventEmitter {
 			});
 	}
 
-	private onResult(match: vscode.TextSearchResult): void {
+	private onResult(match: hypert.TextSearchResult): void {
 		this.emit('result', match);
 	}
 }
@@ -303,7 +303,7 @@ function getNumLinesAndLastNewlineLength(text: string): { numLines: number, last
 	return { numLines, lastLineLength };
 }
 
-function getRgArgs(query: vscode.TextSearchQuery, options: vscode.TextSearchOptions): string[] {
+function getRgArgs(query: hypert.TextSearchQuery, options: hypert.TextSearchOptions): string[] {
 	const args = ['--hidden'];
 	args.push(query.isCaseSensitive ? '--case-sensitive' : '--ignore-case');
 

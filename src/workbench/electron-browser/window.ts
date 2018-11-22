@@ -109,7 +109,7 @@ export class ElectronWindow extends Themable {
 		});
 
 		// Support runAction event
-		ipc.on('vscode:runAction', (event: any, request: IRunActionInWindowRequest) => {
+		ipc.on('hypert:runAction', (event: any, request: IRunActionInWindowRequest) => {
 			const args: any[] = [];
 
 			// If we run an action from the touchbar, we fill in the currently active resource
@@ -140,7 +140,7 @@ export class ElectronWindow extends Themable {
 		});
 
 		// Support resolve keybindings event
-		ipc.on('vscode:resolveKeybindings', (event: any, rawActionIds: string) => {
+		ipc.on('hypert:resolveKeybindings', (event: any, rawActionIds: string) => {
 			let actionIds: string[] = [];
 			try {
 				actionIds = JSON.parse(rawActionIds);
@@ -151,12 +151,12 @@ export class ElectronWindow extends Themable {
 			// Resolve keys using the keybinding service and send back to browser process
 			this.resolveKeybindings(actionIds).then(keybindings => {
 				if (keybindings.length) {
-					ipc.send('vscode:keybindingsResolved', JSON.stringify(keybindings));
+					ipc.send('hypert:keybindingsResolved', JSON.stringify(keybindings));
 				}
 			});
 		});
 
-		ipc.on('vscode:reportError', (event: any, error: string) => {
+		ipc.on('hypert:reportError', (event: any, error: string) => {
 			if (error) {
 				const errorParsed = JSON.parse(error);
 				errorParsed.mainProcess = true;
@@ -165,31 +165,31 @@ export class ElectronWindow extends Themable {
 		});
 
 		// Support openFiles event for existing and new files
-		ipc.on('vscode:openFiles', (event: any, request: IOpenFileRequest) => this.onOpenFiles(request));
+		ipc.on('hypert:openFiles', (event: any, request: IOpenFileRequest) => this.onOpenFiles(request));
 
 		// Support addFolders event if we have a workspace opened
-		ipc.on('vscode:addFolders', (event: any, request: IAddFoldersRequest) => this.onAddFoldersRequest(request));
+		ipc.on('hypert:addFolders', (event: any, request: IAddFoldersRequest) => this.onAddFoldersRequest(request));
 
 		// Message support
-		ipc.on('vscode:showInfoMessage', (event: any, message: string) => {
+		ipc.on('hypert:showInfoMessage', (event: any, message: string) => {
 			this.notificationService.info(message);
 		});
 
 		// Fullscreen Events
-		ipc.on('vscode:enterFullScreen', () => {
+		ipc.on('hypert:enterFullScreen', () => {
 			this.lifecycleService.when(LifecyclePhase.Running).then(() => {
 				browser.setFullscreen(true);
 			});
 		});
 
-		ipc.on('vscode:leaveFullScreen', () => {
+		ipc.on('hypert:leaveFullScreen', () => {
 			this.lifecycleService.when(LifecyclePhase.Running).then(() => {
 				browser.setFullscreen(false);
 			});
 		});
 
 		// High Contrast Events
-		ipc.on('vscode:enterHighContrast', () => {
+		ipc.on('hypert:enterHighContrast', () => {
 			const windowConfig = this.configurationService.getValue<IWindowSettings>('window');
 			if (windowConfig && windowConfig.autoDetectHighContrast) {
 				this.lifecycleService.when(LifecyclePhase.Running).then(() => {
@@ -198,7 +198,7 @@ export class ElectronWindow extends Themable {
 			}
 		});
 
-		ipc.on('vscode:leaveHighContrast', () => {
+		ipc.on('hypert:leaveHighContrast', () => {
 			const windowConfig = this.configurationService.getValue<IWindowSettings>('window');
 			if (windowConfig && windowConfig.autoDetectHighContrast) {
 				this.lifecycleService.when(LifecyclePhase.Running).then(() => {
@@ -208,12 +208,12 @@ export class ElectronWindow extends Themable {
 		});
 
 		// keyboard layout changed event
-		ipc.on('vscode:keyboardLayoutChanged', () => {
+		ipc.on('hypert:keyboardLayoutChanged', () => {
 			KeyboardMapperFactory.INSTANCE._onKeyboardLayoutChanged();
 		});
 
 		// keyboard layout changed event
-		ipc.on('vscode:accessibilitySupportChanged', (event: any, accessibilitySupportEnabled: boolean) => {
+		ipc.on('hypert:accessibilitySupportChanged', (event: any, accessibilitySupportEnabled: boolean) => {
 			browser.setAccessibilitySupport(accessibilitySupportEnabled ? AccessibilitySupport.Enabled : AccessibilitySupport.Disabled);
 		});
 
@@ -238,7 +238,7 @@ export class ElectronWindow extends Themable {
 				this.contextMenuService.showContextMenu({
 					getAnchor: () => e,
 					getActions: () => TextInputActions,
-					onHide: () => target.focus() // fixes https://github.com/Microsoft/vscode/issues/52948
+					onHide: () => target.focus() // fixes https://github.com/hernad/hyper-t/issues/52948
 				});
 			}
 		}
@@ -251,7 +251,7 @@ export class ElectronWindow extends Themable {
 		if (windowConfig.window && typeof windowConfig.window.zoomLevel === 'number') {
 			newZoomLevel = windowConfig.window.zoomLevel;
 
-			// Leave early if the configured zoom level did not change (https://github.com/Microsoft/vscode/issues/1536)
+			// Leave early if the configured zoom level did not change (https://github.com/hernad/hyper-t/issues/1536)
 			if (this.previousConfiguredZoomLevel === newZoomLevel) {
 				return;
 			}
@@ -262,7 +262,7 @@ export class ElectronWindow extends Themable {
 		if (webFrame.getZoomLevel() !== newZoomLevel) {
 			webFrame.setZoomLevel(newZoomLevel);
 			browser.setZoomFactor(webFrame.getZoomFactor());
-			// See https://github.com/Microsoft/vscode/issues/26151
+			// See https://github.com/hernad/hyper-t/issues/26151
 			// Cannot be trusted because the webFrame might take some time
 			// until it really applies the new zoom level
 			browser.setZoomLevel(webFrame.getZoomLevel(), /*isTrusted*/false);
@@ -279,9 +279,9 @@ export class ElectronWindow extends Themable {
 			return null;
 		};
 
-		// Emit event when vscode has loaded
+		// Emit event when hypert has loaded
 		this.lifecycleService.when(LifecyclePhase.Running).then(() => {
-			ipc.send('vscode:workbenchLoaded', this.windowService.getCurrentWindowId());
+			ipc.send('hypert:workbenchLoaded', this.windowService.getCurrentWindowId());
 		});
 
 		// Integrity warning

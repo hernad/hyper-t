@@ -14,7 +14,7 @@ export function addGAParameters(telemetryService: ITelemetryService, environment
 		if (uri.scheme === 'https' && uri.authority === 'code.visualstudio.com') {
 			return telemetryService.getTelemetryInfo()
 				.then(info => {
-					return uri.with({ query: `${uri.query ? uri.query + '&' : ''}utm_source=VsCode&utm_medium=${encodeURIComponent(origin)}&utm_campaign=${encodeURIComponent(info.instanceId)}&utm_content=${encodeURIComponent(experiment)}` });
+					return uri.with({ query: `${uri.query ? uri.query + '&' : ''}utm_source=hypert&utm_medium=${encodeURIComponent(origin)}&utm_campaign=${encodeURIComponent(info.instanceId)}&utm_content=${encodeURIComponent(experiment)}` });
 				});
 		}
 	}

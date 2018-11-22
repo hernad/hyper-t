@@ -32,13 +32,13 @@ function renderBody(
 	body: string,
 	css: string
 ): string {
-	const styleSheetPath = require.toUrl('./media/markdown.css').replace('file://', 'vscode-core-resource://');
+	const styleSheetPath = require.toUrl('./media/markdown.css').replace('file://', 'hypert-core-resource://');
 	return `<!DOCTYPE html>
 		<html>
 			<head>
 				<base href="https://code.visualstudio.com/raw/">
 				<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; media-src https:; script-src 'none'; style-src vscode-core-resource: https: 'unsafe-inline'; child-src 'none'; frame-src 'none';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; media-src https:; script-src 'none'; style-src hypert-core-resource: https: 'unsafe-inline'; child-src 'none'; frame-src 'none';">
 				<link rel="stylesheet" type="text/css" href="${styleSheetPath}">
 				<style>${css}</style>
 			</head>

@@ -8,7 +8,7 @@ import { Registry } from 'platform/registry/common/platform';
 import { Extensions as JSONExtensions, IJSONContributionRegistry } from 'platform/jsonschemas/common/jsonContributionRegistry';
 import { IJSONSchema } from 'base/common/jsonSchema';
 
-const schemaId = 'vscode://schemas/icon-theme';
+const schemaId = 'hypert://schemas/icon-theme';
 const schema: IJSONSchema = {
 	type: 'object',
 	allowComments: true,

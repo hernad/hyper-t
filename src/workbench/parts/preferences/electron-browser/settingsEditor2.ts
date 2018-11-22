@@ -950,7 +950,7 @@ export class SettingsEditor2 extends BaseEditor {
 		if (key) {
 			const elements = this.currentSettingsModel.getElementsByName(key);
 			if (elements && elements.length) {
-				// TODO https://github.com/Microsoft/vscode/issues/57360
+				// TODO https://github.com/hernad/hyper-t/issues/57360
 				// refreshP = Promise.join(elements.map(e => this.settingsTree.refresh(e)));
 				refreshP = this.settingsTree.refresh();
 			} else {

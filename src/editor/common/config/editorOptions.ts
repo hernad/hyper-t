@@ -251,7 +251,7 @@ export interface IEditorOptions {
 	lineNumbersMinChars?: number;
 	/**
 	 * Enable the rendering of the glyph margin.
-	 * Defaults to true in vscode and to false in monaco-editor.
+	 * Defaults to true in hypert and to false in monaco-editor.
 	 */
 	glyphMargin?: boolean;
 	/**
@@ -405,7 +405,7 @@ export interface IEditorOptions {
 	wordWrapMinified?: boolean;
 	/**
 	 * Control indentation of wrapped lines. Can be: 'none', 'same', 'indent' or 'deepIndent'.
-	 * Defaults to 'same' in vscode and to 'none' in monaco-editor.
+	 * Defaults to 'same' in hypert and to 'none' in monaco-editor.
 	 */
 	wrappingIndent?: string;
 	/**
@@ -2169,7 +2169,7 @@ export class InternalEditorOptionsFactory {
 		}
 
 		// Disable some non critical features to get as best performance as possible
-		// See https://github.com/Microsoft/vscode/issues/26730
+		// See https://github.com/hernad/hyper-t/issues/26730
 		const opts = this._tweakValidatedOptions(_opts, accessibilitySupport);
 
 		let lineDecorationsWidth: number;
@@ -2212,7 +2212,7 @@ export class InternalEditorOptionsFactory {
 			const wordWrapMinified = opts.wordWrapMinified;
 
 			if (accessibilitySupport === platform.AccessibilitySupport.Enabled) {
-				// See https://github.com/Microsoft/vscode/issues/27766
+				// See https://github.com/hernad/hyper-t/issues/27766
 				// Never enable wrapping when a screen reader is attached
 				// because arrow down etc. will not move the cursor in the way
 				// a screen reader expects.

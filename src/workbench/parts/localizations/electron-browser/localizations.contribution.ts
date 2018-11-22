@@ -125,7 +125,7 @@ export class LocalizationWorkbenchContribution extends Disposable implements IWo
 						return;
 					}
 
-					const extensionToInstall = tagResult.total === 1 ? tagResult.firstPage[0] : tagResult.firstPage.filter(e => e.publisher === 'MS-CEINTL' && e.name.indexOf('vscode-language-pack') === 0)[0];
+					const extensionToInstall = tagResult.total === 1 ? tagResult.firstPage[0] : tagResult.firstPage.filter(e => e.publisher === 'MS-CEINTL' && e.name.indexOf('hypert-language-pack') === 0)[0];
 					const extensionToFetchTranslationsFrom = extensionToInstall || tagResult.firstPage[0];
 
 					if (!extensionToFetchTranslationsFrom.assets.manifest) {
@@ -228,7 +228,7 @@ export class LocalizationWorkbenchContribution extends Disposable implements IWo
 }
 
 function registerLocaleDefinitionSchema(languages: string[]): void {
-	const localeDefinitionFileSchemaId = 'vscode://schemas/locale';
+	const localeDefinitionFileSchemaId = 'hypert://schemas/locale';
 	const jsonRegistry = Registry.as<IJSONContributionRegistry>(JSONExtensions.JSONContribution);
 	// Keep en-US since we generated files with that content.
 	jsonRegistry.registerSchema(localeDefinitionFileSchemaId, {
@@ -255,43 +255,43 @@ const workbenchRegistry = Registry.as<IWorkbenchContributionsRegistry>(Workbench
 workbenchRegistry.registerWorkbenchContribution(LocalizationWorkbenchContribution, LifecyclePhase.Eventually);
 
 ExtensionsRegistry.registerExtensionPoint('localizations', [], {
-	description: localize('vscode.extension.contributes.localizations', "Contributes localizations to the editor"),
+	description: localize('hypert.extension.contributes.localizations', "Contributes localizations to the editor"),
 	type: 'array',
 	default: [],
 	items: {
 		type: 'object',
 		required: ['languageId', 'translations'],
-		defaultSnippets: [{ body: { languageId: '', languageName: '', localizedLanguageName: '', translations: [{ id: 'vscode', path: '' }] } }],
+		defaultSnippets: [{ body: { languageId: '', languageName: '', localizedLanguageName: '', translations: [{ id: 'hypert', path: '' }] } }],
 		properties: {
 			languageId: {
-				description: localize('vscode.extension.contributes.localizations.languageId', 'Id of the language into which the display strings are translated.'),
+				description: localize('hypert.extension.contributes.localizations.languageId', 'Id of the language into which the display strings are translated.'),
 				type: 'string'
 			},
 			languageName: {
-				description: localize('vscode.extension.contributes.localizations.languageName', 'Name of the language in English.'),
+				description: localize('hypert.extension.contributes.localizations.languageName', 'Name of the language in English.'),
 				type: 'string'
 			},
 			localizedLanguageName: {
-				description: localize('vscode.extension.contributes.localizations.languageNameLocalized', 'Name of the language in contributed language.'),
+				description: localize('hypert.extension.contributes.localizations.languageNameLocalized', 'Name of the language in contributed language.'),
 				type: 'string'
 			},
 			translations: {
-				description: localize('vscode.extension.contributes.localizations.translations', 'List of translations associated to the language.'),
+				description: localize('hypert.extension.contributes.localizations.translations', 'List of translations associated to the language.'),
 				type: 'array',
-				default: [{ id: 'vscode', path: '' }],
+				default: [{ id: 'hypert', path: '' }],
 				items: {
 					type: 'object',
 					required: ['id', 'path'],
 					properties: {
 						id: {
 							type: 'string',
-							description: localize('vscode.extension.contributes.localizations.translations.id', "Id of VS Code or Extension for which this translation is contributed to. Id of VS Code is always `vscode` and of extension should be in format `publisherId.extensionName`."),
-							pattern: '^((vscode)|([a-z0-9A-Z][a-z0-9\-A-Z]*)\\.([a-z0-9A-Z][a-z0-9\-A-Z]*))$',
-							patternErrorMessage: localize('vscode.extension.contributes.localizations.translations.id.pattern', "Id should be `vscode` or in format `publisherId.extensionName` for translating VS code or an extension respectively.")
+							description: localize('hypert.extension.contributes.localizations.translations.id', "Id of VS Code or Extension for which this translation is contributed to. Id of VS Code is always `hypert` and of extension should be in format `publisherId.extensionName`."),
+							pattern: '^((hypert)|([a-z0-9A-Z][a-z0-9\-A-Z]*)\\.([a-z0-9A-Z][a-z0-9\-A-Z]*))$',
+							patternErrorMessage: localize('hypert.extension.contributes.localizations.translations.id.pattern', "Id should be `hypert` or in format `publisherId.extensionName` for translating VS code or an extension respectively.")
 						},
 						path: {
 							type: 'string',
-							description: localize('vscode.extension.contributes.localizations.translations.path', "A relative path to a file containing translations for the language.")
+							description: localize('hypert.extension.contributes.localizations.translations.path', "A relative path to a file containing translations for the language.")
 						}
 					},
 					defaultSnippets: [{ body: { id: '', path: '' } }],

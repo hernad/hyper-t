@@ -230,5 +230,5 @@ export function getSettingsTargetName(target: ConfigurationTarget, resource: URI
 	return '';
 }
 
-export const FOLDER_SETTINGS_PATH = join('.vscode', 'settings.json');
+export const FOLDER_SETTINGS_PATH = join('.hypert', 'settings.json');
 export const DEFAULT_SETTINGS_EDITOR_SETTING = 'workbench.settings.openDefaultSettings';

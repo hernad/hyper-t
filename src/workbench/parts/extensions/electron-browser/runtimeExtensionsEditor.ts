@@ -505,7 +505,7 @@ class ReportExtensionIssueAction extends Action {
 			`- Extension Name: ${extension.description.name}
 - Extension Version: ${extension.description.version}
 - OS Version: ${osVersion}
-- VSCode version: ${pkg.version}` + '\n\n We have written the needed data into your clipboard. Please paste:'
+- hypert version: ${pkg.version}` + '\n\n We have written the needed data into your clipboard. Please paste:'
 		);
 
 		return `${baseUrl}${queryStringPrefix}body=${body}`;

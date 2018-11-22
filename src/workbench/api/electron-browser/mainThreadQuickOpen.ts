@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { IPickOptions, IInputOptions, IQuickInputService, IQuickInput } from 'platform/quickinput/common/quickInput';
-import { InputBoxOptions } from 'vscode';
+import { InputBoxOptions } from 'hypert';
 import { ExtHostContext, MainThreadQuickOpenShape, ExtHostQuickOpenShape, TransferQuickPickItems, MainContext, IExtHostContext, TransferQuickInput, TransferQuickInputButton } from 'workbench/api/node/extHost.protocol';
 import { extHostNamedCustomer } from 'workbench/api/electron-browser/extHostCustomers';
 import { URI } from 'base/common/uri';

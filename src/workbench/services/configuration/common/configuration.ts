@@ -6,7 +6,7 @@
 import { IConfigurationService } from 'platform/configuration/common/configuration';
 import { createDecorator } from 'platform/instantiation/common/instantiation';
 
-export const FOLDER_CONFIG_FOLDER_NAME = '.vscode';
+export const FOLDER_CONFIG_FOLDER_NAME = '.hypert';
 export const FOLDER_SETTINGS_NAME = 'settings';
 export const FOLDER_SETTINGS_PATH = `${FOLDER_CONFIG_FOLDER_NAME}/${FOLDER_SETTINGS_NAME}.json`;
 
@@ -15,11 +15,11 @@ export const IWorkspaceConfigurationService = createDecorator<IWorkspaceConfigur
 export interface IWorkspaceConfigurationService extends IConfigurationService {
 }
 
-export const defaultSettingsSchemaId = 'vscode://schemas/settings/default';
-export const userSettingsSchemaId = 'vscode://schemas/settings/user';
-export const workspaceSettingsSchemaId = 'vscode://schemas/settings/workspace';
-export const folderSettingsSchemaId = 'vscode://schemas/settings/folder';
-export const launchSchemaId = 'vscode://schemas/launch';
+export const defaultSettingsSchemaId = 'hypert://schemas/settings/default';
+export const userSettingsSchemaId = 'hypert://schemas/settings/user';
+export const workspaceSettingsSchemaId = 'hypert://schemas/settings/workspace';
+export const folderSettingsSchemaId = 'hypert://schemas/settings/folder';
+export const launchSchemaId = 'hypert://schemas/launch';
 
 export const TASKS_CONFIGURATION_KEY = 'tasks';
 export const LAUNCH_CONFIGURATION_KEY = 'launch';

@@ -75,7 +75,7 @@ import { REMOTE_FILE_SYSTEM_CHANNEL_NAME } from 'platform/remote/node/remoteAgen
 import { ResolvedAuthority } from 'platform/remote/common/remoteAuthorityResolver';
 import { SnapUpdateService } from 'platform/update/electron-main/updateService.snap';
 
-export class CodeApplication {
+export class HypertApplication {
 
 	private static readonly MACHINE_ID_KEY = 'telemetry.machineId';
 
@@ -122,7 +122,7 @@ export class CodeApplication {
 
 		app.on('accessibility-support-changed', (event: Event, accessibilitySupportEnabled: boolean) => {
 			if (this.windowsMainService) {
-				this.windowsMainService.sendToAll('vscode:accessibilitySupportChanged', accessibilitySupportEnabled);
+				this.windowsMainService.sendToAll('hypert:accessibilitySupportChanged', accessibilitySupportEnabled);
 			}
 		});
 
@@ -267,60 +267,60 @@ export class CodeApplication {
 			this.windowsMainService.openNewWindow(OpenContext.DESKTOP); //macOS native tab "+" button
 		});
 
-		ipc.on('vscode:exit', (event: Event, code: number) => {
-			this.logService.trace('IPC#vscode:exit', code);
+		ipc.on('hypert:exit', (event: Event, code: number) => {
+			this.logService.trace('IPC#hypert:exit', code);
 
 			this.dispose();
 			this.lifecycleService.kill(code);
 		});
 
-		ipc.on('vscode:fetchShellEnv', (event: Event) => {
+		ipc.on('hypert:fetchShellEnv', (event: Event) => {
 			const webContents = event.sender;
 			getShellEnvironment().then(shellEnv => {
 				if (!webContents.isDestroyed()) {
-					webContents.send('vscode:acceptShellEnv', shellEnv);
+					webContents.send('hypert:acceptShellEnv', shellEnv);
 				}
 			}, err => {
 				if (!webContents.isDestroyed()) {
-					webContents.send('vscode:acceptShellEnv', {});
+					webContents.send('hypert:acceptShellEnv', {});
 				}
 
 				this.logService.error('Error fetching shell env', err);
 			});
 		});
 
-		ipc.on('vscode:broadcast', (event: Event, windowId: number, broadcast: { channel: string; payload: any; }) => {
+		ipc.on('hypert:broadcast', (event: Event, windowId: number, broadcast: { channel: string; payload: any; }) => {
 			if (this.windowsMainService && broadcast.channel && !isUndefinedOrNull(broadcast.payload)) {
-				this.logService.trace('IPC#vscode:broadcast', broadcast.channel, broadcast.payload);
+				this.logService.trace('IPC#hypert:broadcast', broadcast.channel, broadcast.payload);
 
 				// Handle specific events on main side
 				this.onBroadcast(broadcast.channel, broadcast.payload);
 
 				// Send to all windows (except sender window)
-				this.windowsMainService.sendToAll('vscode:broadcast', broadcast, [windowId]);
+				this.windowsMainService.sendToAll('hypert:broadcast', broadcast, [windowId]);
 			}
 		});
 
-		ipc.on('vscode:labelRegisterFormatter', (event: any, data: RegisterFormatterEvent) => {
+		ipc.on('hypert:labelRegisterFormatter', (event: any, data: RegisterFormatterEvent) => {
 			this.labelService.registerFormatter(data.selector, data.formatter);
 		});
 
-		ipc.on('vscode:toggleDevTools', (event: Event) => {
+		ipc.on('hypert:toggleDevTools', (event: Event) => {
 			event.sender.toggleDevTools();
 		});
 
-		ipc.on('vscode:openDevTools', (event: Event) => {
+		ipc.on('hypert:openDevTools', (event: Event) => {
 			event.sender.openDevTools();
 		});
 
-		ipc.on('vscode:reloadWindow', (event: Event) => {
+		ipc.on('hypert:reloadWindow', (event: Event) => {
 			event.sender.reload();
 		});
 
 		// Keyboard layout changes
 		KeyboardLayoutMonitor.INSTANCE.onDidChangeKeyboardLayout(() => {
 			if (this.windowsMainService) {
-				this.windowsMainService.sendToAll('vscode:keyboardLayoutChanged', false);
+				this.windowsMainService.sendToAll('hypert:keyboardLayoutChanged', false);
 			}
 		});
 	}
@@ -350,7 +350,7 @@ export class CodeApplication {
 
 			// handle on client side
 			if (this.windowsMainService) {
-				this.windowsMainService.sendToFocused('vscode:reportError', JSON.stringify(friendlyError));
+				this.windowsMainService.sendToFocused('hypert:reportError', JSON.stringify(friendlyError));
 			}
 		}
 
@@ -363,7 +363,7 @@ export class CodeApplication {
 	private onBroadcast(event: string, payload: any): void {
 
 		// Theme changes
-		if (event === 'vscode:changeColorTheme' && typeof payload === 'string') {
+		if (event === 'hypert:changeColorTheme' && typeof payload === 'string') {
 			let data = JSON.parse(payload);
 
 			this.stateService.setItem(THEME_STORAGE_KEY, data.baseTheme);
@@ -389,7 +389,7 @@ export class CodeApplication {
 		// "com.microsoft.", which breaks native tabs for VS Code when using this
 		// identifier (from the official build).
 		// Explicitly opt out of the patch here before creating any windows.
-		// See: https://github.com/Microsoft/vscode/issues/35361#issuecomment-399794085
+		// See: https://github.com/hernad/hyper-t/issues/35361#issuecomment-399794085
 		try {
 			if (platform.isMacintosh && this.configurationService.getValue<boolean>('window.nativeTabs') === true && !systemPreferences.getUserDefault('NSUseImprovedLayoutPass', 'boolean')) {
 				systemPreferences.setUserDefault('NSUseImprovedLayoutPass', 'boolean', true as any);
@@ -475,7 +475,7 @@ export class CodeApplication {
 	}
 
 	private resolveMachineId(): TPromise<string> {
-		const machineId = this.stateService.getItem<string>(CodeApplication.MACHINE_ID_KEY);
+		const machineId = this.stateService.getItem<string>(HypertApplication.MACHINE_ID_KEY);
 		if (machineId) {
 			return TPromise.wrap(machineId);
 		}
@@ -483,7 +483,7 @@ export class CodeApplication {
 		return getMachineId().then(machineId => {
 
 			// Remember in global storage
-			this.stateService.setItem(CodeApplication.MACHINE_ID_KEY, machineId);
+			this.stateService.setItem(HypertApplication.MACHINE_ID_KEY, machineId);
 
 			return machineId;
 		});
@@ -610,7 +610,7 @@ export class CodeApplication {
 
 		// Open our first window
 		const macOpenFiles = (<any>global).macOpenFiles as string[];
-		const context = !!process.env['VSCODE_CLI'] ? OpenContext.CLI : OpenContext.DESKTOP;
+		const context = !!process.env['HYPERT_CLI'] ? OpenContext.CLI : OpenContext.DESKTOP;
 		const hasCliArgs = hasArgs(args._);
 		const hasFolderURIs = hasArgs(args['folder-uri']);
 		const hasFileURIs = hasArgs(args['file-uri']);

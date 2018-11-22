@@ -355,7 +355,7 @@ export class LanguageConfigurationFileHandler {
 	}
 }
 
-const schemaId = 'vscode://schemas/language-configuration';
+const schemaId = 'hypert://schemas/language-configuration';
 const schema: IJSONSchema = {
 	allowComments: true,
 	default: {

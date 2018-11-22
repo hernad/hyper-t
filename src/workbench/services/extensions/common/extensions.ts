@@ -22,7 +22,7 @@ export interface IExtensionDescription {
 	readonly extensionDependencies?: string[];
 	readonly activationEvents?: string[];
 	readonly engines: {
-		vscode: string;
+		hypert: string;
 	};
 	readonly main?: string;
 	readonly contributes?: { [point: string]: any; };
@@ -37,9 +37,9 @@ export const nullExtensionDescription = Object.freeze(<IExtensionDescription>{
 	id: 'nullExtensionDescription',
 	name: 'Null Extension Description',
 	version: '0.0.0',
-	publisher: 'vscode',
+	publisher: 'hypert',
 	enableProposedApi: false,
-	engines: { vscode: '' },
+	engines: { hypert: '' },
 	extensionLocation: URI.parse('void:location'),
 	isBuiltin: false,
 });

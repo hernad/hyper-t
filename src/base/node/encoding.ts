@@ -363,10 +363,10 @@ export function resolveTerminalEncoding(verbose?: boolean): Promise<string> {
 	let rawEncodingPromise: Promise<string>;
 
 	// Support a global environment variable to win over other mechanics
-	const cliEncodingEnv = process.env['VSCODE_CLI_ENCODING'];
+	const cliEncodingEnv = process.env['HYPERT_CLI_ENCODING'];
 	if (cliEncodingEnv) {
 		if (verbose) {
-			console.log(`Found VSCODE_CLI_ENCODING variable: ${cliEncodingEnv}`);
+			console.log(`Found HYPERT_CLI_ENCODING variable: ${cliEncodingEnv}`);
 		}
 
 		rawEncodingPromise = Promise.resolve(cliEncodingEnv);

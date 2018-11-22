@@ -403,11 +403,11 @@ export class CodeWindow implements ICodeWindow {
 
 		// Window Fullscreen
 		this._win.on('enter-full-screen', () => {
-			this.sendWhenReady('vscode:enterFullScreen');
+			this.sendWhenReady('hypert:enterFullScreen');
 		});
 
 		this._win.on('leave-full-screen', () => {
-			this.sendWhenReady('vscode:leaveFullScreen');
+			this.sendWhenReady('hypert:leaveFullScreen');
 		});
 
 		// Window Failed to load
@@ -421,7 +421,7 @@ export class CodeWindow implements ICodeWindow {
 		// Handle Workspace events
 		this.toDispose.push(this.workspacesMainService.onUntitledWorkspaceDeleted(e => this.onUntitledWorkspaceDeleted(e)));
 
-		// TODO@Ben workaround for https://github.com/Microsoft/vscode/issues/13612
+		// TODO@Ben workaround for https://github.com/hernad/hyper-t/issues/13612
 		// It looks like smooth scrolling disappears as soon as the window is minimized
 		// and maximized again. Touching some window properties "fixes" it, like toggling
 		// the visibility of the menu.
@@ -484,9 +484,9 @@ export class CodeWindow implements ICodeWindow {
 			}
 
 			if (cmd === back) {
-				this.send('vscode:runAction', { id: acrossEditors ? 'workbench.action.openPreviousRecentlyUsedEditor' : 'workbench.action.navigateBack', from: 'mouse' } as IRunActionInWindowRequest);
+				this.send('hypert:runAction', { id: acrossEditors ? 'workbench.action.openPreviousRecentlyUsedEditor' : 'workbench.action.navigateBack', from: 'mouse' } as IRunActionInWindowRequest);
 			} else if (cmd === forward) {
-				this.send('vscode:runAction', { id: acrossEditors ? 'workbench.action.openNextRecentlyUsedEditor' : 'workbench.action.navigateForward', from: 'mouse' } as IRunActionInWindowRequest);
+				this.send('hypert:runAction', { id: acrossEditors ? 'workbench.action.openNextRecentlyUsedEditor' : 'workbench.action.navigateForward', from: 'mouse' } as IRunActionInWindowRequest);
 			}
 		});
 	}
@@ -664,7 +664,7 @@ export class CodeWindow implements ICodeWindow {
 				// Still carry over window dimensions from previous sessions
 				// if we can compute it in fullscreen state.
 				// does not seem possible in all cases on Linux for example
-				// (https://github.com/Microsoft/vscode/issues/58218) so we
+				// (https://github.com/hernad/hyper-t/issues/58218) so we
 				// fallback to the defaults in that case.
 				width: this.windowState.width || defaultState.width,
 				height: this.windowState.height || defaultState.height,
@@ -831,7 +831,7 @@ export class CodeWindow implements ICodeWindow {
 		}
 
 		// Events
-		this.sendWhenReady(fullscreen ? 'vscode:enterFullScreen' : 'vscode:leaveFullScreen');
+		this.sendWhenReady(fullscreen ? 'hypert:enterFullScreen' : 'hypert:leaveFullScreen');
 
 		// Respect configured menu bar visibility or default to toggle if not set
 		this.setMenuBarVisibility(this.currentMenuBarVisibility, false);
@@ -888,13 +888,13 @@ export class CodeWindow implements ICodeWindow {
 
 		if (visibility === 'toggle') {
 			if (notify) {
-				this.send('vscode:showInfoMessage', nls.localize('hiddenMenuBar', "You can still access the menu bar by pressing the Alt-key."));
+				this.send('hypert:showInfoMessage', nls.localize('hiddenMenuBar', "You can still access the menu bar by pressing the Alt-key."));
 			}
 		}
 
 		if (visibility === 'hidden') {
 			// for some weird reason that I have no explanation for, the menu bar is not hiding when calling
-			// this without timeout (see https://github.com/Microsoft/vscode/issues/19777). there seems to be
+			// this without timeout (see https://github.com/hernad/hyper-t/issues/19777). there seems to be
 			// a timing issue with us opening the first window and the menu bar getting created. somehow the
 			// fact that we want to hide the menu without being able to bring it back via Alt key makes Electron
 			// still show the menu. Unable to reproduce from a simple Hello World application though...
@@ -1021,7 +1021,7 @@ export class CodeWindow implements ICodeWindow {
 			mode: 'buttons',
 			segmentStyle: 'automatic',
 			change: (selectedIndex) => {
-				this.sendWhenReady('vscode:runAction', { id: (control.segments[selectedIndex] as ITouchBarSegment).id, from: 'touchbar' });
+				this.sendWhenReady('hypert:runAction', { id: (control.segments[selectedIndex] as ITouchBarSegment).id, from: 'touchbar' });
 			}
 		});
 

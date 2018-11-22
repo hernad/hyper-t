@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { MainContext, IMainContext, ExtHostUrlsShape, MainThreadUrlsShape } from './extHost.protocol';
 import { URI, UriComponents } from 'base/common/uri';
 import { toDisposable } from 'base/common/lifecycle';
@@ -15,7 +15,7 @@ export class ExtHostUrls implements ExtHostUrlsShape {
 	private readonly _proxy: MainThreadUrlsShape;
 
 	private handles = new Set<string>();
-	private handlers = new Map<number, vscode.UriHandler>();
+	private handlers = new Map<number, hypert.UriHandler>();
 
 	constructor(
 		mainContext: IMainContext
@@ -23,7 +23,7 @@ export class ExtHostUrls implements ExtHostUrlsShape {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadUrls);
 	}
 
-	registerUriHandler(extensionId: string, handler: vscode.UriHandler): vscode.Disposable {
+	registerUriHandler(extensionId: string, handler: hypert.UriHandler): hypert.Disposable {
 		if (this.handles.has(extensionId)) {
 			throw new Error(`Protocol handler already registered for extension ${extensionId}`);
 		}

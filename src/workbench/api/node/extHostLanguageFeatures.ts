@@ -5,7 +5,7 @@
 
 import { URI, UriComponents } from 'base/common/uri';
 import { mixin } from 'base/common/objects';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import * as typeConvert from 'workbench/api/node/extHostTypeConverters';
 import { Range, Disposable, CompletionList, SnippetString, CodeActionKind, SymbolInformation, DocumentSymbol } from 'workbench/api/node/extHostTypes';
 import { ISingleEditOperation } from 'editor/common/model';
@@ -31,9 +31,9 @@ import { CancellationToken } from 'base/common/cancellation';
 class OutlineAdapter {
 
 	private _documents: ExtHostDocuments;
-	private _provider: vscode.DocumentSymbolProvider;
+	private _provider: hypert.DocumentSymbolProvider;
 
-	constructor(documents: ExtHostDocuments, provider: vscode.DocumentSymbolProvider) {
+	constructor(documents: ExtHostDocuments, provider: hypert.DocumentSymbolProvider) {
 		this._documents = documents;
 		this._provider = provider;
 	}
@@ -95,13 +95,13 @@ class OutlineAdapter {
 
 class CodeLensAdapter {
 
-	private static _badCmd: vscode.Command = { command: 'missing', title: '<<MISSING COMMAND>>' };
+	private static _badCmd: hypert.Command = { command: 'missing', title: '<<MISSING COMMAND>>' };
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
 		private readonly _commands: CommandsConverter,
 		private readonly _heapService: ExtHostHeapService,
-		private readonly _provider: vscode.CodeLensProvider
+		private readonly _provider: hypert.CodeLensProvider
 	) { }
 
 	provideCodeLenses(resource: URI, token: CancellationToken): Thenable<modes.ICodeLensSymbol[]> {
@@ -123,12 +123,12 @@ class CodeLensAdapter {
 
 	resolveCodeLens(resource: URI, symbol: modes.ICodeLensSymbol, token: CancellationToken): Thenable<modes.ICodeLensSymbol> {
 
-		const lens = this._heapService.get<vscode.CodeLens>(ObjectIdentifier.of(symbol));
+		const lens = this._heapService.get<hypert.CodeLens>(ObjectIdentifier.of(symbol));
 		if (!lens) {
 			return undefined;
 		}
 
-		let resolve: Thenable<vscode.CodeLens>;
+		let resolve: Thenable<hypert.CodeLens>;
 		if (typeof this._provider.resolveCodeLens !== 'function' || lens.isResolved) {
 			resolve = Promise.resolve(lens);
 		} else {
@@ -143,9 +143,9 @@ class CodeLensAdapter {
 	}
 }
 
-function convertToDefinitionLinks(value: vscode.Definition): modes.DefinitionLink[] {
+function convertToDefinitionLinks(value: hypert.Definition): modes.DefinitionLink[] {
 	if (Array.isArray(value)) {
-		return (value as (vscode.DefinitionLink | vscode.Location)[]).map(typeConvert.DefinitionLink.from);
+		return (value as (hypert.DefinitionLink | hypert.Location)[]).map(typeConvert.DefinitionLink.from);
 	} else if (value) {
 		return [typeConvert.DefinitionLink.from(value)];
 	}
@@ -156,7 +156,7 @@ class DefinitionAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.DefinitionProvider
+		private readonly _provider: hypert.DefinitionProvider
 	) { }
 
 	provideDefinition(resource: URI, position: IPosition, token: CancellationToken): Thenable<modes.DefinitionLink[]> {
@@ -170,7 +170,7 @@ class DeclarationAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.DeclarationProvider
+		private readonly _provider: hypert.DeclarationProvider
 	) { }
 
 	provideDeclaration(resource: URI, position: IPosition, token: CancellationToken): Thenable<modes.DefinitionLink[]> {
@@ -184,7 +184,7 @@ class ImplementationAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.ImplementationProvider
+		private readonly _provider: hypert.ImplementationProvider
 	) { }
 
 	provideImplementation(resource: URI, position: IPosition, token: CancellationToken): Thenable<modes.DefinitionLink[]> {
@@ -198,7 +198,7 @@ class TypeDefinitionAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.TypeDefinitionProvider
+		private readonly _provider: hypert.TypeDefinitionProvider
 	) { }
 
 	provideTypeDefinition(resource: URI, position: IPosition, token: CancellationToken): Thenable<modes.DefinitionLink[]> {
@@ -212,7 +212,7 @@ class HoverAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.HoverProvider,
+		private readonly _provider: hypert.HoverProvider,
 	) { }
 
 	public provideHover(resource: URI, position: IPosition, token: CancellationToken): Thenable<modes.Hover> {
@@ -240,7 +240,7 @@ class DocumentHighlightAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.DocumentHighlightProvider
+		private readonly _provider: hypert.DocumentHighlightProvider
 	) { }
 
 	provideDocumentHighlights(resource: URI, position: IPosition, token: CancellationToken): Thenable<modes.DocumentHighlight[]> {
@@ -261,7 +261,7 @@ class ReferenceAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.ReferenceProvider
+		private readonly _provider: hypert.ReferenceProvider
 	) { }
 
 	provideReferences(resource: URI, position: IPosition, context: modes.ReferenceContext, token: CancellationToken): Thenable<modes.Location[]> {
@@ -287,7 +287,7 @@ class CodeActionAdapter {
 		private readonly _documents: ExtHostDocuments,
 		private readonly _commands: CommandsConverter,
 		private readonly _diagnostics: ExtHostDiagnostics,
-		private readonly _provider: vscode.CodeActionProvider,
+		private readonly _provider: hypert.CodeActionProvider,
 		private readonly _logService: ILogService,
 		private readonly _extensionId: string
 	) { }
@@ -296,9 +296,9 @@ class CodeActionAdapter {
 
 		const doc = this._documents.getDocumentData(resource).document;
 		const ran = Selection.isISelection(rangeOrSelection)
-			? <vscode.Selection>typeConvert.Selection.to(rangeOrSelection)
-			: <vscode.Range>typeConvert.Range.to(rangeOrSelection);
-		const allDiagnostics: vscode.Diagnostic[] = [];
+			? <hypert.Selection>typeConvert.Selection.to(rangeOrSelection)
+			: <hypert.Range>typeConvert.Range.to(rangeOrSelection);
+		const allDiagnostics: hypert.Diagnostic[] = [];
 
 		for (const diagnostic of this._diagnostics.getDiagnostics(resource)) {
 			if (ran.intersection(diagnostic.range)) {
@@ -306,7 +306,7 @@ class CodeActionAdapter {
 			}
 		}
 
-		const codeActionContext: vscode.CodeActionContext = {
+		const codeActionContext: hypert.CodeActionContext = {
 			diagnostics: allDiagnostics,
 			only: context.only ? new CodeActionKind(context.only) : undefined
 		};
@@ -351,8 +351,8 @@ class CodeActionAdapter {
 		});
 	}
 
-	private static _isCommand(thing: any): thing is vscode.Command {
-		return typeof (<vscode.Command>thing).command === 'string' && typeof (<vscode.Command>thing).title === 'string';
+	private static _isCommand(thing: any): thing is hypert.Command {
+		return typeof (<hypert.Command>thing).command === 'string' && typeof (<hypert.Command>thing).title === 'string';
 	}
 }
 
@@ -360,7 +360,7 @@ class DocumentFormattingAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.DocumentFormattingEditProvider
+		private readonly _provider: hypert.DocumentFormattingEditProvider
 	) { }
 
 	provideDocumentFormattingEdits(resource: URI, options: modes.FormattingOptions, token: CancellationToken): Thenable<ISingleEditOperation[]> {
@@ -380,7 +380,7 @@ class RangeFormattingAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.DocumentRangeFormattingEditProvider
+		private readonly _provider: hypert.DocumentRangeFormattingEditProvider
 	) { }
 
 	provideDocumentRangeFormattingEdits(resource: URI, range: IRange, options: modes.FormattingOptions, token: CancellationToken): Thenable<ISingleEditOperation[]> {
@@ -401,7 +401,7 @@ class OnTypeFormattingAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.OnTypeFormattingEditProvider
+		private readonly _provider: hypert.OnTypeFormattingEditProvider
 	) { }
 
 	autoFormatTriggerCharacters: string[] = []; // not here
@@ -422,11 +422,11 @@ class OnTypeFormattingAdapter {
 
 class NavigateTypeAdapter {
 
-	private readonly _symbolCache: { [id: number]: vscode.SymbolInformation } = Object.create(null);
+	private readonly _symbolCache: { [id: number]: hypert.SymbolInformation } = Object.create(null);
 	private readonly _resultCache: { [id: number]: [number, number] } = Object.create(null);
-	private readonly _provider: vscode.WorkspaceSymbolProvider;
+	private readonly _provider: hypert.WorkspaceSymbolProvider;
 
-	constructor(provider: vscode.WorkspaceSymbolProvider) {
+	constructor(provider: hypert.WorkspaceSymbolProvider) {
 		this._provider = provider;
 	}
 
@@ -484,13 +484,13 @@ class NavigateTypeAdapter {
 
 class RenameAdapter {
 
-	static supportsResolving(provider: vscode.RenameProvider): boolean {
+	static supportsResolving(provider: hypert.RenameProvider): boolean {
 		return typeof provider.prepareRename === 'function';
 	}
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.RenameProvider
+		private readonly _provider: hypert.RenameProvider
 	) { }
 
 	provideRenameEdits(resource: URI, position: IPosition, newName: string, token: CancellationToken): Thenable<WorkspaceEditDto> {
@@ -524,7 +524,7 @@ class RenameAdapter {
 
 		return asThenable(() => this._provider.prepareRename(doc, pos, token)).then(rangeOrLocation => {
 
-			let range: vscode.Range;
+			let range: hypert.Range;
 			let text: string;
 			if (Range.isRange(rangeOrLocation)) {
 				range = rangeOrLocation;
@@ -566,18 +566,18 @@ class RenameAdapter {
 
 class SuggestAdapter {
 
-	static supportsResolving(provider: vscode.CompletionItemProvider): boolean {
+	static supportsResolving(provider: hypert.CompletionItemProvider): boolean {
 		return typeof provider.resolveCompletionItem === 'function';
 	}
 
 	private _documents: ExtHostDocuments;
 	private _commands: CommandsConverter;
-	private _provider: vscode.CompletionItemProvider;
+	private _provider: hypert.CompletionItemProvider;
 
-	private _cache = new Map<number, vscode.CompletionItem[]>();
+	private _cache = new Map<number, hypert.CompletionItem[]>();
 	private _idPool = 0;
 
-	constructor(documents: ExtHostDocuments, commands: CommandsConverter, provider: vscode.CompletionItemProvider) {
+	constructor(documents: ExtHostDocuments, commands: CommandsConverter, provider: hypert.CompletionItemProvider) {
 		this._documents = documents;
 		this._commands = commands;
 		this._provider = provider;
@@ -588,7 +588,7 @@ class SuggestAdapter {
 		const doc = this._documents.getDocumentData(resource).document;
 		const pos = typeConvert.Position.to(position);
 
-		return asThenable<vscode.CompletionItem[] | vscode.CompletionList>(
+		return asThenable<hypert.CompletionItem[] | hypert.CompletionList>(
 			() => this._provider.provideCompletionItems(doc, pos, token, typeConvert.CompletionContext.to(context))
 		).then(value => {
 
@@ -664,7 +664,7 @@ class SuggestAdapter {
 		this._cache.delete(id);
 	}
 
-	private _convertCompletionItem(item: vscode.CompletionItem, position: vscode.Position, defaultRange: vscode.Range, _id: number, _parentId: number): SuggestionDto {
+	private _convertCompletionItem(item: hypert.CompletionItem, position: hypert.Position, defaultRange: hypert.Range, _id: number, _parentId: number): SuggestionDto {
 		if (typeof item.label !== 'string' || item.label.length === 0) {
 			console.warn('INVALID text edit -> must have at least a label');
 			return undefined;
@@ -711,7 +711,7 @@ class SuggestAdapter {
 		}
 
 		// 'overwrite[Before|After]'-logic
-		let range: vscode.Range;
+		let range: hypert.Range;
 		if (item.textEdit) {
 			range = item.textEdit.range;
 		} else if (item.range) {
@@ -734,7 +734,7 @@ class SignatureHelpAdapter {
 
 	constructor(
 		private readonly _documents: ExtHostDocuments,
-		private readonly _provider: vscode.SignatureHelpProvider
+		private readonly _provider: hypert.SignatureHelpProvider
 	) { }
 
 	provideSignatureHelp(resource: URI, position: IPosition, context: modes.SignatureHelpContext, token: CancellationToken): Thenable<modes.SignatureHelp> {
@@ -756,7 +756,7 @@ class LinkProviderAdapter {
 	constructor(
 		private readonly _documents: ExtHostDocuments,
 		private readonly _heapService: ExtHostHeapService,
-		private readonly _provider: vscode.DocumentLinkProvider
+		private readonly _provider: hypert.DocumentLinkProvider
 	) { }
 
 	provideLinks(resource: URI, token: CancellationToken): Thenable<modes.ILink[]> {
@@ -783,7 +783,7 @@ class LinkProviderAdapter {
 		}
 
 		const id = ObjectIdentifier.of(link);
-		const item = this._heapService.get<vscode.DocumentLink>(id);
+		const item = this._heapService.get<hypert.DocumentLink>(id);
 		if (!item) {
 			return undefined;
 		}
@@ -801,7 +801,7 @@ class ColorProviderAdapter {
 
 	constructor(
 		private _documents: ExtHostDocuments,
-		private _provider: vscode.DocumentColorProvider
+		private _provider: hypert.DocumentColorProvider
 	) { }
 
 	provideColors(resource: URI, token: CancellationToken): Thenable<IRawColorInfo[]> {
@@ -836,7 +836,7 @@ class FoldingProviderAdapter {
 
 	constructor(
 		private _documents: ExtHostDocuments,
-		private _provider: vscode.FoldingRangeProvider
+		private _provider: hypert.FoldingRangeProvider
 	) { }
 
 	provideFoldingRanges(resource: URI, context: modes.FoldingContext, token: CancellationToken): Thenable<modes.FoldingRange[]> {
@@ -898,7 +898,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		this._logService = logService;
 	}
 
-	private _transformDocumentSelector(selector: vscode.DocumentSelector): ISerializedDocumentFilter[] {
+	private _transformDocumentSelector(selector: hypert.DocumentSelector): ISerializedDocumentFilter[] {
 		if (Array.isArray(selector)) {
 			return selector.map(sel => this._doTransformDocumentSelector(sel));
 		}
@@ -906,7 +906,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return [this._doTransformDocumentSelector(selector)];
 	}
 
-	private _doTransformDocumentSelector(selector: string | vscode.DocumentFilter): ISerializedDocumentFilter {
+	private _doTransformDocumentSelector(selector: string | hypert.DocumentFilter): ISerializedDocumentFilter {
 		if (typeof selector === 'string') {
 			return {
 				$serialized: true,
@@ -973,7 +973,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- outline
 
-	registerDocumentSymbolProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.DocumentSymbolProvider): vscode.Disposable {
+	registerDocumentSymbolProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.DocumentSymbolProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new OutlineAdapter(this._documents, provider), extension);
 		this._proxy.$registerOutlineSupport(handle, this._transformDocumentSelector(selector), extension ? extension.displayName || extension.name : undefined);
 		return this._createDisposable(handle);
@@ -985,7 +985,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- code lens
 
-	registerCodeLensProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.CodeLensProvider): vscode.Disposable {
+	registerCodeLensProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.CodeLensProvider): hypert.Disposable {
 		const handle = this._nextHandle();
 		const eventHandle = typeof provider.onDidChangeCodeLenses === 'function' ? this._nextHandle() : undefined;
 
@@ -1011,7 +1011,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- declaration
 
-	registerDefinitionProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.DefinitionProvider): vscode.Disposable {
+	registerDefinitionProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.DefinitionProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new DefinitionAdapter(this._documents, provider), extension);
 		this._proxy.$registerDefinitionSupport(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1021,7 +1021,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return this._withAdapter(handle, DefinitionAdapter, adapter => adapter.provideDefinition(URI.revive(resource), position, token));
 	}
 
-	registerDeclarationProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.DeclarationProvider): vscode.Disposable {
+	registerDeclarationProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.DeclarationProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new DeclarationAdapter(this._documents, provider), extension);
 		this._proxy.$registerDeclarationSupport(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1031,7 +1031,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return this._withAdapter(handle, DeclarationAdapter, adapter => adapter.provideDeclaration(URI.revive(resource), position, token));
 	}
 
-	registerImplementationProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.ImplementationProvider): vscode.Disposable {
+	registerImplementationProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.ImplementationProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new ImplementationAdapter(this._documents, provider), extension);
 		this._proxy.$registerImplementationSupport(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1041,7 +1041,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return this._withAdapter(handle, ImplementationAdapter, adapter => adapter.provideImplementation(URI.revive(resource), position, token));
 	}
 
-	registerTypeDefinitionProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.TypeDefinitionProvider): vscode.Disposable {
+	registerTypeDefinitionProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.TypeDefinitionProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new TypeDefinitionAdapter(this._documents, provider), extension);
 		this._proxy.$registerTypeDefinitionSupport(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1053,7 +1053,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- extra info
 
-	registerHoverProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.HoverProvider, extensionId?: string): vscode.Disposable {
+	registerHoverProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.HoverProvider, extensionId?: string): hypert.Disposable {
 		const handle = this._addNewAdapter(new HoverAdapter(this._documents, provider), extension);
 		this._proxy.$registerHoverProvider(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1065,7 +1065,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- occurrences
 
-	registerDocumentHighlightProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.DocumentHighlightProvider): vscode.Disposable {
+	registerDocumentHighlightProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.DocumentHighlightProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new DocumentHighlightAdapter(this._documents, provider), extension);
 		this._proxy.$registerDocumentHighlightProvider(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1077,7 +1077,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- references
 
-	registerReferenceProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.ReferenceProvider): vscode.Disposable {
+	registerReferenceProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.ReferenceProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new ReferenceAdapter(this._documents, provider), extension);
 		this._proxy.$registerReferenceSupport(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1089,7 +1089,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- quick fix
 
-	registerCodeActionProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.CodeActionProvider, metadata?: vscode.CodeActionProviderMetadata): vscode.Disposable {
+	registerCodeActionProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.CodeActionProvider, metadata?: hypert.CodeActionProviderMetadata): hypert.Disposable {
 		const handle = this._addNewAdapter(new CodeActionAdapter(this._documents, this._commands.converter, this._diagnostics, provider, this._logService, extension.id), extension);
 		this._proxy.$registerQuickFixSupport(handle, this._transformDocumentSelector(selector), metadata && metadata.providedCodeActionKinds ? metadata.providedCodeActionKinds.map(kind => kind.value) : undefined);
 		return this._createDisposable(handle);
@@ -1102,7 +1102,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- formatting
 
-	registerDocumentFormattingEditProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.DocumentFormattingEditProvider): vscode.Disposable {
+	registerDocumentFormattingEditProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.DocumentFormattingEditProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new DocumentFormattingAdapter(this._documents, provider), extension);
 		this._proxy.$registerDocumentFormattingSupport(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1112,7 +1112,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return this._withAdapter(handle, DocumentFormattingAdapter, adapter => adapter.provideDocumentFormattingEdits(URI.revive(resource), options, token));
 	}
 
-	registerDocumentRangeFormattingEditProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.DocumentRangeFormattingEditProvider): vscode.Disposable {
+	registerDocumentRangeFormattingEditProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.DocumentRangeFormattingEditProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new RangeFormattingAdapter(this._documents, provider), extension);
 		this._proxy.$registerRangeFormattingSupport(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1122,7 +1122,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return this._withAdapter(handle, RangeFormattingAdapter, adapter => adapter.provideDocumentRangeFormattingEdits(URI.revive(resource), range, options, token));
 	}
 
-	registerOnTypeFormattingEditProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.OnTypeFormattingEditProvider, triggerCharacters: string[]): vscode.Disposable {
+	registerOnTypeFormattingEditProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.OnTypeFormattingEditProvider, triggerCharacters: string[]): hypert.Disposable {
 		const handle = this._addNewAdapter(new OnTypeFormattingAdapter(this._documents, provider), extension);
 		this._proxy.$registerOnTypeFormattingSupport(handle, this._transformDocumentSelector(selector), triggerCharacters);
 		return this._createDisposable(handle);
@@ -1134,7 +1134,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- navigate types
 
-	registerWorkspaceSymbolProvider(extension: IExtensionDescription, provider: vscode.WorkspaceSymbolProvider): vscode.Disposable {
+	registerWorkspaceSymbolProvider(extension: IExtensionDescription, provider: hypert.WorkspaceSymbolProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new NavigateTypeAdapter(provider), extension);
 		this._proxy.$registerNavigateTypeSupport(handle);
 		return this._createDisposable(handle);
@@ -1154,7 +1154,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- rename
 
-	registerRenameProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.RenameProvider): vscode.Disposable {
+	registerRenameProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.RenameProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new RenameAdapter(this._documents, provider), extension);
 		this._proxy.$registerRenameSupport(handle, this._transformDocumentSelector(selector), RenameAdapter.supportsResolving(provider));
 		return this._createDisposable(handle);
@@ -1170,7 +1170,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- suggestion
 
-	registerCompletionItemProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.CompletionItemProvider, triggerCharacters: string[]): vscode.Disposable {
+	registerCompletionItemProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.CompletionItemProvider, triggerCharacters: string[]): hypert.Disposable {
 		const handle = this._addNewAdapter(new SuggestAdapter(this._documents, this._commands.converter, provider), extension);
 		this._proxy.$registerSuggestSupport(handle, this._transformDocumentSelector(selector), triggerCharacters, SuggestAdapter.supportsResolving(provider));
 		return this._createDisposable(handle);
@@ -1190,7 +1190,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- parameter hints
 
-	registerSignatureHelpProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.SignatureHelpProvider, metadataOrTriggerChars?: string[] | vscode.SignatureHelpProviderMetadata): vscode.Disposable {
+	registerSignatureHelpProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.SignatureHelpProvider, metadataOrTriggerChars?: string[] | hypert.SignatureHelpProviderMetadata): hypert.Disposable {
 		const metadata: ISerializedSignatureHelpProviderMetadata = Array.isArray(metadataOrTriggerChars)
 			? { triggerCharacters: metadataOrTriggerChars, retriggerCharacters: [] }
 			: metadataOrTriggerChars;
@@ -1206,7 +1206,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 
 	// --- links
 
-	registerDocumentLinkProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.DocumentLinkProvider): vscode.Disposable {
+	registerDocumentLinkProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.DocumentLinkProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new LinkProviderAdapter(this._documents, this._heapService, provider), extension);
 		this._proxy.$registerDocumentLinkProvider(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1220,7 +1220,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return this._withAdapter(handle, LinkProviderAdapter, adapter => adapter.resolveLink(link, token));
 	}
 
-	registerColorProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.DocumentColorProvider): vscode.Disposable {
+	registerColorProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.DocumentColorProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new ColorProviderAdapter(this._documents, provider), extension);
 		this._proxy.$registerDocumentColorProvider(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
@@ -1234,13 +1234,13 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return this._withAdapter(handle, ColorProviderAdapter, adapter => adapter.provideColorPresentations(URI.revive(resource), colorInfo, token));
 	}
 
-	registerFoldingRangeProvider(extension: IExtensionDescription, selector: vscode.DocumentSelector, provider: vscode.FoldingRangeProvider): vscode.Disposable {
+	registerFoldingRangeProvider(extension: IExtensionDescription, selector: hypert.DocumentSelector, provider: hypert.FoldingRangeProvider): hypert.Disposable {
 		const handle = this._addNewAdapter(new FoldingProviderAdapter(this._documents, provider), extension);
 		this._proxy.$registerFoldingRangeProvider(handle, this._transformDocumentSelector(selector));
 		return this._createDisposable(handle);
 	}
 
-	$provideFoldingRanges(handle: number, resource: UriComponents, context: vscode.FoldingContext, token: CancellationToken): Thenable<modes.FoldingRange[]> {
+	$provideFoldingRanges(handle: number, resource: UriComponents, context: hypert.FoldingContext, token: CancellationToken): Thenable<modes.FoldingRange[]> {
 		return this._withAdapter(handle, FoldingProviderAdapter, adapter => adapter.provideFoldingRanges(URI.revive(resource), context, token));
 	}
 
@@ -1259,7 +1259,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		};
 	}
 
-	private static _serializeIndentationRule(indentationRule: vscode.IndentationRule): ISerializedIndentationRule {
+	private static _serializeIndentationRule(indentationRule: hypert.IndentationRule): ISerializedIndentationRule {
 		if (typeof indentationRule === 'undefined') {
 			return undefined;
 		}
@@ -1274,7 +1274,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		};
 	}
 
-	private static _serializeOnEnterRule(onEnterRule: vscode.OnEnterRule): ISerializedOnEnterRule {
+	private static _serializeOnEnterRule(onEnterRule: hypert.OnEnterRule): ISerializedOnEnterRule {
 		return {
 			beforeText: ExtHostLanguageFeatures._serializeRegExp(onEnterRule.beforeText),
 			afterText: ExtHostLanguageFeatures._serializeRegExp(onEnterRule.afterText),
@@ -1283,7 +1283,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		};
 	}
 
-	private static _serializeOnEnterRules(onEnterRules: vscode.OnEnterRule[]): ISerializedOnEnterRule[] {
+	private static _serializeOnEnterRules(onEnterRules: hypert.OnEnterRule[]): ISerializedOnEnterRule[] {
 		if (typeof onEnterRules === 'undefined') {
 			return undefined;
 		}
@@ -1293,7 +1293,7 @@ export class ExtHostLanguageFeatures implements ExtHostLanguageFeaturesShape {
 		return onEnterRules.map(ExtHostLanguageFeatures._serializeOnEnterRule);
 	}
 
-	setLanguageConfiguration(languageId: string, configuration: vscode.LanguageConfiguration): vscode.Disposable {
+	setLanguageConfiguration(languageId: string, configuration: hypert.LanguageConfiguration): hypert.Disposable {
 		let { wordPattern } = configuration;
 
 		// check for a valid word pattern

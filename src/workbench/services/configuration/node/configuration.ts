@@ -313,7 +313,7 @@ export class FileServiceBasedFolderConfiguration extends AbstractFolderConfigura
 				continue; // event is not inside folder
 			}
 
-			// Handle case where ".vscode" got deleted
+			// Handle case where ".hypert" got deleted
 			if (isDeletedSettingsFolder) {
 				affectedByChanges = true;
 			}

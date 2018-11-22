@@ -103,7 +103,7 @@ export const applicationSettings: { properties: {}, patternProperties: {} } = { 
 export const windowSettings: { properties: {}, patternProperties: {} } = { properties: {}, patternProperties: {} };
 export const resourceSettings: { properties: {}, patternProperties: {} } = { properties: {}, patternProperties: {} };
 
-export const editorConfigurationSchemaId = 'vscode://schemas/settings/editor';
+export const editorConfigurationSchemaId = 'hypert://schemas/settings/editor';
 const contributionRegistry = Registry.as<IJSONContributionRegistry>(JSONExtensions.JSONContribution);
 
 class ConfigurationRegistry implements IConfigurationRegistry {

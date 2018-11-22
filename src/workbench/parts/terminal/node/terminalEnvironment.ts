@@ -60,14 +60,14 @@ export function sanitizeEnvironment(env: platform.IProcessEnvironment): void {
 		'ELECTRON_NO_ATTACH_CONSOLE',
 		'ELECTRON_RUN_AS_NODE',
 		'GOOGLE_API_KEY',
-		'VSCODE_CLI',
-		'VSCODE_DEV',
-		'VSCODE_IPC_HOOK',
-		'VSCODE_LOGS',
-		'VSCODE_NLS_CONFIG',
-		'VSCODE_PORTABLE',
-		'VSCODE_PID',
-		'VSCODE_NODE_CACHED_DATA_DIR'
+		'HYPERT_CLI',
+		'HYPERT_DEV',
+		'HYPERT_IPC_HOOK',
+		'HYPERT_LOGS',
+		'HYPERT_NLS_CONFIG',
+		'HYPERT_PORTABLE',
+		'HYPERT_PID',
+		'HYPERT_NODE_CACHED_DATA_DIR'
 	];
 	keysToRemove.forEach((key) => {
 		if (env[key]) {
@@ -77,7 +77,7 @@ export function sanitizeEnvironment(env: platform.IProcessEnvironment): void {
 }
 
 export function addTerminalEnvironmentKeys(env: platform.IProcessEnvironment, locale: string | undefined): void {
-	env['TERM_PROGRAM'] = 'vscode';
+	env['TERM_PROGRAM'] = 'hypert';
 	env['TERM_PROGRAM_VERSION'] = pkg.version;
 	env['LANG'] = _getLangEnvVariable(locale);
 }

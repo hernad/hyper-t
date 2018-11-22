@@ -84,8 +84,8 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 		});
 	}
 
-	readonly defaultKeybindingsResource = URI.from({ scheme: network.Schemas.vscode, authority: 'defaultsettings', path: '/keybindings.json' });
-	private readonly defaultSettingsRawResource = URI.from({ scheme: network.Schemas.vscode, authority: 'defaultsettings', path: '/defaultSettings.json' });
+	readonly defaultKeybindingsResource = URI.from({ scheme: network.Schemas.hypert, authority: 'defaultsettings', path: '/keybindings.json' });
+	private readonly defaultSettingsRawResource = URI.from({ scheme: network.Schemas.hypert, authority: 'defaultsettings', path: '/defaultSettings.json' });
 
 	get userSettingsResource(): URI {
 		return this.getEditableSettingsURI(ConfigurationTarget.USER);
@@ -396,25 +396,25 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 	}
 
 	private isDefaultUserSettingsResource(uri: URI): boolean {
-		return uri.authority === 'defaultsettings' && uri.scheme === network.Schemas.vscode && !!uri.path.match(/\/(\d+\/)?settings\.json$/);
+		return uri.authority === 'defaultsettings' && uri.scheme === network.Schemas.hypert && !!uri.path.match(/\/(\d+\/)?settings\.json$/);
 	}
 
 	private isDefaultWorkspaceSettingsResource(uri: URI): boolean {
-		return uri.authority === 'defaultsettings' && uri.scheme === network.Schemas.vscode && !!uri.path.match(/\/(\d+\/)?workspaceSettings\.json$/);
+		return uri.authority === 'defaultsettings' && uri.scheme === network.Schemas.hypert && !!uri.path.match(/\/(\d+\/)?workspaceSettings\.json$/);
 	}
 
 	private isDefaultFolderSettingsResource(uri: URI): boolean {
-		return uri.authority === 'defaultsettings' && uri.scheme === network.Schemas.vscode && !!uri.path.match(/\/(\d+\/)?resourceSettings\.json$/);
+		return uri.authority === 'defaultsettings' && uri.scheme === network.Schemas.hypert && !!uri.path.match(/\/(\d+\/)?resourceSettings\.json$/);
 	}
 
 	private getDefaultSettingsResource(configurationTarget: ConfigurationTarget): URI {
 		switch (configurationTarget) {
 			case ConfigurationTarget.WORKSPACE:
-				return URI.from({ scheme: network.Schemas.vscode, authority: 'defaultsettings', path: `/${this._defaultWorkspaceSettingsUriCounter++}/workspaceSettings.json` });
+				return URI.from({ scheme: network.Schemas.hypert, authority: 'defaultsettings', path: `/${this._defaultWorkspaceSettingsUriCounter++}/workspaceSettings.json` });
 			case ConfigurationTarget.WORKSPACE_FOLDER:
-				return URI.from({ scheme: network.Schemas.vscode, authority: 'defaultsettings', path: `/${this._defaultFolderSettingsUriCounter++}/resourceSettings.json` });
+				return URI.from({ scheme: network.Schemas.hypert, authority: 'defaultsettings', path: `/${this._defaultFolderSettingsUriCounter++}/resourceSettings.json` });
 		}
-		return URI.from({ scheme: network.Schemas.vscode, authority: 'defaultsettings', path: `/${this._defaultUserSettingsUriCounter++}/settings.json` });
+		return URI.from({ scheme: network.Schemas.hypert, authority: 'defaultsettings', path: `/${this._defaultUserSettingsUriCounter++}/settings.json` });
 	}
 
 	private getPreferencesEditorInputName(target: ConfigurationTarget, resource: URI): string {

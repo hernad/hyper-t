@@ -15,7 +15,7 @@ import {
 	MainContext, MainThreadDebugServiceShape, ExtHostDebugServiceShape, DebugSessionUUID,
 	IMainContext, IBreakpointsDeltaDto, ISourceMultiBreakpointDto, IFunctionBreakpointDto, IDebugSessionDto
 } from 'workbench/api/node/extHost.protocol';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { Disposable, Position, Location, SourceBreakpoint, FunctionBreakpoint, DebugAdapterServer, DebugAdapterExecutable, DebugAdapterImplementation } from 'workbench/api/node/extHostTypes';
 import { ExecutableDebugAdapter, SocketDebugAdapter, AbstractDebugAdapter } from 'workbench/parts/debug/node/debugAdapter';
 import { ExtHostWorkspace } from 'workbench/api/node/extHostWorkspace';
@@ -46,36 +46,36 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 	private _debugServiceProxy: MainThreadDebugServiceShape;
 	private _debugSessions: Map<DebugSessionUUID, ExtHostDebugSession> = new Map<DebugSessionUUID, ExtHostDebugSession>();
 
-	private readonly _onDidStartDebugSession: Emitter<vscode.DebugSession>;
-	get onDidStartDebugSession(): Event<vscode.DebugSession> { return this._onDidStartDebugSession.event; }
+	private readonly _onDidStartDebugSession: Emitter<hypert.DebugSession>;
+	get onDidStartDebugSession(): Event<hypert.DebugSession> { return this._onDidStartDebugSession.event; }
 
-	private readonly _onDidTerminateDebugSession: Emitter<vscode.DebugSession>;
-	get onDidTerminateDebugSession(): Event<vscode.DebugSession> { return this._onDidTerminateDebugSession.event; }
+	private readonly _onDidTerminateDebugSession: Emitter<hypert.DebugSession>;
+	get onDidTerminateDebugSession(): Event<hypert.DebugSession> { return this._onDidTerminateDebugSession.event; }
 
-	private readonly _onDidChangeActiveDebugSession: Emitter<vscode.DebugSession | undefined>;
-	get onDidChangeActiveDebugSession(): Event<vscode.DebugSession | undefined> { return this._onDidChangeActiveDebugSession.event; }
+	private readonly _onDidChangeActiveDebugSession: Emitter<hypert.DebugSession | undefined>;
+	get onDidChangeActiveDebugSession(): Event<hypert.DebugSession | undefined> { return this._onDidChangeActiveDebugSession.event; }
 
 	private _activeDebugSession: ExtHostDebugSession | undefined;
 	get activeDebugSession(): ExtHostDebugSession | undefined { return this._activeDebugSession; }
 
-	private readonly _onDidReceiveDebugSessionCustomEvent: Emitter<vscode.DebugSessionCustomEvent>;
-	get onDidReceiveDebugSessionCustomEvent(): Event<vscode.DebugSessionCustomEvent> { return this._onDidReceiveDebugSessionCustomEvent.event; }
+	private readonly _onDidReceiveDebugSessionCustomEvent: Emitter<hypert.DebugSessionCustomEvent>;
+	get onDidReceiveDebugSessionCustomEvent(): Event<hypert.DebugSessionCustomEvent> { return this._onDidReceiveDebugSessionCustomEvent.event; }
 
 	private _activeDebugConsole: ExtHostDebugConsole;
 	get activeDebugConsole(): ExtHostDebugConsole { return this._activeDebugConsole; }
 
-	private _breakpoints: Map<string, vscode.Breakpoint>;
+	private _breakpoints: Map<string, hypert.Breakpoint>;
 	private _breakpointEventsActive: boolean;
 
-	private readonly _onDidChangeBreakpoints: Emitter<vscode.BreakpointsChangeEvent>;
+	private readonly _onDidChangeBreakpoints: Emitter<hypert.BreakpointsChangeEvent>;
 
 	private _aexCommands: Map<string, string>;
 	private _debugAdapters: Map<number, IDebugAdapter>;
-	private _debugAdaptersTrackers: Map<number, vscode.DebugAdapterTracker>;
+	private _debugAdaptersTrackers: Map<number, hypert.DebugAdapterTracker>;
 
 	private _variableResolver: IConfigurationResolverService;
 
-	private _integratedTerminalInstance: vscode.Terminal;
+	private _integratedTerminalInstance: hypert.Terminal;
 	private _terminalDisposedListener: IDisposable;
 
 
@@ -97,14 +97,14 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		this._debugAdapters = new Map();
 		this._debugAdaptersTrackers = new Map();
 
-		this._onDidStartDebugSession = new Emitter<vscode.DebugSession>();
-		this._onDidTerminateDebugSession = new Emitter<vscode.DebugSession>();
-		this._onDidChangeActiveDebugSession = new Emitter<vscode.DebugSession>();
-		this._onDidReceiveDebugSessionCustomEvent = new Emitter<vscode.DebugSessionCustomEvent>();
+		this._onDidStartDebugSession = new Emitter<hypert.DebugSession>();
+		this._onDidTerminateDebugSession = new Emitter<hypert.DebugSession>();
+		this._onDidChangeActiveDebugSession = new Emitter<hypert.DebugSession>();
+		this._onDidReceiveDebugSessionCustomEvent = new Emitter<hypert.DebugSessionCustomEvent>();
 
 		this._debugServiceProxy = mainContext.getProxy(MainContext.MainThreadDebugService);
 
-		this._onDidChangeBreakpoints = new Emitter<vscode.BreakpointsChangeEvent>({
+		this._onDidChangeBreakpoints = new Emitter<hypert.BreakpointsChangeEvent>({
 			onFirstListenerAdd: () => {
 				this.startBreakpoints();
 			}
@@ -112,7 +112,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 
 		this._activeDebugConsole = new ExtHostDebugConsole(this._debugServiceProxy);
 
-		this._breakpoints = new Map<string, vscode.Breakpoint>();
+		this._breakpoints = new Map<string, hypert.Breakpoint>();
 		this._breakpointEventsActive = false;
 
 
@@ -141,20 +141,20 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 
 	// extension debug API
 
-	get onDidChangeBreakpoints(): Event<vscode.BreakpointsChangeEvent> {
+	get onDidChangeBreakpoints(): Event<hypert.BreakpointsChangeEvent> {
 		return this._onDidChangeBreakpoints.event;
 	}
 
-	get breakpoints(): vscode.Breakpoint[] {
+	get breakpoints(): hypert.Breakpoint[] {
 
 		this.startBreakpoints();
 
-		const result: vscode.Breakpoint[] = [];
+		const result: hypert.Breakpoint[] = [];
 		this._breakpoints.forEach(bp => result.push(bp));
 		return result;
 	}
 
-	public addBreakpoints(breakpoints0: vscode.Breakpoint[]): Thenable<void> {
+	public addBreakpoints(breakpoints0: hypert.Breakpoint[]): Thenable<void> {
 
 		this.startBreakpoints();
 
@@ -212,7 +212,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		return this._debugServiceProxy.$registerBreakpoints(dtos);
 	}
 
-	public removeBreakpoints(breakpoints0: vscode.Breakpoint[]): Thenable<void> {
+	public removeBreakpoints(breakpoints0: hypert.Breakpoint[]): Thenable<void> {
 
 		this.startBreakpoints();
 
@@ -228,11 +228,11 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		return this._debugServiceProxy.$unregisterBreakpoints(ids, fids);
 	}
 
-	public startDebugging(folder: vscode.WorkspaceFolder | undefined, nameOrConfig: string | vscode.DebugConfiguration): Thenable<boolean> {
+	public startDebugging(folder: hypert.WorkspaceFolder | undefined, nameOrConfig: string | hypert.DebugConfiguration): Thenable<boolean> {
 		return this._debugServiceProxy.$startDebugging(folder ? folder.uri : undefined, nameOrConfig);
 	}
 
-	public registerDebugConfigurationProvider(extension: IExtensionDescription, type: string, provider: vscode.DebugConfigurationProvider): vscode.Disposable {
+	public registerDebugConfigurationProvider(extension: IExtensionDescription, type: string, provider: hypert.DebugConfigurationProvider): hypert.Disposable {
 
 		if (!provider) {
 			return new Disposable(() => { });
@@ -253,7 +253,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		});
 	}
 
-	public registerDebugAdapterProvider(extension: IExtensionDescription, type: string, provider: vscode.DebugAdapterProvider): vscode.Disposable {
+	public registerDebugAdapterProvider(extension: IExtensionDescription, type: string, provider: hypert.DebugAdapterProvider): hypert.Disposable {
 
 		if (!provider) {
 			return new Disposable(() => { });
@@ -459,15 +459,15 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 
 	public $acceptBreakpointsDelta(delta: IBreakpointsDeltaDto): void {
 
-		let a: vscode.Breakpoint[] = [];
-		let r: vscode.Breakpoint[] = [];
-		let c: vscode.Breakpoint[] = [];
+		let a: hypert.Breakpoint[] = [];
+		let r: hypert.Breakpoint[] = [];
+		let c: hypert.Breakpoint[] = [];
 
 		if (delta.added) {
 			for (const bpd of delta.added) {
 
 				if (!this._breakpoints.has(bpd.id)) {
-					let bp: vscode.Breakpoint;
+					let bp: hypert.Breakpoint;
 					if (bpd.type === 'function') {
 						bp = new FunctionBreakpoint(bpd.functionName, bpd.enabled, bpd.condition, bpd.hitCondition, bpd.logMessage);
 					} else {
@@ -518,7 +518,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		this.fireBreakpointChanges(a, r, c);
 	}
 
-	public $provideDebugConfigurations(configProviderHandle: number, folderUri: UriComponents | undefined): Thenable<vscode.DebugConfiguration[]> {
+	public $provideDebugConfigurations(configProviderHandle: number, folderUri: UriComponents | undefined): Thenable<hypert.DebugConfiguration[]> {
 		let provider = this.getConfigProviderByHandle(configProviderHandle);
 		if (!provider) {
 			return Promise.reject(new Error('no handler found'));
@@ -529,7 +529,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		return asThenable(() => provider.provideDebugConfigurations(this.getFolder(folderUri), CancellationToken.None));
 	}
 
-	public $resolveDebugConfiguration(configProviderHandle: number, folderUri: UriComponents | undefined, debugConfiguration: vscode.DebugConfiguration): Thenable<vscode.DebugConfiguration> {
+	public $resolveDebugConfiguration(configProviderHandle: number, folderUri: UriComponents | undefined, debugConfiguration: hypert.DebugConfiguration): Thenable<hypert.DebugConfiguration> {
 		let provider = this.getConfigProviderByHandle(configProviderHandle);
 		if (!provider) {
 			return Promise.reject(new Error('no handler found'));
@@ -582,7 +582,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 
 	public $acceptDebugSessionCustomEvent(sessionDto: IDebugSessionDto, event: any): void {
 
-		const ee: vscode.DebugSessionCustomEvent = {
+		const ee: hypert.DebugSessionCustomEvent = {
 			session: this.getSession(sessionDto),
 			event: event.event,
 			body: event.body
@@ -592,7 +592,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 
 	// private & dto helpers
 
-	private convertToDto(x: vscode.DebugAdapterDescriptor): IAdapterDescriptor {
+	private convertToDto(x: hypert.DebugAdapterDescriptor): IAdapterDescriptor {
 		if (x instanceof DebugAdapterExecutable) {
 			return <IDebugAdapterExecutable>{
 				type: 'executable',
@@ -617,7 +617,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		}
 	}
 
-	private getAdapterProviderByType(type: string): vscode.DebugAdapterProvider {
+	private getAdapterProviderByType(type: string): hypert.DebugAdapterProvider {
 		const results = this._adapterProviders.filter(p => p.type === type);
 		if (results.length > 0) {
 			return results[0].provider;
@@ -625,7 +625,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		return undefined;
 	}
 
-	private getAdapterProviderByHandle(handle: number): vscode.DebugAdapterProvider {
+	private getAdapterProviderByHandle(handle: number): hypert.DebugAdapterProvider {
 		const results = this._adapterProviders.filter(p => p.handle === handle);
 		if (results.length > 0) {
 			return results[0].provider;
@@ -633,7 +633,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		return undefined;
 	}
 
-	private getConfigProviderByHandle(handle: number): vscode.DebugConfigurationProvider {
+	private getConfigProviderByHandle(handle: number): hypert.DebugConfigurationProvider {
 		const results = this._configProviders.filter(p => p.handle === handle);
 		if (results.length > 0) {
 			return results[0].provider;
@@ -658,7 +658,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		return false;
 	}
 
-	private getDebugAdapterTrackers(session: ExtHostDebugSession): Promise<vscode.DebugAdapterTracker> {
+	private getDebugAdapterTrackers(session: ExtHostDebugSession): Promise<hypert.DebugAdapterTracker> {
 
 		const config = session.configuration;
 		const type = config.type;
@@ -686,7 +686,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		});
 	}
 
-	private getAdapterDescriptor(adapterProvider: vscode.DebugAdapterProvider, session: ExtHostDebugSession): Thenable<vscode.DebugAdapterDescriptor> {
+	private getAdapterDescriptor(adapterProvider: hypert.DebugAdapterProvider, session: ExtHostDebugSession): Thenable<hypert.DebugAdapterDescriptor> {
 
 		// a "debugServer" attribute in the launch config takes precedence
 		const serverPort = session.configuration.debugServer;
@@ -733,7 +733,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		}
 	}
 
-	private fireBreakpointChanges(added: vscode.Breakpoint[], removed: vscode.Breakpoint[], changed: vscode.Breakpoint[]) {
+	private fireBreakpointChanges(added: hypert.Breakpoint[], removed: hypert.Breakpoint[], changed: hypert.Breakpoint[]) {
 		if (added.length > 0 || removed.length > 0 || changed.length > 0) {
 			this._onDidChangeBreakpoints.fire(Object.freeze({
 				added,
@@ -756,7 +756,7 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 		return undefined;
 	}
 
-	private getFolder(_folderUri: UriComponents | undefined): vscode.WorkspaceFolder | undefined {
+	private getFolder(_folderUri: UriComponents | undefined): hypert.WorkspaceFolder | undefined {
 		if (_folderUri) {
 			const folderURI = URI.revive(_folderUri);
 			return this._workspaceService.resolveWorkspaceFolder(folderURI);
@@ -765,15 +765,15 @@ export class ExtHostDebugService implements ExtHostDebugServiceShape {
 	}
 }
 
-export class ExtHostDebugSession implements vscode.DebugSession {
+export class ExtHostDebugSession implements hypert.DebugSession {
 
 	constructor(
 		private _debugServiceProxy: MainThreadDebugServiceShape,
 		private _id: DebugSessionUUID,
 		private _type: string,
 		private _name: string,
-		private _workspaceFolder: vscode.WorkspaceFolder | undefined,
-		private _configuration: vscode.DebugConfiguration) {
+		private _workspaceFolder: hypert.WorkspaceFolder | undefined,
+		private _configuration: hypert.DebugConfiguration) {
 	}
 
 	public get id(): string {
@@ -788,11 +788,11 @@ export class ExtHostDebugSession implements vscode.DebugSession {
 		return this._name;
 	}
 
-	public get workspaceFolder(): vscode.WorkspaceFolder | undefined {
+	public get workspaceFolder(): hypert.WorkspaceFolder | undefined {
 		return this._workspaceFolder;
 	}
 
-	public get configuration(): vscode.DebugConfiguration {
+	public get configuration(): hypert.DebugConfiguration {
 		return this._configuration;
 	}
 
@@ -801,7 +801,7 @@ export class ExtHostDebugSession implements vscode.DebugSession {
 	}
 }
 
-export class ExtHostDebugConsole implements vscode.DebugConsole {
+export class ExtHostDebugConsole implements hypert.DebugConsole {
 
 	private _debugServiceProxy: MainThreadDebugServiceShape;
 
@@ -837,7 +837,7 @@ export class ExtHostVariableResolverService extends AbstractVariableResolverServ
 				return configurationService.getConfiguration(undefined, folderUri).get<string>(section);
 			},
 			getExecPath: (): string | undefined => {
-				return process.env['VSCODE_EXEC_PATH'];
+				return process.env['HYPERT_EXEC_PATH'];
 			},
 			getFilePath: (): string | undefined => {
 				const activeEditor = editorService.activeEditor();
@@ -870,18 +870,18 @@ export class ExtHostVariableResolverService extends AbstractVariableResolverServ
 interface TypeProviderPair {
 	type: string;
 	handle: number;
-	provider: vscode.DebugConfigurationProvider;
+	provider: hypert.DebugConfigurationProvider;
 }
 
 interface TypeDaProviderPair {
 	type: string;
 	handle: number;
-	provider: vscode.DebugAdapterProvider;
+	provider: hypert.DebugAdapterProvider;
 }
 
-class MultiTracker implements vscode.DebugAdapterTracker {
+class MultiTracker implements hypert.DebugAdapterTracker {
 
-	constructor(private trackers: vscode.DebugAdapterTracker[]) {
+	constructor(private trackers: hypert.DebugAdapterTracker[]) {
 	}
 
 	startDebugAdapter(): void {
@@ -940,7 +940,7 @@ class DirectDebugAdapter extends AbstractDebugAdapter implements IDapTransport {
 	}
 
 	// AbstractDebugAdapter
-	// VSCode -> DA
+	// hypert -> DA
 	sendMessage(message: DebugProtocol.ProtocolMessage): void {
 		this._sendUp(message);
 	}
@@ -952,7 +952,7 @@ class DirectDebugAdapter extends AbstractDebugAdapter implements IDapTransport {
 	}
 
 	// IDapTransport
-	// DA -> VSCode
+	// DA -> hypert
 	send(message: DebugProtocol.ProtocolMessage) {
 		this.acceptMessage(message);
 	}

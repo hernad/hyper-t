@@ -365,7 +365,7 @@ export class Menubar {
 		const quit = new MenuItem(this.likeAction('workbench.action.quit', {
 			label: nls.localize('miQuit', "Quit {0}", product.nameLong), click: () => {
 				if (this.windowsMainService.getWindowCount() === 0 || !!BrowserWindow.getFocusedWindow()) {
-					this.windowsMainService.quit(); // fix for https://github.com/Microsoft/vscode/issues/39191
+					this.windowsMainService.quit(); // fix for https://github.com/hernad/hyper-t/issues/39191
 				}
 			}
 		}));
@@ -700,11 +700,11 @@ export class Menubar {
 
 	private runActionInRenderer(id: string): void {
 		// We make sure to not run actions when the window has no focus, this helps
-		// for https://github.com/Microsoft/vscode/issues/25907 and specifically for
-		// https://github.com/Microsoft/vscode/issues/11928
+		// for https://github.com/hernad/hyper-t/issues/25907 and specifically for
+		// https://github.com/hernad/hyper-t/issues/11928
 		const activeWindow = this.windowsMainService.getFocusedWindow();
 		if (activeWindow) {
-			this.windowsMainService.sendToFocused('vscode:runAction', { id, from: 'menu' } as IRunActionInWindowRequest);
+			this.windowsMainService.sendToFocused('hypert:runAction', { id, from: 'menu' } as IRunActionInWindowRequest);
 		}
 	}
 

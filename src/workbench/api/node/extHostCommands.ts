@@ -12,7 +12,7 @@ import { MainContext, MainThreadCommandsShape, ExtHostCommandsShape, ObjectIdent
 import { ExtHostHeapService } from 'workbench/api/node/extHostHeapService';
 import { isNonEmptyArray } from 'base/common/arrays';
 import * as modes from 'editor/common/modes';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { ILogService } from 'platform/log/common/log';
 import { revive } from 'base/common/marshalling';
 
@@ -178,7 +178,7 @@ export class CommandsConverter {
 		this._commands.registerCommand(true, this._delegatingCommandId, this._executeConvertedCommand, this);
 	}
 
-	toInternal(command: vscode.Command): modes.Command {
+	toInternal(command: hypert.Command): modes.Command {
 
 		if (!command) {
 			return undefined;
@@ -207,7 +207,7 @@ export class CommandsConverter {
 		return result;
 	}
 
-	fromInternal(command: modes.Command): vscode.Command {
+	fromInternal(command: modes.Command): hypert.Command {
 
 		if (!command) {
 			return undefined;
@@ -215,7 +215,7 @@ export class CommandsConverter {
 
 		const id = ObjectIdentifier.of(command);
 		if (typeof id === 'number') {
-			return this._heap.get<vscode.Command>(id);
+			return this._heap.get<hypert.Command>(id);
 
 		} else {
 			return {
@@ -227,7 +227,7 @@ export class CommandsConverter {
 	}
 
 	private _executeConvertedCommand<R>(...args: any[]): Thenable<R> {
-		const actualCmd = this._heap.get<vscode.Command>(args[0]);
+		const actualCmd = this._heap.get<hypert.Command>(args[0]);
 		return this._commands.executeCommand(actualCmd.command, ...actualCmd.arguments);
 	}
 

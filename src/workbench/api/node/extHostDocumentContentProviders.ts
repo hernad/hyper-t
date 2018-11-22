@@ -7,7 +7,7 @@ import { onUnexpectedError } from 'base/common/errors';
 import { URI, UriComponents } from 'base/common/uri';
 import { IDisposable } from 'base/common/lifecycle';
 import { Disposable } from 'workbench/api/node/extHostTypes';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { MainContext, ExtHostDocumentContentProvidersShape, MainThreadDocumentContentProvidersShape, IMainContext } from './extHost.protocol';
 import { ExtHostDocumentsAndEditors } from './extHostDocumentsAndEditors';
 import { Schemas } from 'base/common/network';
@@ -18,7 +18,7 @@ export class ExtHostDocumentContentProvider implements ExtHostDocumentContentPro
 
 	private static _handlePool = 0;
 
-	private readonly _documentContentProviders = new Map<number, vscode.TextDocumentContentProvider>();
+	private readonly _documentContentProviders = new Map<number, hypert.TextDocumentContentProvider>();
 	private readonly _proxy: MainThreadDocumentContentProvidersShape;
 
 	constructor(
@@ -33,7 +33,7 @@ export class ExtHostDocumentContentProvider implements ExtHostDocumentContentPro
 		// todo@joh
 	}
 
-	registerTextDocumentContentProvider(scheme: string, provider: vscode.TextDocumentContentProvider): vscode.Disposable {
+	registerTextDocumentContentProvider(scheme: string, provider: hypert.TextDocumentContentProvider): hypert.Disposable {
 		// todo@remote
 		// check with scheme from fs-providers!
 		if (scheme === Schemas.file || scheme === Schemas.untitled) {

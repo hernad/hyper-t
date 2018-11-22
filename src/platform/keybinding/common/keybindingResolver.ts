@@ -314,7 +314,7 @@ export class KeybindingResolver {
 				return;
 			}
 			seenMap.set(id);
-			if (id[0] === '_' || id.indexOf('vscode.') === 0) { // private command
+			if (id[0] === '_' || id.indexOf('hypert.') === 0) { // private command
 				return;
 			}
 			if (boundCommands.get(id) === true) {

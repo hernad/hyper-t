@@ -17,7 +17,7 @@ import { RipgrepSearchProvider } from 'workbench/services/search/node/ripgrepSea
 import { OutputChannel } from 'workbench/services/search/node/ripgrepSearchUtils';
 import { isSerializedFileMatch } from 'workbench/services/search/node/search';
 import { TextSearchManager } from 'workbench/services/search/node/textSearchManager';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { ExtHostSearchShape, IMainContext, MainContext, MainThreadSearchShape } from './extHost.protocol';
 
 export interface ISchemeTransformer {
@@ -27,11 +27,11 @@ export interface ISchemeTransformer {
 export class ExtHostSearch implements ExtHostSearchShape {
 
 	private readonly _proxy: MainThreadSearchShape;
-	private readonly _textSearchProvider = new Map<number, vscode.TextSearchProvider>();
+	private readonly _textSearchProvider = new Map<number, hypert.TextSearchProvider>();
 	private readonly _textSearchUsedSchemes = new Set<string>();
-	private readonly _fileSearchProvider = new Map<number, vscode.FileSearchProvider>();
+	private readonly _fileSearchProvider = new Map<number, hypert.FileSearchProvider>();
 	private readonly _fileSearchUsedSchemes = new Set<string>();
-	private readonly _fileIndexProvider = new Map<number, vscode.FileIndexProvider>();
+	private readonly _fileIndexProvider = new Map<number, hypert.FileIndexProvider>();
 	private readonly _fileIndexUsedSchemes = new Set<string>();
 	private _handlePool: number = 0;
 
@@ -56,7 +56,7 @@ export class ExtHostSearch implements ExtHostSearchShape {
 		return scheme;
 	}
 
-	registerTextSearchProvider(scheme: string, provider: vscode.TextSearchProvider): IDisposable {
+	registerTextSearchProvider(scheme: string, provider: hypert.TextSearchProvider): IDisposable {
 		if (this._textSearchUsedSchemes.has(scheme)) {
 			throw new Error(`a provider for the scheme '${scheme}' is already registered`);
 		}
@@ -72,7 +72,7 @@ export class ExtHostSearch implements ExtHostSearchShape {
 		});
 	}
 
-	registerFileSearchProvider(scheme: string, provider: vscode.FileSearchProvider): IDisposable {
+	registerFileSearchProvider(scheme: string, provider: hypert.FileSearchProvider): IDisposable {
 		if (this._fileSearchUsedSchemes.has(scheme)) {
 			throw new Error(`a provider for the scheme '${scheme}' is already registered`);
 		}
@@ -99,7 +99,7 @@ export class ExtHostSearch implements ExtHostSearchShape {
 		});
 	}
 
-	registerFileIndexProvider(scheme: string, provider: vscode.FileIndexProvider): IDisposable {
+	registerFileIndexProvider(scheme: string, provider: hypert.FileIndexProvider): IDisposable {
 		if (this._fileIndexUsedSchemes.has(scheme)) {
 			throw new Error(`a provider for the scheme '${scheme}' is already registered`);
 		}

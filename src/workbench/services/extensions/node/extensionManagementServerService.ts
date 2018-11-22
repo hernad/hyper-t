@@ -12,7 +12,7 @@ import { IRemoteAgentService } from 'workbench/services/remote/node/remoteAgentS
 import { REMOTE_HOST_SCHEME } from 'platform/remote/common/remoteHosts';
 import { IChannel } from 'base/parts/ipc/node/ipc';
 
-const localExtensionManagementServerAuthority: string = 'vscode-local';
+const localExtensionManagementServerAuthority: string = 'hypert-local';
 
 export class ExtensionManagementServerService implements IExtensionManagementServerService {
 

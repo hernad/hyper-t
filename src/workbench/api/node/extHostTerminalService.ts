@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import * as os from 'os';
 import * as platform from 'base/common/platform';
 import * as terminalEnvironment from 'workbench/parts/terminal/node/terminalEnvironment';
@@ -70,7 +70,7 @@ export class BaseExtHostTerminal {
 	}
 }
 
-export class ExtHostTerminal extends BaseExtHostTerminal implements vscode.Terminal {
+export class ExtHostTerminal extends BaseExtHostTerminal implements hypert.Terminal {
 	private _pidPromise: Promise<number>;
 	private _pidPromiseComplete: (value: number) => any;
 
@@ -151,7 +151,7 @@ export class ExtHostTerminal extends BaseExtHostTerminal implements vscode.Termi
 	}
 }
 
-export class ExtHostTerminalRenderer extends BaseExtHostTerminal implements vscode.TerminalRenderer {
+export class ExtHostTerminalRenderer extends BaseExtHostTerminal implements hypert.TerminalRenderer {
 	public get name(): string { return this._name; }
 	public set name(newName: string) {
 		this._name = newName;
@@ -168,16 +168,16 @@ export class ExtHostTerminalRenderer extends BaseExtHostTerminal implements vsco
 		return this._onInput && this._onInput.event;
 	}
 
-	private _dimensions: vscode.TerminalDimensions | undefined;
-	public get dimensions(): vscode.TerminalDimensions { return this._dimensions; }
-	public set dimensions(dimensions: vscode.TerminalDimensions) {
+	private _dimensions: hypert.TerminalDimensions | undefined;
+	public get dimensions(): hypert.TerminalDimensions { return this._dimensions; }
+	public set dimensions(dimensions: hypert.TerminalDimensions) {
 		this._checkDisposed();
 		this._dimensions = dimensions;
 		this._queueApiRequest(this._proxy.$terminalRendererSetDimensions, [dimensions]);
 	}
 
-	private _maximumDimensions: vscode.TerminalDimensions;
-	public get maximumDimensions(): vscode.TerminalDimensions {
+	private _maximumDimensions: hypert.TerminalDimensions;
+	public get maximumDimensions(): hypert.TerminalDimensions {
 		if (!this._maximumDimensions) {
 			return undefined;
 		}
@@ -187,8 +187,8 @@ export class ExtHostTerminalRenderer extends BaseExtHostTerminal implements vsco
 		};
 	}
 
-	private readonly _onDidChangeMaximumDimensions: Emitter<vscode.TerminalDimensions> = new Emitter<vscode.TerminalDimensions>();
-	public get onDidChangeMaximumDimensions(): Event<vscode.TerminalDimensions> {
+	private readonly _onDidChangeMaximumDimensions: Emitter<hypert.TerminalDimensions> = new Emitter<hypert.TerminalDimensions>();
+	public get onDidChangeMaximumDimensions(): Event<hypert.TerminalDimensions> {
 		return this._onDidChangeMaximumDimensions && this._onDidChangeMaximumDimensions.event;
 	}
 
@@ -237,12 +237,12 @@ export class ExtHostTerminalService implements ExtHostTerminalServiceShape {
 	public get activeTerminal(): ExtHostTerminal { return this._activeTerminal; }
 	public get terminals(): ExtHostTerminal[] { return this._terminals; }
 
-	private readonly _onDidCloseTerminal: Emitter<vscode.Terminal> = new Emitter<vscode.Terminal>();
-	public get onDidCloseTerminal(): Event<vscode.Terminal> { return this._onDidCloseTerminal && this._onDidCloseTerminal.event; }
-	private readonly _onDidOpenTerminal: Emitter<vscode.Terminal> = new Emitter<vscode.Terminal>();
-	public get onDidOpenTerminal(): Event<vscode.Terminal> { return this._onDidOpenTerminal && this._onDidOpenTerminal.event; }
-	private readonly _onDidChangeActiveTerminal: Emitter<vscode.Terminal | undefined> = new Emitter<vscode.Terminal | undefined>();
-	public get onDidChangeActiveTerminal(): Event<vscode.Terminal | undefined> { return this._onDidChangeActiveTerminal && this._onDidChangeActiveTerminal.event; }
+	private readonly _onDidCloseTerminal: Emitter<hypert.Terminal> = new Emitter<hypert.Terminal>();
+	public get onDidCloseTerminal(): Event<hypert.Terminal> { return this._onDidCloseTerminal && this._onDidCloseTerminal.event; }
+	private readonly _onDidOpenTerminal: Emitter<hypert.Terminal> = new Emitter<hypert.Terminal>();
+	public get onDidOpenTerminal(): Event<hypert.Terminal> { return this._onDidOpenTerminal && this._onDidOpenTerminal.event; }
+	private readonly _onDidChangeActiveTerminal: Emitter<hypert.Terminal | undefined> = new Emitter<hypert.Terminal | undefined>();
+	public get onDidChangeActiveTerminal(): Event<hypert.Terminal | undefined> { return this._onDidChangeActiveTerminal && this._onDidChangeActiveTerminal.event; }
 
 	constructor(
 		mainContext: IMainContext,
@@ -252,21 +252,21 @@ export class ExtHostTerminalService implements ExtHostTerminalServiceShape {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadTerminalService);
 	}
 
-	public createTerminal(name?: string, shellPath?: string, shellArgs?: string[]): vscode.Terminal {
+	public createTerminal(name?: string, shellPath?: string, shellArgs?: string[]): hypert.Terminal {
 		const terminal = new ExtHostTerminal(this._proxy, name);
 		terminal.create(shellPath, shellArgs);
 		this._terminals.push(terminal);
 		return terminal;
 	}
 
-	public createTerminalFromOptions(options: vscode.TerminalOptions): vscode.Terminal {
+	public createTerminalFromOptions(options: hypert.TerminalOptions): hypert.Terminal {
 		const terminal = new ExtHostTerminal(this._proxy, options.name);
 		terminal.create(options.shellPath, options.shellArgs, options.cwd, options.env /*, options.waitOnExit*/);
 		this._terminals.push(terminal);
 		return terminal;
 	}
 
-	public createTerminalRenderer(name: string): vscode.TerminalRenderer {
+	public createTerminalRenderer(name: string): hypert.TerminalRenderer {
 		const terminal = new ExtHostTerminal(this._proxy, name);
 		terminal._setProcessId(undefined);
 		this._terminals.push(terminal);

@@ -6,7 +6,7 @@
 import { startsWith } from 'base/common/strings';
 import { ILogService } from 'platform/log/common/log';
 import { SearchRange, TextSearchMatch } from 'platform/search/common/search';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { mapArrayOrNot } from 'base/common/arrays';
 
 export type Maybe<T> = T | null | undefined;
@@ -16,9 +16,9 @@ export function anchorGlob(glob: string): string {
 }
 
 /**
- * Create a vscode.TextSearchResult by using our internal TextSearchResult type for its previewOptions logic.
+ * Create a hypert.TextSearchResult by using our internal TextSearchResult type for its previewOptions logic.
  */
-export function createTextSearchResult(uri: vscode.Uri, text: string, range: Range | Range[], previewOptions?: vscode.TextSearchPreviewOptions): vscode.TextSearchMatch {
+export function createTextSearchResult(uri: hypert.Uri, text: string, range: Range | Range[], previewOptions?: hypert.TextSearchPreviewOptions): hypert.TextSearchMatch {
 	const searchRange = mapArrayOrNot(range, rangeToSearchRange);
 
 	const internalResult = new TextSearchMatch(text, searchRange, previewOptions);

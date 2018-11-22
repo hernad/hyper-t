@@ -119,7 +119,7 @@ async function postLogs(
 function zipLogs(
 	logsPath: string
 ): Promise<string> {
-	const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'vscode-log-upload'));
+	const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hypert-log-upload'));
 	const outZip = path.join(tempDir, 'logs.zip');
 	return new Promise<string>((resolve, reject) => {
 		doZip(logsPath, outZip, tempDir, (err, stdout, stderr) => {

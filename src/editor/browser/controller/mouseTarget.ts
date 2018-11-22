@@ -652,7 +652,7 @@ export class MouseTargetFactory {
 
 		if (domHitTestExecuted) {
 			// Check if we are hitting a view-line (can happen in the case of inline decorations on empty lines)
-			// See https://github.com/Microsoft/vscode/issues/46942
+			// See https://github.com/hernad/hyper-t/issues/46942
 			if (ElementPath.isStrictChildOfViewLines(request.targetPath)) {
 				const lineNumber = ctx.getLineNumberAtVerticalOffset(request.mouseVerticalOffset);
 				if (ctx.model.getLineLength(lineNumber) === 0) {
@@ -733,7 +733,7 @@ export class MouseTargetFactory {
 
 		if (request.mouseContentHorizontalOffset > lineWidth) {
 			if (browser.isEdge && pos.column === 1) {
-				// See https://github.com/Microsoft/vscode/issues/10875
+				// See https://github.com/hernad/hyper-t/issues/10875
 				const detail = createEmptyContentDataInLines(request.mouseContentHorizontalOffset - lineWidth);
 				return request.fulfill(MouseTargetType.CONTENT_EMPTY, new Position(lineNumber, ctx.model.getLineMaxColumn(lineNumber)), void 0, detail);
 			}

@@ -15,10 +15,10 @@ import { TimeoutTimer } from 'base/common/async';
 export function generateRandomPipeName(): string {
 	const randomSuffix = generateUuid();
 	if (process.platform === 'win32') {
-		return `\\\\.\\pipe\\vscode-ipc-${randomSuffix}-sock`;
+		return `\\\\.\\pipe\\hypert-ipc-${randomSuffix}-sock`;
 	} else {
 		// Mac/Unix: use socket file
-		return join(tmpdir(), `vscode-ipc-${randomSuffix}.sock`);
+		return join(tmpdir(), `hypert-ipc-${randomSuffix}.sock`);
 	}
 }
 

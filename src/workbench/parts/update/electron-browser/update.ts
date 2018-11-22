@@ -174,7 +174,7 @@ export class Win3264BitContribution implements IWorkbenchContribution {
 
 	private static readonly KEY = 'update/win32-64bits';
 	private static readonly URL = 'https://code.visualstudio.com/updates/v1_15#_windows-64-bit';
-	private static readonly INSIDER_URL = 'https://github.com/Microsoft/vscode-docs/blob/vnext/release-notes/v1_15.md#windows-64-bit';
+	private static readonly INSIDER_URL = 'https://github.com/hernad/hyper-t-docs/blob/vnext/release-notes/v1_15.md#windows-64-bit';
 
 	constructor(
 		@IStorageService storageService: IStorageService,
@@ -320,7 +320,7 @@ export class UpdateContribution implements IGlobalActivity {
 	}
 
 	private onError(error: string): void {
-		error = error.replace(/See https:\/\/github\.com\/Squirrel\/Squirrel\.Mac\/issues\/182 for more information/, 'See [this link](https://github.com/Microsoft/vscode/issues/7426#issuecomment-425093469) for more information');
+		error = error.replace(/See https:\/\/github\.com\/Squirrel\/Squirrel\.Mac\/issues\/182 for more information/, 'See [this link](https://github.com/hernad/hyper-t/issues/7426#issuecomment-425093469) for more information');
 
 		this.notificationService.notify({
 			severity: Severity.Error,

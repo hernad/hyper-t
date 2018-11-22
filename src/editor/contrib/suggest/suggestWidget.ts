@@ -461,7 +461,7 @@ export class SuggestWidget implements IContentWidget, IListVirtualDelegate<IComp
 		this.focusedItem = null;
 		this.storageService = storageService;
 
-		// :facepalm: No other smart way to determine if this is monaco or vscode.
+		// :facepalm: No other smart way to determine if this is monaco or hypert.
 		// The former doesnt have a storage service
 		this.storageService.store('___suggest___', true, StorageScope.GLOBAL);
 		if (!this.storageService.get('___suggest___', StorageScope.GLOBAL)) {

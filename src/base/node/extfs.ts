@@ -425,7 +425,7 @@ function doWriteFileStreamAndFlush(path: string, reader: NodeJS.ReadableStream, 
 
 		// start data piping only when we got a successful open. this ensures that we do
 		// not consume the stream when an error happens and helps to fix this issue:
-		// https://github.com/Microsoft/vscode/issues/42542
+		// https://github.com/hernad/hyper-t/issues/42542
 		reader.pipe(writer);
 	});
 
@@ -556,7 +556,7 @@ function ensureOptions(options?: IWriteFileOptions): IWriteFileOptions {
 }
 
 /**
- * Copied from: https://github.com/Microsoft/vscode-node-debug/blob/master/src/node/pathUtilities.ts#L83
+ * Copied from: https://github.com/hernad/hyper-t-node-debug/blob/master/src/node/pathUtilities.ts#L83
  *
  * Given an absolute, normalized, and existing file path 'realcase' returns the exact path that the file has on disk.
  * On a case insensitive file system, the returned path might differ from the original path by character casing.
@@ -643,7 +643,7 @@ export function watch(path: string, onChange: (type: string, path?: string) => v
 
 		watcher.on('change', (type, raw) => {
 			let file: string | undefined;
-			if (raw) { // https://github.com/Microsoft/vscode/issues/38191
+			if (raw) { // https://github.com/hernad/hyper-t/issues/38191
 				file = raw.toString();
 				if (platform.isMacintosh) {
 					// Mac: uses NFD unicode form on disk, but we want NFC

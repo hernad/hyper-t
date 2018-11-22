@@ -39,7 +39,7 @@ export class BroadcastService implements IBroadcastService {
 	}
 
 	private registerListeners(): void {
-		ipc.on('vscode:broadcast', (event, b: IBroadcast) => {
+		ipc.on('hypert:broadcast', (event, b: IBroadcast) => {
 			this.logService.trace(`Received broadcast from main in window ${this.windowId}: `, b);
 
 			this._onBroadcast.fire(b);
@@ -53,7 +53,7 @@ export class BroadcastService implements IBroadcastService {
 	public broadcast(b: IBroadcast): void {
 		this.logService.trace(`Sending broadcast to main from window ${this.windowId}: `, b);
 
-		ipc.send('vscode:broadcast', this.windowId, {
+		ipc.send('hypert:broadcast', this.windowId, {
 			channel: b.channel,
 			payload: b.payload
 		});

@@ -106,7 +106,7 @@ export interface IStartupMetrics {
 	didUseCachedData: boolean;
 
 	/**
-	 * How/why the window was created. See https://github.com/Microsoft/vscode/blob/d1f57d871722f4d6ba63e4ef6f06287121ceb045/src/platform/lifecycle/common/lifecycle.ts#L50
+	 * How/why the window was created. See https://github.com/hernad/hyper-t/blob/d1f57d871722f4d6ba63e4ef6f06287121ceb045/src/platform/lifecycle/common/lifecycle.ts#L50
 	 */
 	windowKind: number;
 
@@ -232,7 +232,7 @@ export interface IStartupMetrics {
 		 * until another extension is installed)
 		 * * Happens in parallel to other things, depends on async timing
 		 *
-		 * todo@joh/ramya this measures an artifical dealy we have added, see https://github.com/Microsoft/vscode/blob/2f07ddae8bf56e969e3f4ba1447258ebc999672f/src/workbench/services/extensions/electron-browser/extensionService.ts#L311-L326
+		 * todo@joh/ramya this measures an artifical dealy we have added, see https://github.com/hernad/hyper-t/blob/2f07ddae8bf56e969e3f4ba1447258ebc999672f/src/workbench/services/extensions/electron-browser/extensionService.ts#L311-L326
 		 */
 		ellapsedExtensions: number;
 
@@ -429,7 +429,7 @@ export function didUseCachedData(): boolean {
 	}
 	// whenever cached data is produced or rejected a onNodeCachedData-callback is invoked. That callback
 	// stores data in the `MonacoEnvironment.onNodeCachedData` global. See:
-	// https://github.com/Microsoft/vscode/blob/efe424dfe76a492eab032343e2fa4cfe639939f0/src/workbench/electron-browser/bootstrap/index.js#L299
+	// https://github.com/hernad/hyper-t/blob/efe424dfe76a492eab032343e2fa4cfe639939f0/src/workbench/electron-browser/bootstrap/index.js#L299
 	if (isNonEmptyArray(MonacoEnvironment.onNodeCachedData)) {
 		return false;
 	}

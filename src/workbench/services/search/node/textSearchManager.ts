@@ -14,7 +14,7 @@ import { toCanonicalName } from 'base/node/encoding';
 import * as extfs from 'base/node/extfs';
 import { IExtendedExtensionSearchOptions, IFileMatch, IFolderQuery, IPatternInfo, ISearchCompleteStats, ITextQuery, ITextSearchMatch, ITextSearchContext, ITextSearchResult } from 'platform/search/common/search';
 import { QueryGlobTester, resolvePatternsForProvider } from 'workbench/services/search/node/search';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
 export class TextSearchManager {
 
@@ -23,7 +23,7 @@ export class TextSearchManager {
 	private isLimitHit: boolean;
 	private resultCount = 0;
 
-	constructor(private query: ITextQuery, private provider: vscode.TextSearchProvider, private _extfs: typeof extfs = extfs) {
+	constructor(private query: ITextQuery, private provider: hypert.TextSearchProvider, private _extfs: typeof extfs = extfs) {
 	}
 
 	public search(onProgress: (matches: IFileMatch[]) => void, token: CancellationToken): Promise<ISearchCompleteStats> {
@@ -35,7 +35,7 @@ export class TextSearchManager {
 			this.collector = new TextSearchResultsCollector(onProgress);
 
 			let isCanceled = false;
-			const onResult = (match: vscode.TextSearchResult, folderIdx: number) => {
+			const onResult = (match: hypert.TextSearchResult, folderIdx: number) => {
 				if (isCanceled) {
 					return;
 				}
@@ -74,11 +74,11 @@ export class TextSearchManager {
 		});
 	}
 
-	private searchInFolder(folderQuery: IFolderQuery<URI>, onResult: (result: vscode.TextSearchResult) => void, token: CancellationToken): Promise<vscode.TextSearchComplete | null | undefined> {
+	private searchInFolder(folderQuery: IFolderQuery<URI>, onResult: (result: hypert.TextSearchResult) => void, token: CancellationToken): Promise<hypert.TextSearchComplete | null | undefined> {
 		const queryTester = new QueryGlobTester(this.query, folderQuery);
 		const testingPs: Promise<void>[] = [];
 		const progress = {
-			report: (result: vscode.TextSearchResult) => {
+			report: (result: hypert.TextSearchResult) => {
 				// TODO: validate result.ranges vs result.preview.matches
 
 				const hasSibling = folderQuery.folder.scheme === 'file' ?
@@ -119,11 +119,11 @@ export class TextSearchManager {
 		});
 	}
 
-	private getSearchOptionsForFolder(fq: IFolderQuery<URI>): vscode.TextSearchOptions {
+	private getSearchOptionsForFolder(fq: IFolderQuery<URI>): hypert.TextSearchOptions {
 		const includes = resolvePatternsForProvider(this.query.includePattern, fq.includePattern);
 		const excludes = resolvePatternsForProvider(this.query.excludePattern, fq.excludePattern);
 
-		const options = <vscode.TextSearchOptions>{
+		const options = <hypert.TextSearchOptions>{
 			folder: URI.from(fq.folder),
 			excludes,
 			includes,
@@ -142,8 +142,8 @@ export class TextSearchManager {
 	}
 }
 
-function patternInfoToQuery(patternInfo: IPatternInfo): vscode.TextSearchQuery {
-	return <vscode.TextSearchQuery>{
+function patternInfoToQuery(patternInfo: IPatternInfo): hypert.TextSearchQuery {
+	return <hypert.TextSearchQuery>{
 		isCaseSensitive: patternInfo.isCaseSensitive || false,
 		isRegExp: patternInfo.isRegExp || false,
 		isWordMatch: patternInfo.isWordMatch || false,
@@ -163,7 +163,7 @@ export class TextSearchResultsCollector {
 		this._batchedCollector = new BatchedCollector<IFileMatch>(512, items => this.sendItems(items));
 	}
 
-	add(data: vscode.TextSearchResult, folderIdx: number): void {
+	add(data: hypert.TextSearchResult, folderIdx: number): void {
 		// Collects TextSearchResults into IInternalFileMatches and collates using BatchedCollector.
 		// This is efficient for ripgrep which sends results back one file at a time. It wouldn't be efficient for other search
 		// providers that send results in random order. We could do this step afterwards instead.
@@ -200,8 +200,8 @@ export class TextSearchResultsCollector {
 	}
 }
 
-function extensionResultToFrontendResult(data: vscode.TextSearchResult): ITextSearchResult {
-	// Warning: result from RipgrepTextSearchEH has fake vscode.Range. Don't depend on any other props beyond these...
+function extensionResultToFrontendResult(data: hypert.TextSearchResult): ITextSearchResult {
+	// Warning: result from RipgrepTextSearchEH has fake hypert.Range. Don't depend on any other props beyond these...
 	if (extensionResultIsMatch(data)) {
 		return <ITextSearchMatch>{
 			preview: {
@@ -228,8 +228,8 @@ function extensionResultToFrontendResult(data: vscode.TextSearchResult): ITextSe
 	}
 }
 
-export function extensionResultIsMatch(data: vscode.TextSearchResult): data is vscode.TextSearchMatch {
-	return !!(<vscode.TextSearchMatch>data).preview;
+export function extensionResultIsMatch(data: hypert.TextSearchResult): data is hypert.TextSearchMatch {
+	return !!(<hypert.TextSearchMatch>data).preview;
 }
 
 /**

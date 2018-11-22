@@ -45,7 +45,7 @@ import { URI } from 'base/common/uri';
 
 const notFound = (id: string) => localize('notFound', "Extension '{0}' not found.", id);
 const notInstalled = (id: string) => localize('notInstalled', "Extension '{0}' is not installed.", id);
-const useId = localize('useId', "Make sure you use the full extension ID, including the publisher, eg: {0}", 'ms-vscode.csharp');
+const useId = localize('useId', "Make sure you use the full extension ID, including the publisher, eg: {0}", 'ms-hypert.csharp');
 
 function getId(manifest: IExtensionManifest, withVersion?: boolean): string {
 	if (withVersion) {

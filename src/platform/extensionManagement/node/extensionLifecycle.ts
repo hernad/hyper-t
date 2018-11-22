@@ -34,8 +34,8 @@ export class ExtensionsLifecycle extends Disposable {
 	}
 
 	private parseUninstallScript(extension: ILocalExtension): { uninstallHook: string, args: string[] } | null {
-		if (extension.location.scheme === Schemas.file && extension.manifest && extension.manifest['scripts'] && typeof extension.manifest['scripts']['vscode:uninstall'] === 'string') {
-			const uninstallScript = (<string>extension.manifest['scripts']['vscode:uninstall']).split(' ');
+		if (extension.location.scheme === Schemas.file && extension.manifest && extension.manifest['scripts'] && typeof extension.manifest['scripts']['hypert:uninstall'] === 'string') {
+			const uninstallScript = (<string>extension.manifest['scripts']['hypert:uninstall']).split(' ');
 			if (uninstallScript.length < 2 || uninstallScript[0] !== 'node' || !uninstallScript[1]) {
 				this.logService.warn(extension.identifier.id, 'Uninstall script should be a node script');
 				return null;

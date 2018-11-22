@@ -8,7 +8,7 @@ import { URI } from 'base/common/uri';
 import { IInstantiationService, createDecorator } from 'platform/instantiation/common/instantiation';
 import { IEditorService, ACTIVE_GROUP_TYPE, SIDE_GROUP_TYPE } from 'workbench/services/editor/common/editorService';
 import { IEditorGroupsService, IEditorGroup } from 'workbench/services/group/common/editorGroupsService';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { WebviewEditorInput } from './webviewEditorInput';
 import { GroupIdentifier } from 'workbench/common/editor';
 import { equals } from 'base/common/arrays';
@@ -71,10 +71,10 @@ export interface WebviewReviver {
 export interface WebviewEvents {
 	onMessage?(message: any): void;
 	onDispose?(): void;
-	onDidClickLink?(link: URI, options: vscode.WebviewOptions): void;
+	onDidClickLink?(link: URI, options: hypert.WebviewOptions): void;
 }
 
-export interface WebviewInputOptions extends vscode.WebviewOptions, vscode.WebviewPanelOptions {
+export interface WebviewInputOptions extends hypert.WebviewOptions, hypert.WebviewPanelOptions {
 	tryRestoreScrollPosition?: boolean;
 }
 
@@ -103,7 +103,7 @@ export class WebviewEditorService implements IWebviewEditorService {
 		viewType: string,
 		title: string,
 		showOptions: ICreateWebViewShowOptions,
-		options: vscode.WebviewOptions,
+		options: hypert.WebviewOptions,
 		extensionLocation: URI,
 		events: WebviewEvents
 	): WebviewEditorInput {

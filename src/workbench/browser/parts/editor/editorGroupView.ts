@@ -758,7 +758,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		// Set group active unless we open inactive or preserve focus
 		// Do this before we open the editor in the group to prevent a false
 		// active editor change event before the editor is loaded
-		// (see https://github.com/Microsoft/vscode/issues/51679)
+		// (see https://github.com/hernad/hyper-t/issues/51679)
 		if (openEditorOptions.active && (!options || !options.preserveFocus)) {
 			this.accessor.activateGroup(this);
 		}

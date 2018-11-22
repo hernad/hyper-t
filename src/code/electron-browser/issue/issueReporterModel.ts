@@ -63,7 +63,7 @@ Issue Type: <b>${this.getIssueTypeTitle()}</b>
 
 ${this._data.issueDescription}
 ${this.getExtensionVersion()}
-VS Code version: ${this._data.versionInfo && this._data.versionInfo.vscodeVersion}
+Hyper-t version: ${this._data.versionInfo && this._data.versionInfo.hypertVersion}
 OS version: ${this._data.versionInfo && this._data.versionInfo.os}
 
 ${this.getInfos()}

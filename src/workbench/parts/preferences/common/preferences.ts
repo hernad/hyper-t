@@ -98,7 +98,7 @@ export const KEYBINDINGS_EDITOR_CLEAR_INPUT = 'keybindings.editor.showDefaultKey
 export const KEYBINDINGS_EDITOR_SHOW_DEFAULT_KEYBINDINGS = 'keybindings.editor.showDefaultKeybindings';
 export const KEYBINDINGS_EDITOR_SHOW_USER_KEYBINDINGS = 'keybindings.editor.showUserKeybindings';
 
-export const FOLDER_SETTINGS_PATH = join('.vscode', 'settings.json');
+export const FOLDER_SETTINGS_PATH = join('.hypert', 'settings.json');
 export const DEFAULT_SETTINGS_EDITOR_SETTING = 'workbench.settings.openDefaultSettings';
 
 export const MODIFIED_SETTING_TAG = 'modified';

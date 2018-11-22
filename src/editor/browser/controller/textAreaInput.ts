@@ -332,7 +332,7 @@ export class TextAreaInput extends Disposable {
 		}));
 
 
-		// See https://github.com/Microsoft/vscode/issues/27216
+		// See https://github.com/hernad/hyper-t/issues/27216
 		// When using a Braille display, it is possible for users to reposition the
 		// system caret. This is reflected in Chrome as a `selectionchange` event.
 		//

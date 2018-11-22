@@ -80,7 +80,7 @@ export class IssueReporter extends Disposable {
 		this.issueReporterModel = new IssueReporterModel({
 			issueType: configuration.data.issueType || IssueType.Bug,
 			versionInfo: {
-				vscodeVersion: `${pkg.name} ${pkg.version} (${product.commit || 'Commit unknown'}, ${product.date || 'Date unknown'})`,
+				hypertVersion: `${pkg.name} ${pkg.version} (${product.commit || 'Commit unknown'}, ${product.date || 'Date unknown'})`,
 				os: `${os.type()} ${os.arch()} ${os.release()}`
 			},
 			extensionsDisabled: !!this.environmentService.disableExtensions,
@@ -88,7 +88,7 @@ export class IssueReporter extends Disposable {
 
 		this.previewButton = new Button(document.getElementById('issue-reporter'));
 
-		ipcRenderer.on('vscode:issuePerformanceInfoResponse', (event, info) => {
+		ipcRenderer.on('hypert:issuePerformanceInfoResponse', (event, info) => {
 			this.logService.trace('issueReporter: Received performance data');
 			this.issueReporterModel.update(info);
 			this.receivedPerformanceInfo = true;
@@ -99,7 +99,7 @@ export class IssueReporter extends Disposable {
 			this.updatePreviewButtonState();
 		});
 
-		ipcRenderer.on('vscode:issueSystemInfoResponse', (event, info) => {
+		ipcRenderer.on('hypert:issueSystemInfoResponse', (event, info) => {
 			this.logService.trace('issueReporter: Received system data');
 			this.issueReporterModel.update({ systemInfo: info });
 			this.receivedSystemInfo = true;
@@ -108,9 +108,9 @@ export class IssueReporter extends Disposable {
 			this.updatePreviewButtonState();
 		});
 
-		ipcRenderer.send('vscode:issueSystemInfoRequest');
+		ipcRenderer.send('hypert:issueSystemInfoRequest');
 		if (configuration.data.issueType === IssueType.PerformanceIssue) {
-			ipcRenderer.send('vscode:issuePerformanceInfoRequest');
+			ipcRenderer.send('hypert:issuePerformanceInfoRequest');
 		}
 		this.logService.trace('issueReporter: Sent data requests');
 
@@ -136,7 +136,7 @@ export class IssueReporter extends Disposable {
 	private applyZoom(zoomLevel: number) {
 		webFrame.setZoomLevel(zoomLevel);
 		browser.setZoomFactor(webFrame.getZoomFactor());
-		// See https://github.com/Microsoft/vscode/issues/26151
+		// See https://github.com/hernad/hyper-t/issues/26151
 		// Cannot be trusted because the webFrame might take some time
 		// until it really applies the new zoom level
 		browser.setZoomLevel(webFrame.getZoomLevel(), /*isTrusted*/false);
@@ -303,7 +303,7 @@ export class IssueReporter extends Disposable {
 			const issueType = parseInt((<HTMLInputElement>event.target).value);
 			this.issueReporterModel.update({ issueType: issueType });
 			if (issueType === IssueType.PerformanceIssue && !this.receivedPerformanceInfo) {
-				ipcRenderer.send('vscode:issuePerformanceInfoRequest');
+				ipcRenderer.send('hypert:issuePerformanceInfoRequest');
 			}
 			this.updatePreviewButtonState();
 			this.render();
@@ -379,14 +379,14 @@ export class IssueReporter extends Disposable {
 		this.previewButton.onDidClick(() => this.createIssue());
 
 		this.addEventListener('disableExtensions', 'click', () => {
-			ipcRenderer.send('vscode:workbenchCommand', 'workbench.action.reloadWindowWithExtensionsDisabled');
+			ipcRenderer.send('hypert:workbenchCommand', 'workbench.action.reloadWindowWithExtensionsDisabled');
 		});
 
 		this.addEventListener('disableExtensions', 'keydown', (e: KeyboardEvent) => {
 			e.stopPropagation();
 			if (e.keyCode === 13 || e.keyCode === 32) {
-				ipcRenderer.send('vscode:workbenchCommand', 'workbench.extensions.action.disableAll');
-				ipcRenderer.send('vscode:workbenchCommand', 'workbench.action.reloadWindow');
+				ipcRenderer.send('hypert:workbenchCommand', 'workbench.extensions.action.disableAll');
+				ipcRenderer.send('hypert:workbenchCommand', 'workbench.action.reloadWindow');
 			}
 		});
 
@@ -395,7 +395,7 @@ export class IssueReporter extends Disposable {
 			// Cmd/Ctrl+Enter previews issue and closes window
 			if (cmdOrCtrlKey && e.keyCode === 13) {
 				if (this.createIssue()) {
-					ipcRenderer.send('vscode:closeIssueReporter');
+					ipcRenderer.send('hypert:closeIssueReporter');
 				}
 			}
 
@@ -532,7 +532,7 @@ export class IssueReporter extends Disposable {
 
 	@debounce(300)
 	private searchDuplicates(title: string, body: string): void {
-		const url = 'https://vscode-probot.westus.cloudapp.azure.com:7890/duplicate_candidates';
+		const url = 'https://hypert-probot.westus.cloudapp.azure.com:7890/duplicate_candidates';
 		const init = {
 			method: 'POST',
 			body: JSON.stringify({
@@ -779,7 +779,7 @@ export class IssueReporter extends Disposable {
 			url = baseUrl + `&body=${encodeURIComponent(localize('pasteData', "We have written the needed data into your clipboard because it was too large to send. Please paste."))}`;
 		}
 
-		ipcRenderer.send('vscode:openExternal', url);
+		ipcRenderer.send('hypert:openExternal', url);
 		return true;
 	}
 

@@ -39,7 +39,7 @@ exports.load = function (modulePaths, resultCallback, options) {
 	});
 
 	// Developer tools
-	const enableDeveloperTools = (process.env['VSCODE_DEV'] || !!configuration.extensionDevelopmentPath) && !configuration.extensionTestsPath;
+	const enableDeveloperTools = (process.env['HYPERT_DEV'] || !!configuration.extensionDevelopmentPath) && !configuration.extensionTestsPath;
 	let developerToolsUnbind;
 	if (enableDeveloperTools || (options && options.forceEnableDeveloperKeybindings)) {
 		developerToolsUnbind = registerDeveloperKeybindings();
@@ -167,9 +167,9 @@ function registerDeveloperKeybindings() {
 	let listener = function (e) {
 		const key = extractKey(e);
 		if (key === TOGGLE_DEV_TOOLS_KB) {
-			ipc.send('vscode:toggleDevTools');
+			ipc.send('hypert:toggleDevTools');
 		} else if (key === RELOAD_KB) {
-			ipc.send('vscode:reloadWindow');
+			ipc.send('hypert:reloadWindow');
 		}
 	};
 
@@ -189,7 +189,7 @@ function onUnexpectedError(error, enableDeveloperTools) {
 	const ipc = require('electron').ipcRenderer;
 
 	if (enableDeveloperTools) {
-		ipc.send('vscode:openDevTools');
+		ipc.send('hypert:openDevTools');
 	}
 
 	console.error('[uncaught exception]: ' + error);

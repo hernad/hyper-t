@@ -42,7 +42,7 @@ export interface IMenubarMenuItemSubmenu {
 }
 
 export interface IMenubarMenuItemSeparator {
-	id: 'vscode.menubar.separator';
+	id: 'hypert.menubar.separator';
 }
 
 export type MenubarMenuItem = IMenubarMenuItemAction | IMenubarMenuItemSubmenu | IMenubarMenuItemSeparator;
@@ -52,7 +52,7 @@ export function isMenubarMenuItemSubmenu(menuItem: MenubarMenuItem): menuItem is
 }
 
 export function isMenubarMenuItemSeparator(menuItem: MenubarMenuItem): menuItem is IMenubarMenuItemSeparator {
-	return (<IMenubarMenuItemSeparator>menuItem).id === 'vscode.menubar.separator';
+	return (<IMenubarMenuItemSeparator>menuItem).id === 'hypert.menubar.separator';
 }
 
 export function isMenubarMenuItemAction(menuItem: MenubarMenuItem): menuItem is IMenubarMenuItemAction {

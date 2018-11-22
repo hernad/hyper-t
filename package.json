@@ -27,7 +27,7 @@
     "tslint": "^5.11.0",
     "vscode-proxy-agent": "^0.1.1",
     "vscode-ripgrep": "^1.2.4",
-    "vscode-sqlite3": "^4.0.5",
+    "vscode-sqlite3": "4.0.5",
     "vscode-xterm": "^3.9.0-beta1"
   },
   "scripts": {

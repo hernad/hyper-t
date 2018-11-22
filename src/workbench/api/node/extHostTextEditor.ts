@@ -13,16 +13,16 @@ import { IResolvedTextEditorConfiguration, ITextEditorConfigurationUpdate, MainT
 import { ExtHostDocumentData } from 'workbench/api/node/extHostDocumentData';
 import * as TypeConverters from 'workbench/api/node/extHostTypeConverters';
 import { EndOfLine, Position, Range, Selection, SnippetString, TextEditorLineNumbersStyle, TextEditorRevealType } from 'workbench/api/node/extHostTypes';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 
-export class TextEditorDecorationType implements vscode.TextEditorDecorationType {
+export class TextEditorDecorationType implements hypert.TextEditorDecorationType {
 
 	private static readonly _Keys = new IdGenerator('TextEditorDecorationType');
 
 	private _proxy: MainThreadTextEditorsShape;
 	public key: string;
 
-	constructor(proxy: MainThreadTextEditorsShape, options: vscode.DecorationRenderOptions) {
+	constructor(proxy: MainThreadTextEditorsShape, options: hypert.DecorationRenderOptions) {
 		this.key = TextEditorDecorationType._Keys.nextId();
 		this._proxy = proxy;
 		this._proxy.$registerTextEditorDecorationType(this.key, TypeConverters.DecorationRenderOptions.from(options));
@@ -34,7 +34,7 @@ export class TextEditorDecorationType implements vscode.TextEditorDecorationType
 }
 
 export interface ITextEditOperation {
-	range: vscode.Range;
+	range: hypert.Range;
 	text: string;
 	forceMoveMarkers: boolean;
 }
@@ -49,14 +49,14 @@ export interface IEditData {
 
 export class TextEditorEdit {
 
-	private readonly _document: vscode.TextDocument;
+	private readonly _document: hypert.TextDocument;
 	private readonly _documentVersionId: number;
 	private _collectedEdits: ITextEditOperation[];
 	private _setEndOfLine: EndOfLine;
 	private readonly _undoStopBefore: boolean;
 	private readonly _undoStopAfter: boolean;
 
-	constructor(document: vscode.TextDocument, options: { undoStopBefore: boolean; undoStopAfter: boolean; }) {
+	constructor(document: hypert.TextDocument, options: { undoStopBefore: boolean; undoStopAfter: boolean; }) {
 		this._document = document;
 		this._documentVersionId = document.version;
 		this._collectedEdits = [];
@@ -136,7 +136,7 @@ function deprecated(name: string, message: string = 'Refer to the documentation 
 	};
 }
 
-export class ExtHostTextEditorOptions implements vscode.TextEditorOptions {
+export class ExtHostTextEditorOptions implements hypert.TextEditorOptions {
 
 	private _proxy: MainThreadTextEditorsShape;
 	private _id: string;
@@ -256,7 +256,7 @@ export class ExtHostTextEditorOptions implements vscode.TextEditorOptions {
 		}));
 	}
 
-	public assign(newOptions: vscode.TextEditorOptions) {
+	public assign(newOptions: hypert.TextEditorOptions) {
 		let bulkConfigurationUpdate: ITextEditorConfigurationUpdate = {};
 		let hasUpdate = false;
 
@@ -308,7 +308,7 @@ export class ExtHostTextEditorOptions implements vscode.TextEditorOptions {
 	}
 }
 
-export class ExtHostTextEditor implements vscode.TextEditor {
+export class ExtHostTextEditor implements hypert.TextEditor {
 
 	private readonly _proxy: MainThreadTextEditorsShape;
 	private readonly _id: string;
@@ -317,7 +317,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 	private _selections: Selection[];
 	private _options: ExtHostTextEditorOptions;
 	private _visibleRanges: Range[];
-	private _viewColumn: vscode.ViewColumn;
+	private _viewColumn: hypert.ViewColumn;
 	private _disposed: boolean = false;
 	private _hasDecorationsForKey: { [key: string]: boolean; };
 
@@ -326,7 +326,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 	constructor(
 		proxy: MainThreadTextEditorsShape, id: string, document: ExtHostDocumentData,
 		selections: Selection[], options: IResolvedTextEditorConfiguration,
-		visibleRanges: Range[], viewColumn: vscode.ViewColumn
+		visibleRanges: Range[], viewColumn: hypert.ViewColumn
 	) {
 		this._proxy = proxy;
 		this._id = id;
@@ -343,7 +343,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 		this._disposed = true;
 	}
 
-	@deprecated('TextEditor.show') show(column: vscode.ViewColumn) {
+	@deprecated('TextEditor.show') show(column: hypert.ViewColumn) {
 		this._proxy.$tryShowEditor(this._id, TypeConverters.ViewColumn.from(column));
 	}
 
@@ -353,7 +353,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 
 	// ---- the document
 
-	get document(): vscode.TextDocument {
+	get document(): hypert.TextDocument {
 		return this._documentData.document;
 	}
 
@@ -363,11 +363,11 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 
 	// ---- options
 
-	get options(): vscode.TextEditorOptions {
+	get options(): hypert.TextEditorOptions {
 		return this._options;
 	}
 
-	set options(value: vscode.TextEditorOptions) {
+	set options(value: hypert.TextEditorOptions) {
 		if (!this._disposed) {
 			this._options.assign(value);
 		}
@@ -395,7 +395,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 
 	// ---- view column
 
-	get viewColumn(): vscode.ViewColumn {
+	get viewColumn(): hypert.ViewColumn {
 		return this._viewColumn;
 	}
 
@@ -403,7 +403,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 		throw readonly('viewColumn');
 	}
 
-	_acceptViewColumn(value: vscode.ViewColumn) {
+	_acceptViewColumn(value: hypert.ViewColumn) {
 		ok(!this._disposed);
 		this._viewColumn = value;
 	}
@@ -434,7 +434,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 		this._trySetSelection();
 	}
 
-	setDecorations(decorationType: vscode.TextEditorDecorationType, ranges: Range[] | vscode.DecorationOptions[]): void {
+	setDecorations(decorationType: hypert.TextEditorDecorationType, ranges: Range[] | hypert.DecorationOptions[]): void {
 		const willBeEmpty = (ranges.length === 0);
 		if (willBeEmpty && !this._hasDecorationsForKey[decorationType.key]) {
 			// avoid no-op call to the renderer
@@ -472,7 +472,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 		);
 	}
 
-	revealRange(range: Range, revealType: vscode.TextEditorRevealType): void {
+	revealRange(range: Range, revealType: hypert.TextEditorRevealType): void {
 		this._runOnProxy(
 			() => this._proxy.$tryRevealRange(
 				this._id,
@@ -482,7 +482,7 @@ export class ExtHostTextEditor implements vscode.TextEditor {
 		);
 	}
 
-	private _trySetSelection(): Thenable<vscode.TextEditor> {
+	private _trySetSelection(): Thenable<hypert.TextEditor> {
 		let selection = this._selections.map(TypeConverters.Selection.from);
 		return this._runOnProxy(() => this._proxy.$trySetSelections(this._id, selection));
 	}

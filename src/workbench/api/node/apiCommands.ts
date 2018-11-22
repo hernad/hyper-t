@@ -5,7 +5,7 @@
 
 import { URI } from 'base/common/uri';
 import { isMalformedFileUri } from 'base/common/resources';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import * as typeConverters from 'workbench/api/node/extHostTypeConverters';
 import { CommandsRegistry, ICommandService, ICommandHandler } from 'platform/commands/common/commands';
 import { ITextEditorOptions } from 'platform/editor/common/editor';
@@ -30,8 +30,8 @@ function adjustHandler(handler: (executor: ICommandsExecutor, ...args: any[]) =>
 }
 
 export class PreviewHTMLAPICommand {
-	public static ID = 'vscode.previewHtml';
-	public static execute(executor: ICommandsExecutor, uri: URI, position?: vscode.ViewColumn, label?: string, options?: any): Thenable<any> {
+	public static ID = 'hypert.previewHtml';
+	public static execute(executor: ICommandsExecutor, uri: URI, position?: hypert.ViewColumn, label?: string, options?: any): Thenable<any> {
 		return executor.executeCommand('_workbench.previewHtml',
 			uri,
 			typeof position === 'number' && typeConverters.ViewColumn.from(position),
@@ -43,7 +43,7 @@ export class PreviewHTMLAPICommand {
 CommandsRegistry.registerCommand(PreviewHTMLAPICommand.ID, adjustHandler(PreviewHTMLAPICommand.execute));
 
 export class OpenFolderAPICommand {
-	public static ID = 'vscode.openFolder';
+	public static ID = 'hypert.openFolder';
 	public static execute(executor: ICommandsExecutor, uri?: URI, forceNewWindow?: boolean): Thenable<any> {
 		if (!uri) {
 			return executor.executeCommand('_files.pickFolderAndOpen', forceNewWindow);
@@ -51,7 +51,7 @@ export class OpenFolderAPICommand {
 		let correctedUri = isMalformedFileUri(uri);
 		if (correctedUri) {
 			// workaround for #55916 and #55891, will be removed in 1.28
-			console.warn(`'vscode.openFolder' command invoked with an invalid URI (file:// scheme missing): '${uri}'. Converted to a 'file://' URI: ${correctedUri}`);
+			console.warn(`'hypert.openFolder' command invoked with an invalid URI (file:// scheme missing): '${uri}'. Converted to a 'file://' URI: ${correctedUri}`);
 			uri = correctedUri;
 		}
 
@@ -61,8 +61,8 @@ export class OpenFolderAPICommand {
 CommandsRegistry.registerCommand(OpenFolderAPICommand.ID, adjustHandler(OpenFolderAPICommand.execute));
 
 export class DiffAPICommand {
-	public static ID = 'vscode.diff';
-	public static execute(executor: ICommandsExecutor, left: URI, right: URI, label: string, options?: vscode.TextDocumentShowOptions): Thenable<any> {
+	public static ID = 'hypert.diff';
+	public static execute(executor: ICommandsExecutor, left: URI, right: URI, label: string, options?: hypert.TextDocumentShowOptions): Thenable<any> {
 		return executor.executeCommand('_workbench.diff', [
 			left, right,
 			label,
@@ -75,8 +75,8 @@ export class DiffAPICommand {
 CommandsRegistry.registerCommand(DiffAPICommand.ID, adjustHandler(DiffAPICommand.execute));
 
 export class OpenAPICommand {
-	public static ID = 'vscode.open';
-	public static execute(executor: ICommandsExecutor, resource: URI, columnOrOptions?: vscode.ViewColumn | vscode.TextDocumentShowOptions, label?: string): Thenable<any> {
+	public static ID = 'hypert.open';
+	public static execute(executor: ICommandsExecutor, resource: URI, columnOrOptions?: hypert.ViewColumn | hypert.TextDocumentShowOptions, label?: string): Thenable<any> {
 		let options: ITextEditorOptions;
 		let position: EditorViewColumn;
 
@@ -100,7 +100,7 @@ export class OpenAPICommand {
 CommandsRegistry.registerCommand(OpenAPICommand.ID, adjustHandler(OpenAPICommand.execute));
 
 export class RemoveFromRecentlyOpenedAPICommand {
-	public static ID = 'vscode.removeFromRecentlyOpened';
+	public static ID = 'hypert.removeFromRecentlyOpened';
 	public static execute(executor: ICommandsExecutor, path: string): Thenable<any> {
 		return executor.executeCommand('_workbench.removeFromRecentlyOpened', path);
 	}
@@ -108,7 +108,7 @@ export class RemoveFromRecentlyOpenedAPICommand {
 CommandsRegistry.registerCommand(RemoveFromRecentlyOpenedAPICommand.ID, adjustHandler(RemoveFromRecentlyOpenedAPICommand.execute));
 
 export class SetEditorLayoutAPICommand {
-	public static ID = 'vscode.setEditorLayout';
+	public static ID = 'hypert.setEditorLayout';
 	public static execute(executor: ICommandsExecutor, layout: EditorGroupLayout): Thenable<any> {
 		return executor.executeCommand('layoutEditorGroups', layout);
 	}

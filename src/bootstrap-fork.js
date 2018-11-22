@@ -17,17 +17,17 @@ if (!!process.send && process.env.PIPE_LOGGING === 'true') {
 }
 
 // Disable IO if configured
-if (!process.env['VSCODE_ALLOW_IO']) {
+if (!process.env['HYPERT_ALLOW_IO']) {
 	disableSTDIO();
 }
 
 // Handle Exceptions
-if (!process.env['VSCODE_HANDLES_UNCAUGHT_ERRORS']) {
+if (!process.env['HYPERT_HANDLES_UNCAUGHT_ERRORS']) {
 	handleExceptions();
 }
 
 // Terminate when parent terminates
-if (process.env['VSCODE_PARENT_PID']) {
+if (process.env['HYPERT_PARENT_PID']) {
 	terminateWhenParentTerminates();
 }
 
@@ -77,7 +77,7 @@ function pipeLoggingToParent() {
 
 		// Add the stack trace as payload if we are told so. We remove the message and the 2 top frames
 		// to start the stacktrace where the console message was being written
-		if (process.env.VSCODE_LOG_STACK === 'true') {
+		if (process.env.HYPERT_LOG_STACK === 'true') {
 			const stack = new Error().stack;
 			argsArray.push({ __$stack: stack.split('\n').slice(3).join('\n') });
 		}
@@ -167,7 +167,7 @@ function handleExceptions() {
 }
 
 function terminateWhenParentTerminates() {
-	const parentPid = Number(process.env['VSCODE_PARENT_PID']);
+	const parentPid = Number(process.env['HYPERT_PARENT_PID']);
 
 	if (typeof parentPid === 'number' && !isNaN(parentPid)) {
 		setInterval(function () {

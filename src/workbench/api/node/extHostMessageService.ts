@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import Severity from 'base/common/severity';
-import * as vscode from 'vscode';
+import * as hypert from 'hypert';
 import { MainContext, MainThreadMessageServiceShape, MainThreadMessageOptions, IMainContext } from './extHost.protocol';
 import { IExtensionDescription } from 'workbench/services/extensions/common/extensions';
 
-function isMessageItem(item: any): item is vscode.MessageItem {
+function isMessageItem(item: any): item is hypert.MessageItem {
 	return item && item.title;
 }
 
@@ -20,12 +20,12 @@ export class ExtHostMessageService {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadMessageService);
 	}
 
-	showMessage(extension: IExtensionDescription, severity: Severity, message: string, optionsOrFirstItem: vscode.MessageOptions | string, rest: string[]): Thenable<string | undefined>;
-	showMessage(extension: IExtensionDescription, severity: Severity, message: string, optionsOrFirstItem: vscode.MessageOptions | vscode.MessageItem, rest: vscode.MessageItem[]): Thenable<vscode.MessageItem | undefined>;
-	showMessage(extension: IExtensionDescription, severity: Severity, message: string, optionsOrFirstItem: vscode.MessageOptions | string | vscode.MessageItem, rest: (string | vscode.MessageItem)[]): Thenable<string | vscode.MessageItem | undefined> {
+	showMessage(extension: IExtensionDescription, severity: Severity, message: string, optionsOrFirstItem: hypert.MessageOptions | string, rest: string[]): Thenable<string | undefined>;
+	showMessage(extension: IExtensionDescription, severity: Severity, message: string, optionsOrFirstItem: hypert.MessageOptions | hypert.MessageItem, rest: hypert.MessageItem[]): Thenable<hypert.MessageItem | undefined>;
+	showMessage(extension: IExtensionDescription, severity: Severity, message: string, optionsOrFirstItem: hypert.MessageOptions | string | hypert.MessageItem, rest: (string | hypert.MessageItem)[]): Thenable<string | hypert.MessageItem | undefined> {
 
 		let options: MainThreadMessageOptions = { extension };
-		let items: (string | vscode.MessageItem)[];
+		let items: (string | hypert.MessageItem)[];
 
 		if (typeof optionsOrFirstItem === 'string' || isMessageItem(optionsOrFirstItem)) {
 			items = [optionsOrFirstItem, ...rest];

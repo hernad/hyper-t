@@ -191,7 +191,7 @@ export function addToValueTree(settingsTreeRoot: any, key: string, value: any, c
 	}
 
 	if (typeof curr === 'object') {
-		curr[last] = value; // workaround https://github.com/Microsoft/vscode/issues/13606
+		curr[last] = value; // workaround https://github.com/hernad/hyper-t/issues/13606
 	} else {
 		conflictReporter(`Ignoring ${key} as ${segments.join('.')} is ${JSON.stringify(curr)}`);
 	}

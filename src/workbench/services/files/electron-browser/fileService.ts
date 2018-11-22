@@ -588,8 +588,8 @@ export class FileService extends Disposable implements IFileService {
 
 					// On Windows and if the file exists, we use a different strategy of saving the file
 					// by first truncating the file and then writing with r+ mode. This helps to save hidden files on Windows
-					// (see https://github.com/Microsoft/vscode/issues/931) and prevent removing alternate data streams
-					// (see https://github.com/Microsoft/vscode/issues/6363)
+					// (see https://github.com/hernad/hyper-t/issues/931) and prevent removing alternate data streams
+					// (see https://github.com/hernad/hyper-t/issues/6363)
 					else {
 
 						// 4.) truncate
@@ -601,7 +601,7 @@ export class FileService extends Disposable implements IFileService {
 									console.error(`Truncate succeeded, but save failed (${error}), retrying after 100ms`);
 								}
 
-								// We heard from one user that fs.truncate() succeeds, but the save fails (https://github.com/Microsoft/vscode/issues/61310)
+								// We heard from one user that fs.truncate() succeeds, but the save fails (https://github.com/hernad/hyper-t/issues/61310)
 								// In that case, the file is now entirely empty and the contents are gone. This can happen if an external file watcher is
 								// installed that reacts on the truncate and keeps the file busy right after. Our workaround is to retry to save after a
 								// short timeout, assuming that the file is free to write then.
@@ -612,7 +612,7 @@ export class FileService extends Disposable implements IFileService {
 								console.error(`Truncate failed (${error}), falling back to normal save`);
 							}
 
-							// we heard from users that fs.truncate() fails (https://github.com/Microsoft/vscode/issues/59561)
+							// we heard from users that fs.truncate() fails (https://github.com/hernad/hyper-t/issues/59561)
 							// in that case we simply save the file without truncating first (same as macOS and Linux)
 							return this.doSetContentsAndResolve(resource, absolutePath, value, addBom, encodingToWrite);
 						});
@@ -912,7 +912,7 @@ export class FileService extends Disposable implements IFileService {
 	private doMoveItemToTrash(resource: uri): TPromise<void> {
 		const absolutePath = resource.fsPath;
 
-		const shell = (require('electron') as any as Electron.RendererInterface).shell; // workaround for being able to run tests out of VSCode debugger
+		const shell = (require('electron') as any as Electron.RendererInterface).shell; // workaround for being able to run tests out of hypert debugger
 		const result = shell.moveItemToTrash(absolutePath);
 		if (!result) {
 			return TPromise.wrapError(new Error(isWindows ? nls.localize('binFailed', "Failed to move '{0}' to the recycle bin", paths.basename(absolutePath)) : nls.localize('trashFailed', "Failed to move '{0}' to the trash", paths.basename(absolutePath))));

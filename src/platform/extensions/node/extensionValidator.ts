@@ -207,7 +207,7 @@ export function isValidVersion(_version: string | INormalizedVersion, _desiredVe
 export interface IReducedExtensionDescription {
 	isBuiltin: boolean;
 	engines: {
-		vscode: string;
+		hypert: string;
 	};
 	main?: string;
 }
@@ -219,7 +219,7 @@ export function isValidExtensionVersion(version: string, extensionDesc: IReduced
 		return true;
 	}
 
-	return isVersionValid(version, extensionDesc.engines.vscode, notices);
+	return isVersionValid(version, extensionDesc.engines.hypert, notices);
 }
 
 export function isEngineValid(engine: string): boolean {
@@ -231,7 +231,7 @@ export function isVersionValid(currentVersion: string, requestedVersion: string,
 
 	let desiredVersion = normalizeVersion(parseVersion(requestedVersion));
 	if (!desiredVersion) {
-		notices.push(nls.localize('versionSyntax', "Could not parse `engines.vscode` value {0}. Please use, for example: ^1.22.0, ^1.22.x, etc.", requestedVersion));
+		notices.push(nls.localize('versionSyntax', "Could not parse `engines.hypert` value {0}. Please use, for example: ^1.22.0, ^1.22.x, etc.", requestedVersion));
 		return false;
 	}
 
@@ -241,13 +241,13 @@ export function isVersionValid(currentVersion: string, requestedVersion: string,
 	if (desiredVersion.majorBase === 0) {
 		// force that major and minor must be specific
 		if (!desiredVersion.majorMustEqual || !desiredVersion.minorMustEqual) {
-			notices.push(nls.localize('versionSpecificity1', "Version specified in `engines.vscode` ({0}) is not specific enough. For vscode versions before 1.0.0, please define at a minimum the major and minor desired version. E.g. ^0.10.0, 0.10.x, 0.11.0, etc.", requestedVersion));
+			notices.push(nls.localize('versionSpecificity1', "Version specified in `engines.hypert` ({0}) is not specific enough. For hypert versions before 1.0.0, please define at a minimum the major and minor desired version. E.g. ^0.10.0, 0.10.x, 0.11.0, etc.", requestedVersion));
 			return false;
 		}
 	} else {
 		// force that major must be specific
 		if (!desiredVersion.majorMustEqual) {
-			notices.push(nls.localize('versionSpecificity2', "Version specified in `engines.vscode` ({0}) is not specific enough. For vscode versions after 1.0.0, please define at a minimum the major desired version. E.g. ^1.10.0, 1.10.x, 1.x.x, 2.x.x, etc.", requestedVersion));
+			notices.push(nls.localize('versionSpecificity2', "Version specified in `engines.hypert` ({0}) is not specific enough. For hypert versions after 1.0.0, please define at a minimum the major desired version. E.g. ^1.10.0, 1.10.x, 1.x.x, 2.x.x, etc.", requestedVersion));
 			return false;
 		}
 	}
