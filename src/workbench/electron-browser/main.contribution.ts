@@ -194,6 +194,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	when: IsMacContext
 });
 
+/* out-workspace
 MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	group: '2_open',
 	command: {
@@ -202,6 +203,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	},
 	order: 3
 });
+*/
 
 MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	title: nls.localize({ key: 'miOpenRecent', comment: ['&& denotes a mnemonic'] }, "Open &&Recent"),
@@ -345,6 +347,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarAppearanceMenu, {
 	order: 3
 });
 
+/* hernad out-meni-opcije
 // Help
 
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
@@ -356,6 +359,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	order: 3
 });
 
+
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	group: '1_welcome',
 	command: {
@@ -365,7 +369,7 @@ MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	order: 4
 });
 
-/* hernad out-meni-opcije
+
 // Reference
 MenuRegistry.appendMenuItem(MenuId.MenubarHelpMenu, {
 	group: '2_reference',
