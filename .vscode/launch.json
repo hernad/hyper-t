@@ -26,8 +26,21 @@
             "type": "chrome",
             "request": "attach",
             "port": 9223,
-            "webRoot": "${workspaceFolder}",
-            "timeout": 10000
-        }
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+			"type": "chrome",
+			"request": "launch",
+			"name": "Launch HyperT",
+			"runtimeExecutable": "${workspaceFolder}/scripts/hypert.sh",
+			"urlFilter": "*workbench.html*",
+			"runtimeArgs": [
+				"--inspect=5875", "--no-cached-data"
+			],
+			"skipFiles": [
+				"**/winjs*.js"
+			],
+			"webRoot": "${workspaceFolder}"
+		}
     ]
 }

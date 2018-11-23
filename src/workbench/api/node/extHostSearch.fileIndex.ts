@@ -567,6 +567,7 @@ export class FileIndexSearchManager {
 
 	private preventCancellation<C>(promise: CancelablePromise<C>): CancelablePromise<C> {
 		return new class implements CancelablePromise<C> {
+
 			cancel() {
 				// Do nothing
 			}

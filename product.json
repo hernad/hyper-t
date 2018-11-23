@@ -1,25 +1,25 @@
 {
-	"nameShort": "hyper-t",
-	"nameLong": "Hyper-t",
+	"nameShort": "hypert",
+	"nameLong": "Hyper-T",
 	"applicationName": "hypert",
     "twitterUrl": "https://twitter.com/hernad",
-	"dataFolderName": ".hyper-t",
+	"dataFolderName": ".hypert",
 	"win32MutexName": "hypert",
 	"licenseName": "MIT",
 	"licenseUrl": "https://github.com/Microsoft/vshyper/blob/master/LICENSE.txt",
-	"win32DirName": "bring.out Hyper-t",
-	"win32NameVersion": "bring.out Hyper-t",
-	"win32RegValueName": "HyperT",
+	"win32DirName": "bring.out Hyper-T",
+	"win32NameVersion": "bring.out Hyper-T",
+	"win32RegValueName": "Hyper-T",
 	"win32AppId": "{{F34013BA-9A10-1501-1C11-BE3FAA13F210}",
 	"win32x64AppId": "{{D77B7E06-80BA-4137-BCF4-444B95CCEBC5}",
 	"win32UserAppId": "{{C6065F00-1603-4FC4-8101-45781A25D88E}",
 	"win32x64UserAppId": "{{C6065F00-1603-4FC4-8101-45781A25D88E}",
 	"win32AppUserModelId": "bringout.HyperT",
-	"win32ShellNameShort": "&Hyper-t",
-	"darwinBundleIdentifier": "ba.out.bring.t.hyper.com",
+	"win32ShellNameShort": "&Hyper-T",
+	"darwinBundleIdentifier": "ba.out.bring.hypert",
 	"reportIssueUrl": "https://github.com/hernad/hyper-t/issues/new",
-	"urlProtocol": "hyper-t",
+	"urlProtocol": "hypert",
 	"extensionAllowedProposedApi": [
-		"bout-hyper-t.references-view"
+		"bout-hypert.references-view"
 	]
 }

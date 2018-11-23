@@ -379,18 +379,35 @@ export class SearchService implements IRawSearchService {
 		return Promise.resolve(undefined);
 	}
 
+/*
+	src/workbench/services/search/node/rawSearchService.ts:391:4 - error TS2416: 
+	Property 'then' in type '(Anonymous class)' is not assignable to the same property in base type 'CancelablePromise<C>'.
+	Type '(resolve: any, reject: any) => Promise<C>' is not assignable 
+	to type '<TResult1 = C, TResult2 = never>(onfulfilled?: (value: C) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>'.
+	  Type 'Promise<C>' is not assignable to type 'Promise<TResult1 | TResult2>'.
+		Type 'C' is not assignable to type 'TResult1 | TResult2'.
+		  Type 'C' is not assignable to type 'TResult2'.
+  
+  391             then(resolve, reject) {
+*/
+
+
 	/**
 	 * Return a CancelablePromise which is not actually cancelable
 	 * TODO@rob - Is this really needed?
 	 */
 	private preventCancellation<C>(promise: CancelablePromise<C>): CancelablePromise<C> {
+		
 		return new class implements CancelablePromise<C> {
+
 			cancel() {
 				// Do nothing
 			}
-			then(resolve, reject) {
+
+			then(resolve, reject ) {
 				return promise.then(resolve, reject);
 			}
+
 			catch(reject?) {
 				return this.then(undefined, reject);
 			}

@@ -1229,6 +1229,11 @@ export class OpenPrivacyStatementUrlAction extends Action {
 	}
 }
 
+
+// function hernad_error(message: string): Thenable<void> {
+//	return Promise.reject(new Error(message));
+// }
+
 export class ShowAboutDialogAction extends Action {
 
 	static readonly ID = 'workbench.action.showAboutDialog';
@@ -1244,6 +1249,7 @@ export class ShowAboutDialogAction extends Action {
 
 	run(): Thenable<void> {
 		return this.windowsService.openAboutDialog();
+		// return hernad_error("bolje error nego about");
 	}
 }
 

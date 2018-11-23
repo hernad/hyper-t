@@ -103,6 +103,8 @@ function save(
 		return options;
 	}
 
+	// return Promise.reject(new Error("ne radi save"));
+
 	if (resource && (fileService.canHandleResource(resource) || resource.scheme === Schemas.untitled)) {
 
 		// Save As (or Save untitled with associated path)

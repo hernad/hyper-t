@@ -150,7 +150,7 @@ export class TextFileEditor extends BaseTextEditor {
 				// Readonly flag
 				textEditor.updateOptions({ readOnly: textFileModel.isReadonly() });
 			}, error => {
-
+		
 				// In case we tried to open a file inside the text editor and the response
 				// indicates that this is not a text file, reopen the file through the binary
 				// editor.

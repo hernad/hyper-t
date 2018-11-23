@@ -100,7 +100,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		this.dirty = false;
 		this.versionId = 0;
 		this.lastSaveAttemptTime = 0;
-		this.saveSequentializer = new SaveSequentializer();
+		this.saveSequentializer = new SaveSequentializer(this.logService);
 
 		this.contentChangeEventScheduler = this._register(new RunOnceScheduler(() => this._onDidContentChange.fire(StateChange.CONTENT_CHANGE), TextFileEditorModel.DEFAULT_CONTENT_CHANGE_BUFFER_DELAY));
 		this.orphanedChangeEventScheduler = this._register(new RunOnceScheduler(() => this._onDidStateChange.fire(StateChange.ORPHANED_CHANGE), TextFileEditorModel.DEFAULT_ORPHANED_CHANGE_BUFFER_DELAY));
@@ -1053,6 +1053,11 @@ export class SaveSequentializer {
 	private _pendingSave: IPendingSave;
 	private _nextSave: ISaveOperation;
 
+	constructor(
+		@ILogService private logService?: ILogService
+	)
+	{}
+
 	hasPendingSave(versionId?: number): boolean {
 		if (!this._pendingSave) {
 			return false;
@@ -1072,7 +1077,18 @@ export class SaveSequentializer {
 	setPending(versionId: number, promise: TPromise<void>): TPromise<void> {
 		this._pendingSave = { versionId, promise };
 
-		promise.then(() => this.donePending(versionId), () => this.donePending(versionId));
+		// promise.then(() => this.donePending(versionId), () => this.donePending(versionId));
+		// this.logService.info(`ver-0: ${versionId}`)
+
+		const onF = () => {
+			this.logService.info(`ver: ${versionId}`)
+			this.donePending(versionId);
+		}
+		promise.then(
+			onF,
+			onF
+		);
+
 
 		return promise;
 	}

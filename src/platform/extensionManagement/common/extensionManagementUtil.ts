@@ -25,6 +25,9 @@ export function getGalleryExtensionId(publisher: string, name: string): string {
 }
 
 export function getGalleryExtensionIdFromLocal(local: ILocalExtension): string {
+	if (local.location == undefined) {
+        return "------";
+	}
 	return local.manifest ? getGalleryExtensionId(local.manifest.publisher, local.manifest.name) : local.identifier.id;
 }
 
@@ -90,6 +93,7 @@ export function getLocalExtensionTelemetryData(extension: ILocalExtension): any 
 		]
 	}
 */
+
 export function getGalleryExtensionTelemetryData(extension: IGalleryExtension): any {
 	return {
 		id: extension.identifier.id,

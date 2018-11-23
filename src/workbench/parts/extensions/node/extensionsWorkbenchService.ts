@@ -432,6 +432,9 @@ export class ExtensionsWorkbenchService implements IExtensionsWorkbenchService, 
 		return this.extensionService.getInstalled()
 			.then(installed => this.getDistinctInstalledExtensions(installed)
 				.then(distinctInstalled => {
+					
+					if ((distinctInstalled[0] as object)['code'] == "scanningSystem")  return [];
+
 					const installedById = index(this.installed, e => e.local.identifier.id);
 					const groupById = groupBy(installed, i => getGalleryExtensionIdFromLocal(i));
 					this.installed = distinctInstalled.map(local => {

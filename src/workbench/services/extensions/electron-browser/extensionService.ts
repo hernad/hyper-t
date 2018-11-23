@@ -399,7 +399,7 @@ export class ExtensionService extends Disposable implements IExtensionService {
 				Severity.Error,
 				nls.localize('extensionHostProcess.versionMismatchCrash', "Extension host cannot start: version mismatch."),
 				[{
-					label: nls.localize('relaunch', "Relaunch Hyper-t"),
+					label: nls.localize('relaunch', "Relaunch Hyper-T"),
 					run: () => {
 						this._instantiationService.invokeFunction((accessor) => {
 							const windowsService = accessor.get(IWindowsService);

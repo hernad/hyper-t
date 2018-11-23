@@ -15,7 +15,6 @@
 		"sourceMap": true,
 		"outDir": "../dist",
 		"baseUrl": ".",
-		"allowJs": true,
 		"paths": {
 			"b/*": [
                			"./b/*"

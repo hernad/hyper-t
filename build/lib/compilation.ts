@@ -89,11 +89,11 @@ const typesDts = [
 export function compileTask(src: string, out: string, build: boolean): () => NodeJS.ReadWriteStream {
 
 	return function () {
-        console.log('hernad-3');
+        console.log('hernad-4');
 		const compile = createCompile(src, build, true);
 
 		const srcPipe = es.merge(
-			gulp.src( `${src}/**/*.@(html|png|css|svg|scss|less|eot|woff|ttf|md)`, { base: `${src}` }),
+			gulp.src( `${src}/**/*.@(js|html|png|css|svg|scss|less|eot|woff|ttf|md)`, { base: `${src}` }),
 			gulp.src(typesDts),
 		);
 
