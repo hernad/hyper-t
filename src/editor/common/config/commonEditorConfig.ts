@@ -313,6 +313,7 @@ const editorConfiguration: IConfigurationNode = {
 			'default': EDITOR_DEFAULTS.viewInfo.smoothScrolling,
 			'description': nls.localize('smoothScrolling', "Controls whether the editor will scroll using an animation.")
 		},
+/*		
 		'editor.minimap.enabled': {
 			'type': 'boolean',
 			'default': EDITOR_DEFAULTS.viewInfo.minimap.enabled,
@@ -340,6 +341,7 @@ const editorConfiguration: IConfigurationNode = {
 			'default': EDITOR_DEFAULTS.viewInfo.minimap.maxColumn,
 			'description': nls.localize('minimap.maxColumn', "Limit the width of the minimap to render at most a certain number of columns.")
 		},
+*/
 		'editor.hover.enabled': {
 			'type': 'boolean',
 			'default': EDITOR_DEFAULTS.contribInfo.hover.enabled,
