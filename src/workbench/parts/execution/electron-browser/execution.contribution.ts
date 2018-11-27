@@ -27,6 +27,7 @@ import { CommandsRegistry } from 'platform/commands/common/commands';
 import { Schemas } from 'base/common/network';
 import { distinct } from 'base/common/arrays';
 import { IEditorService } from 'workbench/services/editor/common/editorService';
+import { IPartService } from 'workbench/services/part/common/partService';
 
 if (env.isWindows) {
 	registerSingleton(ITerminalService, WinTerminalService);
@@ -88,16 +89,20 @@ CommandsRegistry.registerCommand({
 		const fileService = accessor.get(IFileService);
 		const integratedTerminalService = accessor.get(IIntegratedTerminalService);
 		const terminalService = accessor.get(ITerminalService);
+		const partService = accessor.get(IPartService);
+
 		const resources = getMultiSelectedResources(resource, accessor.get(IListService), editorService);
 
 		return fileService.resolveFiles(resources.map(r => ({ resource: r }))).then(stats => {
 			const directoriesToOpen = distinct(stats.map(({ stat }) => stat.isDirectory ? stat.resource.fsPath : paths.dirname(stat.resource.fsPath)));
 			return directoriesToOpen.map(dir => {
 				if (configurationService.getValue<ITerminalConfiguration>().terminal.explorerKind === 'integrated') {
-					const instance = integratedTerminalService.createTerminal({ cwd: dir }, true);
+					const instance = integratedTerminalService.createTerminal({ cwd: dir, executable: "/home/hernad/F18_knowhow/F18.sh" }, true);
+					partService.setSideBarHidden(true);
 					if (instance && (resources.length === 1 || !resource || dir === resource.fsPath || dir === paths.dirname(resource.fsPath))) {
 						integratedTerminalService.setActiveInstance(instance);
 						integratedTerminalService.showPanel(true);
+						
 					}
 				} else {
 					terminalService.openTerminal(dir);

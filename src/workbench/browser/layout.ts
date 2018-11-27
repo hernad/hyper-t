@@ -42,6 +42,8 @@ const PANEL_SIZE_BEFORE_MAXIMIZED_BOUNDARY = 0.7;
 const HIDE_PANEL_HEIGHT_THRESHOLD = 50;
 const HIDE_PANEL_WIDTH_THRESHOLD = 100;
 
+
+
 /**
  * The workbench layout is responsible to lay out all parts that make the Workbench.
  */
@@ -428,6 +430,7 @@ export class WorkbenchLayout extends Disposable implements IVerticalSashLayoutPr
 		this.sidebarHeight = this.workbenchSize.height - this.statusbarHeight - this.titlebarHeight;
 		let sidebarSize = new Dimension(this.sidebarWidth, this.sidebarHeight);
 
+
 		// Activity Bar
 		let activityBarSize = new Dimension(this.activitybarWidth, sidebarSize.height);
 
@@ -484,11 +487,15 @@ export class WorkbenchLayout extends Disposable implements IVerticalSashLayoutPr
 			height: 0
 		};
 
+	
 		editorSize.width = this.workbenchSize.width - sidebarSize.width - activityBarSize.width - (panelPosition === Position.RIGHT ? panelDimension.width : 0);
 		editorSize.height = sidebarSize.height - (panelPosition === Position.BOTTOM ? panelDimension.height : 0);
-
+		
 		// Adjust for Editor Part minimum width
 		const minimumEditorPartSize = new Dimension(this.parts.editor.minimumWidth, this.parts.editor.minimumHeight);
+		
+		// const minimumEditorPartSize = new Dimension(0,0);
+
 		if (editorSize.width < minimumEditorPartSize.width) {
 			const missingPreferredEditorWidth = minimumEditorPartSize.width - editorSize.width;
 			let outstandingMissingPreferredEditorWidth = missingPreferredEditorWidth;
@@ -570,6 +577,7 @@ export class WorkbenchLayout extends Disposable implements IVerticalSashLayoutPr
 		// Editor Part and Panel part
 		const editorContainer = this.parts.editor.getContainer();
 		const panelContainer = this.parts.panel.getContainer();
+		
 		size(editorContainer, editorSize.width, editorSize.height);
 		size(panelContainer, panelDimension.width, panelDimension.height);
 

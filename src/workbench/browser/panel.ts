@@ -80,6 +80,7 @@ export abstract class TogglePanelAction extends Action {
 			this.partService.setPanelHidden(true);
 		} else {
 			this.panelService.openPanel(this.panelId, true);
+
 		}
 
 		return Promise.resolve(null);

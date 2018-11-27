@@ -1007,7 +1007,7 @@ export class Workbench extends Disposable implements IPartService {
 
 		// Apply sidebar state as CSS class
 		if (this.sideBarHidden) {
-			DOM.addClass(this.workbench, 'nosidebar');
+			DOM.addClass(this.workbench, 'nosidebar');			
 		}
 
 		if (this.panelHidden) {
@@ -1427,6 +1427,8 @@ export class Workbench extends Disposable implements IPartService {
 			DOM.addClass(this.workbench, 'nopanel');
 		} else {
 			DOM.removeClass(this.workbench, 'nopanel');
+			// hernad full size terminal
+			// DOM.addClass(this.workbench, 'noeditor');
 		}
 
 		// If panel part becomes hidden, also hide the current active panel if any
@@ -1450,6 +1452,10 @@ export class Workbench extends Disposable implements IPartService {
 		} else {
 			this.storageService.remove(Workbench.panelHiddenStorageKey, StorageScope.WORKSPACE);
 		}
+
+
+		// hernad test
+		this.setSideBarHidden(true, true);
 
 		// Layout
 		if (!skipLayout) {

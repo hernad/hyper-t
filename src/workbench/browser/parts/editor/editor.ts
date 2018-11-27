@@ -19,7 +19,11 @@ import { IEditorService } from 'workbench/services/editor/common/editorService';
 
 export const EDITOR_TITLE_HEIGHT = 35;
 
+/* hernad editor-skupi-se
 export const DEFAULT_EDITOR_MIN_DIMENSIONS = new Dimension(220, 70);
+*/
+export const DEFAULT_EDITOR_MIN_DIMENSIONS = new Dimension(0, 0);
+
 export const DEFAULT_EDITOR_MAX_DIMENSIONS = new Dimension(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
 
 export interface IEditorPartOptions extends IWorkbenchEditorPartConfiguration {

@@ -3,6 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+.monaco-workbench.noeditor > .part.editor {
+	display: none !important;
+	visibility: hidden !important;
+}
+
 .monaco-workbench > .part > .title {
 	display: none; /* Parts have to opt in to show title area */
 }
@@ -80,7 +85,9 @@
 	height: 2px;
 }
 
+
 .monaco-workbench > .part > .content > .monaco-progress-container .progress-bit,
 .monaco-workbench > .part.editor > .content .monaco-progress-container .progress-bit {
 	height: 2px;
 }
+

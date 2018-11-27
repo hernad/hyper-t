@@ -5,9 +5,9 @@
 
 import * as nls from 'base/nls';
 import { Action } from 'base/common/actions';
-import { MenuId, MenuRegistry, SyncActionDescriptor } from 'platform/actions/common/actions';
+import { /* MenuId, MenuRegistry, */ SyncActionDescriptor } from 'platform/actions/common/actions';
 import { ConfigurationTarget, IConfigurationService } from 'platform/configuration/common/configuration';
-import { ContextKeyExpr } from 'platform/contextkey/common/contextkey';
+// import { ContextKeyExpr } from 'platform/contextkey/common/contextkey';
 import { Registry } from 'platform/registry/common/platform';
 import { Extensions as ActionExtensions, IWorkbenchActionRegistry } from 'workbench/common/actions';
 
@@ -32,6 +32,7 @@ export class ToggleMinimapAction extends Action {
 const registry = Registry.as<IWorkbenchActionRegistry>(ActionExtensions.WorkbenchActions);
 registry.registerWorkbenchAction(new SyncActionDescriptor(ToggleMinimapAction, ToggleMinimapAction.ID, ToggleMinimapAction.LABEL), 'View: Toggle Minimap');
 
+/*
 MenuRegistry.appendMenuItem(MenuId.MenubarViewMenu, {
 	group: '5_editor',
 	command: {
@@ -41,3 +42,4 @@ MenuRegistry.appendMenuItem(MenuId.MenubarViewMenu, {
 	},
 	order: 2
 });
+*/
