@@ -659,6 +659,46 @@ export class RunSelectedTextInTerminalAction extends Action {
 	}
 }
 
+
+
+export class RunCtrlPTerminalAction extends Action {
+
+	public static readonly ID = TERMINAL_COMMAND_ID.RUN_CTRL_P;
+	public static readonly LABEL = nls.localize('workbench.action.terminal.runCtrlP', "Run Ctrl_P In Active Terminal");
+
+	constructor(
+		id: string, label: string,
+		// @ICodeEditorService private codeEditorService: ICodeEditorService,
+		@ITerminalService private terminalService: ITerminalService
+	) {
+		super(id, label);
+	}
+
+	public run(event?: any): Promise<any> {
+		const instance = this.terminalService.getActiveOrCreateInstance();
+		if (!instance) {
+			return Promise.resolve(void 0);
+		}
+		/*
+		let editor = this.codeEditorService.getFocusedCodeEditor();
+		if (!editor) {
+			return Promise.resolve(void 0);
+		}
+		let selection = editor.getSelection();
+		let text: string;
+		if (selection.isEmpty()) {
+			text = editor.getModel().getLineContent(selection.selectionStartLineNumber).trim();
+		} else {
+			const endOfLinePreference = os.EOL === '\n' ? EndOfLinePreference.LF : EndOfLinePreference.CRLF;
+			text = editor.getModel().getValueInRange(selection, endOfLinePreference);
+		}
+		*/
+		
+		instance.sendText(String.fromCharCode('P'.charCodeAt(0) - 64), true);
+		return this.terminalService.showPanel();
+	}
+}
+
 export class RunActiveFileInTerminalAction extends Action {
 
 	public static readonly ID = TERMINAL_COMMAND_ID.RUN_ACTIVE_FILE;

@@ -59,4 +59,13 @@ export function setupTerminalMenu() {
 		},
 		order: 4
 	});
+
+	MenuRegistry.appendMenuItem(MenuId.MenubarTerminalMenu, {
+		group: runGroup,
+		command: {
+			id: TERMINAL_COMMAND_ID.RUN_CTRL_P,
+			title: nls.localize({ key: 'miRunCtrlP', comment: ['&& denotes a mnemonic'] }, "Run Ctrl_&&P")
+		},
+		order: 5
+	});
 }
